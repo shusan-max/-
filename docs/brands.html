@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>子供服マーケット情報ボード｜SNSブランド分析</title>
+<style>:root {
+  --bg: #faf8f5; --card: #ffffff; --text: #2b2a28; --muted: #6f6b64;
+  --line: #e8e3dc; --accent: #c4553c; --accent-soft: #fbe9e4; --new: #2b7d5e;
+  --bar: #d9654b; --grid: #ece7e0;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1c1b1a; --card: #262523; --text: #ecebe8; --muted: #a39f98;
+    --line: #3a3835; --accent: #f08a70; --accent-soft: #3d2a25; --new: #5cc59b;
+    --bar: #e8795f; --grid: #34322f;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", "Yu Gothic", sans-serif;
+  line-height: 1.7;
+}
+.wrap { max-width: 900px; margin: 0 auto; padding: 20px 16px 64px; }
+h1 { font-size: 1.4rem; margin: 0 0 4px; }
+h2 { font-size: 1.15rem; margin: 36px 0 12px; }
+h3 { font-size: 1rem; margin: 0 0 6px; }
+a { color: var(--accent); }
+.updated, .note { color: var(--muted); font-size: .85rem; margin: 0 0 16px; }
+.nav { display: flex; gap: 4px; margin: 0 0 18px; border-bottom: 1px solid var(--line); overflow-x: auto; }
+.nav a {
+  padding: 8px 12px; color: var(--muted); text-decoration: none; font-weight: 600; white-space: nowrap;
+  border-bottom: 3px solid transparent; margin-bottom: -1px;
+}
+.nav a[aria-current="page"] { color: var(--text); border-bottom-color: var(--accent); }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+.grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
+.kpi .label { font-size: .8rem; color: var(--muted); }
+.kpi .value { font-size: 1.6rem; font-weight: 700; line-height: 1.3; margin: 4px 0; }
+.kpi .sub { font-size: .8rem; color: var(--muted); }
+.search {
+  width: 100%; padding: 10px 14px; font-size: 1rem; border-radius: 10px;
+  border: 1px solid var(--line); background: var(--card); color: var(--text);
+}
+.tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 20px; }
+.tab {
+  border: 1px solid var(--line); background: var(--card); color: var(--text);
+  padding: 6px 12px; border-radius: 999px; font-size: .9rem; cursor: pointer;
+}
+.tab[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+.tab .n { opacity: .75; margin-left: 4px; font-size: .8rem; }
+.list { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+.item { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; }
+.item a { color: var(--text); text-decoration: none; font-weight: 600; }
+.item a:hover { color: var(--accent); text-decoration: underline; }
+.meta { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 4px; font-size: .8rem; color: var(--muted); }
+.chip { background: var(--accent-soft); color: var(--accent); padding: 1px 8px; border-radius: 6px; font-size: .8rem; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+.new { color: var(--new); font-weight: 700; }
+.empty { color: var(--muted); text-align: center; padding: 28px 0; }
+.chart svg { width: 100%; height: auto; display: block; }
+.chart .axis { fill: var(--muted); font-size: 11px; }
+.chart .gridline { stroke: var(--grid); stroke-width: 1; }
+.chart .bar { fill: var(--bar); }
+.chart .bar:hover, .chart .bar.active { opacity: .75; }
+.chart .val { fill: var(--text); font-size: 11px; font-weight: 600; }
+.tooltip {
+  position: fixed; pointer-events: none; background: var(--text); color: var(--bg);
+  padding: 4px 10px; border-radius: 6px; font-size: .8rem; display: none; z-index: 10;
+}
+details { margin-top: 8px; font-size: .85rem; }
+summary { cursor: pointer; color: var(--muted); }
+table { border-collapse: collapse; width: 100%; font-size: .85rem; margin-top: 6px; }
+th, td { border-bottom: 1px solid var(--line); padding: 6px 8px; text-align: left; vertical-align: top; }
+td.num { text-align: right; font-variant-numeric: tabular-nums; }
+.hbar { display: grid; grid-template-columns: 7.5em 1fr 2.5em; gap: 8px; align-items: center; font-size: .85rem; margin: 4px 0; }
+.hbar .track { height: 10px; background: var(--grid); border-radius: 4px; overflow: hidden; }
+.hbar .fill { height: 100%; background: var(--bar); border-radius: 0 4px 4px 0; }
+.hbar .num { text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
+dl.profile { display: grid; grid-template-columns: 6.5em 1fr; gap: 4px 12px; margin: 10px 0; font-size: .9rem; }
+dl.profile dt { color: var(--muted); }
+dl.profile dd { margin: 0; }
+ul.points { margin: 6px 0 0; padding-left: 1.2em; font-size: .9rem; }
+.tagline { color: var(--muted); font-size: .9rem; margin: 0 0 4px; }
+.scroll-x { overflow-x: auto; }
+.sources { font-size: .8rem; color: var(--muted); }
+@media (max-width: 520px) {
+  dl.profile { grid-template-columns: 1fr; }
+  dl.profile dd { margin-bottom: 6px; }
+}
+#compare { min-width: 560px; }
+#compare th:first-child { white-space: nowrap; color: var(--muted); font-weight: 600; }
+#compare td { min-width: 200px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>子供服マーケット情報ボード</h1>
+  <nav class="nav"><a href="index.html">ニュース</a><a href="market.html">市場環境</a><a href="brands.html" aria-current="page">SNSブランド分析</a></nav>
+  <p class="updated">SNSを中心に人気を集める子供服ブランドの特徴と、自分のお店に活かせるポイントをまとめています。</p>
+
+  <h2>ブランド共通の傾向</h2>
+  <div class="grid" id="common"></div>
+
+  <h2>比較表</h2>
+  <div class="card scroll-x"><table id="compare"></table></div>
+
+  <div id="brands"></div>
+
+  <h2>ブランド関連の最新ニュース</h2>
+  <p class="note" id="news-note"></p>
+  <ul class="list" id="news"></ul>
+  <p class="empty" id="news-empty" hidden>直近7日〜30日のニュースはまだありません（SNS中心のブランドは記事になる頻度が低めです）</p>
+</div>
+<script>const el = (tag, cls, text) => {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text != null) e.textContent = text;
+  return e;
+};
+
+function fmtDate(iso) {
+  const d = new Date(iso);
+  return (d.getMonth() + 1) + "/" + d.getDate() + " " +
+    String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
+}
+
+// 記事の一覧を描く。showCategory=false ならカテゴリの札を出さない
+function renderNews(listEl, articles, showCategory = true) {
+  const dayAgo = Date.now() - 24 * 3600 * 1000;
+  listEl.replaceChildren(...articles.map((a) => {
+    const li = el("li", "item");
+    const link = el("a", null, a.title);
+    link.href = a.link; link.target = "_blank"; link.rel = "noopener noreferrer";
+    const meta = el("div", "meta");
+    if (new Date(a.published).getTime() > dayAgo) meta.append(el("span", "new", "NEW"));
+    if (a.brand) meta.append(el("span", "chip", a.brand));
+    else if (showCategory) meta.append(el("span", "chip", a.category));
+    meta.append(el("span", null, a.source || ""), el("span", null, fmtDate(a.published)));
+    li.append(link, meta);
+    return li;
+  }));
+}
+
+// 1 系列の縦棒グラフ（SVG）。data = [[ラベル, 値], ...]
+function barChart(box, data, unit) {
+  const W = 640, H = 260, L = 8, R = 8, T = 24, B = 26;
+  const max = Math.max(...data.map((d) => d[1])) * 1.1;
+  const slot = (W - L - R) / data.length, bw = Math.min(44, slot * 0.6);
+  const y = (v) => T + (H - T - B) * (1 - v / max);
+  const ns = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(ns, "svg");
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  svg.setAttribute("role", "img");
+  const mk = (name, attrs, text) => {
+    const n = document.createElementNS(ns, name);
+    for (const k in attrs) n.setAttribute(k, attrs[k]);
+    if (text != null) n.textContent = text;
+    svg.append(n);
+    return n;
+  };
+  mk("line", { class: "gridline", x1: L, x2: W - R, y1: H - B, y2: H - B });
+  const tip = document.querySelector(".tooltip") || document.body.appendChild(el("div", "tooltip"));
+  const fmt = (v) => v.toLocaleString("ja-JP") + unit;
+  data.forEach(([label, v], i) => {
+    const cx = L + slot * i + slot / 2;
+    const top = y(v), h = H - B - top;
+    // 上側だけ角を丸めた棒（下端は基準線に接する）
+    const r = Math.min(4, h);
+    const x0 = cx - bw / 2, x1 = cx + bw / 2;
+    const bar = mk("path", {
+      class: "bar",
+      d: `M${x0},${H - B} V${top + r} Q${x0},${top} ${x0 + r},${top} H${x1 - r} Q${x1},${top} ${x1},${top + r} V${H - B} Z`,
+    });
+    mk("text", { class: "axis", x: cx, y: H - 8, "text-anchor": "middle" }, label);
+    // 最初と最後の値だけ直接表示（全部に数字を付けない）
+    if (i === 0 || i === data.length - 1) {
+      mk("text", { class: "val", x: cx, y: top - 6, "text-anchor": "middle" }, v.toLocaleString("ja-JP"));
+    }
+    // 棒より広い当たり判定
+    const hit = mk("rect", { x: L + slot * i, y: T, width: slot, height: H - T - B, fill: "transparent" });
+    hit.addEventListener("mousemove", (e) => {
+      bar.classList.add("active");
+      tip.textContent = `${label}年：${fmt(v)}`;
+      tip.style.display = "block";
+      tip.style.left = e.clientX + 12 + "px";
+      tip.style.top = e.clientY - 28 + "px";
+    });
+    hit.addEventListener("mouseleave", () => { bar.classList.remove("active"); tip.style.display = "none"; });
+  });
+  box.append(svg);
+}
+</script>
+<script>
+const DATA = {"updated": "2026-10-12 16:45", "brands": [{"name": "House on the Hill", "aliases": ["House on the Hill", "ハウス オン ザ ヒル", "ハウスオンザヒル"], "checked": "2026-10-12", "tagline": "子どもの成長と思い出を紡ぐ服", "profile": {"デビュー": "2023年8月", "デザイナー": "渡邊みなみ（元ジュエリーデザイナー）", "対象": "ベビー・キッズ", "価格帯": "高価格帯（例：コート 22,500円、タイツ 2,800円）", "主な商品": "シーズンごとのコレクション（26年秋冬は29型・71バリエーション）、コート、ボアジャケット＆パンツのセット、タイツ、ギフトボックス", "販売方法": "自社サイトでの新作発売（即完売が続く）、シーズンごとのポップアップ（全日程 完全抽選予約制）"}, "tags": ["高価格帯", "少量生産・即完売", "抽選制ポップアップ", "コレクション型", "ギフト"], "strengths": ["「The 8th collection」のように毎シーズンを“作品”として発表し、ファンが新作を待つ仕組みを作っている", "新作が即完売・ポップアップは抽選制で、手に入りにくさ自体が話題とブランド価値になっている", "フリマアプリで定価以上の出品も見られ、二次流通で価値が下がりにくい（=新品を買う理由になる）", "2万円以上購入でミニトートを贈るなど、まとめ買いを促す特典に“余り布”というストーリーを持たせている"], "takeaways": ["シーズンに番号やテーマ名を付け、発売日を事前告知して「待つ楽しみ」を作る", "作る量をあえて抑え、再販は限定的にして希少性を保つ", "購入金額に応じた“ブランドらしい”ノベルティで客単価を上げる"], "sources": [{"label": "FASHIONSNAP：「ハウス オン ザ ヒル」が支持されるまで（2026/7/27）", "url": "https://www.fashionsnap.com/article/house-on-the-hill-interview-2026/"}, {"label": "FASHIONSNAP：26年秋冬のポップアップ開催 コートが初登場（2026/10/2）", "url": "https://www.fashionsnap.com/article/2026-10-02/house-on-the-hill-the-8th-popup/"}, {"label": "FASHIONSNAP：ポップアップ開催、ギフトボックスが新登場（2026/4/28）", "url": "https://www.fashionsnap.com/article/2026-04-28/houseonthehill-7th-popup/"}], "unknown": "Instagramのフォロワー数、通常商品の定価一覧、素材・生産国は公開記事から確認できていません。"}, {"name": "ululu", "aliases": ["ululu", "ウルル"], "match_with_kids_term": true, "checked": "2026-10-12", "tagline": "親子で過ごす大切な時間を、特別で幸せなものに", "profile": {"世界観": "ホワイト〜ベージュの柔らかな色合いで統一", "対象": "出産準備（0〜3ヶ月）・ベビー（〜1歳）・キッズ（2歳〜）", "価格帯": "手に取りやすい中価格帯（例：ロンパース 2,340円、ワッフルロンパースセット 3,980円、デニムパンツ 3,100円、チュールドレス 3,800円）", "主な商品": "ロンパース、出産準備セット、ガーゼおくるみ（綿100%）、ワンピース、カーディガン、デニム", "販売方法": "自社通販サイト（7,000円以上で送料無料）、楽天市場店、Amazon"}, "tags": ["中価格帯", "くすみ・ベージュ系", "出産準備・ギフト", "自社EC＋モール"], "strengths": ["色をホワイト〜ベージュに絞り、どの商品を並べても写真の雰囲気がそろう（SNS投稿と相性が良い）", "「出産準備」「〜1歳」「2歳〜」と成長段階で売り場を分け、出産前から長く付き合える導線になっている", "セット商品や出産祝い向けのおくるみなど、ギフト需要を取り込む商品構成", "自社サイトに加え楽天・Amazonにも出し、SNSで知った人がいつものモールでも買える"], "takeaways": ["使う色の範囲を決めて、ショップ全体の写真の“トーン”を統一する", "月齢・年齢別のカテゴリで「出産準備→ベビー→キッズ」とリピートにつなげる", "送料無料ラインの手前に置けるセット商品・小物を用意して客単価を上げる"], "sources": [{"label": "ululu 公式オンラインストア", "url": "https://ululu-shop.jp/"}, {"label": "楽天市場：ululuの商品一覧", "url": "https://search.rakuten.co.jp/search/mall/ululu/"}], "unknown": "運営会社、Instagramのフォロワー数、創業年、再販・新作発売のルールは確認できていません。"}], "common_trends": [{"title": "世界観の統一", "body": "色・トーン・写真の雰囲気をそろえ、SNSで1枚見ただけで「あのブランド」と分かる状態を作っている。"}, {"title": "ギフト・特別な日の需要", "body": "出産祝い・セット商品・ギフトボックスなど、「自分で着せる服」だけでなく「贈る服」を用意している。"}, {"title": "自社ECを軸にした直販", "body": "百貨店や量販店ではなく、自社サイトを中心にSNSから直接お客さんを呼んでいる。"}, {"title": "量と売り方のコントロール", "body": "抽選制ポップアップや即完売（House on the Hill）、モール併用（ululu）など、ブランドの立ち位置に合わせて“どこで・どれだけ売るか”を設計している。"}], "articles": [{"title": "House on the Hill 2026年秋冬コレクション | 画像40枚", "link": "https://news.google.com/rss/articles/CBMickFVX3lxTFBQay1iQ014cm1OT0NTeVkyZkJyUkxTMU9hZHBfcHd5Q21ZamF4QkhNcjJsNkdlVS1OSzBnSTR1Z2ZPMzVKVlZaYUdBM0NYcHJPcmZrRE85SzNkSG1BRnRYVnkyb0Roc3VZOXlCN1g2MnhGdw?oc=5", "source": "Fashionsnap.com", "published": "2026-10-06T16:44:10+09:00", "category": "注目SNSブランド", "keyword": "\"House on the hill\" 子供服", "brand": "House on the Hill"}, {"title": "ブランド「House on the Hill」 のコレクション一覧", "link": "https://news.google.com/rss/articles/CBMieEFVX3lxTE0tcFJkVHpGaHNKQ2dFQ2IwdjhGLTZFaFJoTUU3RVNQaDV3MXpmbFNEUXgydjVFSmNFZ3U1WjRnWEtXOXBLOVJJc1FFeWlrUEZGRkh2YWxVUlZVV0RvbVk5ZEpJc0RjZkVfdDRfS21yUFdxR3poTUtNNA?oc=5", "source": "fashionsnap.com", "published": "2026-10-06T16:44:00+09:00", "category": "注目SNSブランド", "keyword": "\"House on the hill\" 子供服", "brand": "House on the Hill"}]};
+const $ = (id) => document.getElementById(id);
+
+$("common").replaceChildren(...DATA.common_trends.map((t) => {
+  const c = el("div", "card");
+  const p = el("p", "note", t.body); p.style.margin = "0";
+  c.append(el("h3", null, t.title), p);
+  return c;
+}));
+
+// 比較表：ブランドごとの profile の項目を行にする
+const keys = [...new Set(DATA.brands.flatMap((b) => Object.keys(b.profile)))];
+const head = el("tr");
+head.append(el("th"), ...DATA.brands.map((b) => el("th", null, b.name)));
+$("compare").append(head);
+keys.forEach((k) => {
+  const tr = el("tr");
+  tr.append(el("th", null, k), ...DATA.brands.map((b) => el("td", null, b.profile[k] || "—")));
+  $("compare").append(tr);
+});
+const newsCount = el("tr");
+newsCount.append(el("th", null, "直近の記事数"),
+  ...DATA.brands.map((b) => el("td", null, DATA.articles.filter((a) => a.brand === b.name).length + "件")));
+$("compare").append(newsCount);
+
+const list = (items) => {
+  const ul = el("ul", "points");
+  ul.append(...items.map((t) => el("li", null, t)));
+  return ul;
+};
+
+DATA.brands.forEach((b) => {
+  const sec = el("section");
+  sec.append(el("h2", null, b.name));
+  const card = el("div", "card");
+  card.append(el("p", "tagline", "「" + b.tagline + "」"));
+  const chips = el("div", "chips");
+  chips.append(...b.tags.map((t) => el("span", "chip", t)));
+  card.append(chips);
+  const dl = el("dl", "profile");
+  Object.entries(b.profile).forEach(([k, v]) => dl.append(el("dt", null, k), el("dd", null, v)));
+  card.append(dl);
+  card.append(el("h3", null, "人気の理由（分析）"), list(b.strengths));
+  const h = el("h3", null, "自分のお店に活かせるポイント"); h.style.marginTop = "14px";
+  card.append(h, list(b.takeaways));
+  const unk = el("p", "note", "※ " + b.unknown + "（確認日：" + b.checked + "）");
+  unk.style.margin = "12px 0 4px";
+  card.append(unk);
+  const src = el("ul", "sources");
+  src.append(...b.sources.map((s) => {
+    const li = el("li"), a = el("a", null, s.label);
+    a.href = s.url; a.target = "_blank"; a.rel = "noopener noreferrer";
+    li.append(a);
+    return li;
+  }));
+  card.append(src);
+  const bn = DATA.articles.filter((a) => a.brand === b.name);
+  if (bn.length) {
+    const h4 = el("h3", null, "最新ニュース"); h4.style.marginTop = "14px";
+    const ul = el("ul", "list");
+    renderNews(ul, bn.slice(0, 5), false);
+    card.append(h4, ul);
+  }
+  sec.append(card);
+  $("brands").append(sec);
+});
+
+$("news-note").textContent = "最終更新：" + DATA.updated;
+$("news-empty").hidden = DATA.articles.length > 0;
+renderNews($("news"), DATA.articles);
+</script>
+</body>
+</html>

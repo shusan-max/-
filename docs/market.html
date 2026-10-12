@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>子供服マーケット情報ボード｜市場環境</title>
+<style>:root {
+  --bg: #faf8f5; --card: #ffffff; --text: #2b2a28; --muted: #6f6b64;
+  --line: #e8e3dc; --accent: #c4553c; --accent-soft: #fbe9e4; --new: #2b7d5e;
+  --bar: #d9654b; --grid: #ece7e0;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1c1b1a; --card: #262523; --text: #ecebe8; --muted: #a39f98;
+    --line: #3a3835; --accent: #f08a70; --accent-soft: #3d2a25; --new: #5cc59b;
+    --bar: #e8795f; --grid: #34322f;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", "Yu Gothic", sans-serif;
+  line-height: 1.7;
+}
+.wrap { max-width: 900px; margin: 0 auto; padding: 20px 16px 64px; }
+h1 { font-size: 1.4rem; margin: 0 0 4px; }
+h2 { font-size: 1.15rem; margin: 36px 0 12px; }
+h3 { font-size: 1rem; margin: 0 0 6px; }
+a { color: var(--accent); }
+.updated, .note { color: var(--muted); font-size: .85rem; margin: 0 0 16px; }
+.nav { display: flex; gap: 4px; margin: 0 0 18px; border-bottom: 1px solid var(--line); overflow-x: auto; }
+.nav a {
+  padding: 8px 12px; color: var(--muted); text-decoration: none; font-weight: 600; white-space: nowrap;
+  border-bottom: 3px solid transparent; margin-bottom: -1px;
+}
+.nav a[aria-current="page"] { color: var(--text); border-bottom-color: var(--accent); }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+.grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
+.kpi .label { font-size: .8rem; color: var(--muted); }
+.kpi .value { font-size: 1.6rem; font-weight: 700; line-height: 1.3; margin: 4px 0; }
+.kpi .sub { font-size: .8rem; color: var(--muted); }
+.search {
+  width: 100%; padding: 10px 14px; font-size: 1rem; border-radius: 10px;
+  border: 1px solid var(--line); background: var(--card); color: var(--text);
+}
+.tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 20px; }
+.tab {
+  border: 1px solid var(--line); background: var(--card); color: var(--text);
+  padding: 6px 12px; border-radius: 999px; font-size: .9rem; cursor: pointer;
+}
+.tab[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+.tab .n { opacity: .75; margin-left: 4px; font-size: .8rem; }
+.list { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+.item { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; }
+.item a { color: var(--text); text-decoration: none; font-weight: 600; }
+.item a:hover { color: var(--accent); text-decoration: underline; }
+.meta { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 4px; font-size: .8rem; color: var(--muted); }
+.chip { background: var(--accent-soft); color: var(--accent); padding: 1px 8px; border-radius: 6px; font-size: .8rem; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+.new { color: var(--new); font-weight: 700; }
+.empty { color: var(--muted); text-align: center; padding: 28px 0; }
+.chart svg { width: 100%; height: auto; display: block; }
+.chart .axis { fill: var(--muted); font-size: 11px; }
+.chart .gridline { stroke: var(--grid); stroke-width: 1; }
+.chart .bar { fill: var(--bar); }
+.chart .bar:hover, .chart .bar.active { opacity: .75; }
+.chart .val { fill: var(--text); font-size: 11px; font-weight: 600; }
+.tooltip {
+  position: fixed; pointer-events: none; background: var(--text); color: var(--bg);
+  padding: 4px 10px; border-radius: 6px; font-size: .8rem; display: none; z-index: 10;
+}
+details { margin-top: 8px; font-size: .85rem; }
+summary { cursor: pointer; color: var(--muted); }
+table { border-collapse: collapse; width: 100%; font-size: .85rem; margin-top: 6px; }
+th, td { border-bottom: 1px solid var(--line); padding: 6px 8px; text-align: left; vertical-align: top; }
+td.num { text-align: right; font-variant-numeric: tabular-nums; }
+.hbar { display: grid; grid-template-columns: 7.5em 1fr 2.5em; gap: 8px; align-items: center; font-size: .85rem; margin: 4px 0; }
+.hbar .track { height: 10px; background: var(--grid); border-radius: 4px; overflow: hidden; }
+.hbar .fill { height: 100%; background: var(--bar); border-radius: 0 4px 4px 0; }
+.hbar .num { text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
+dl.profile { display: grid; grid-template-columns: 6.5em 1fr; gap: 4px 12px; margin: 10px 0; font-size: .9rem; }
+dl.profile dt { color: var(--muted); }
+dl.profile dd { margin: 0; }
+ul.points { margin: 6px 0 0; padding-left: 1.2em; font-size: .9rem; }
+.tagline { color: var(--muted); font-size: .9rem; margin: 0 0 4px; }
+.scroll-x { overflow-x: auto; }
+.sources { font-size: .8rem; color: var(--muted); }
+@media (max-width: 520px) {
+  dl.profile { grid-template-columns: 1fr; }
+  dl.profile dd { margin-bottom: 6px; }
+}
+#compare { min-width: 560px; }
+#compare th:first-child { white-space: nowrap; color: var(--muted); font-weight: 600; }
+#compare td { min-width: 200px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>子供服マーケット情報ボード</h1>
+  <nav class="nav"><a href="index.html">ニュース</a><a href="market.html" aria-current="page">市場環境</a><a href="brands.html">SNSブランド分析</a></nav>
+  <p class="updated" id="updated"></p>
+
+  <h2>主要な数字</h2>
+  <div class="grid" id="kpis"></div>
+
+  <h2>市場のポイント</h2>
+  <div class="grid" id="insights"></div>
+
+  <div id="charts"></div>
+
+  <h2>ニュースに多く出てくる言葉</h2>
+  <p class="note" id="trend-note"></p>
+  <div class="card" id="trends"></div>
+
+  <h2>市場・消費動向の最新ニュース</h2>
+  <ul class="list" id="news"></ul>
+  <p class="empty" id="news-empty" hidden>直近の記事はまだありません</p>
+
+  <h2>出典</h2>
+  <ol class="sources" id="sources"></ol>
+</div>
+<script>const el = (tag, cls, text) => {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text != null) e.textContent = text;
+  return e;
+};
+
+function fmtDate(iso) {
+  const d = new Date(iso);
+  return (d.getMonth() + 1) + "/" + d.getDate() + " " +
+    String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
+}
+
+// 記事の一覧を描く。showCategory=false ならカテゴリの札を出さない
+function renderNews(listEl, articles, showCategory = true) {
+  const dayAgo = Date.now() - 24 * 3600 * 1000;
+  listEl.replaceChildren(...articles.map((a) => {
+    const li = el("li", "item");
+    const link = el("a", null, a.title);
+    link.href = a.link; link.target = "_blank"; link.rel = "noopener noreferrer";
+    const meta = el("div", "meta");
+    if (new Date(a.published).getTime() > dayAgo) meta.append(el("span", "new", "NEW"));
+    if (a.brand) meta.append(el("span", "chip", a.brand));
+    else if (showCategory) meta.append(el("span", "chip", a.category));
+    meta.append(el("span", null, a.source || ""), el("span", null, fmtDate(a.published)));
+    li.append(link, meta);
+    return li;
+  }));
+}
+
+// 1 系列の縦棒グラフ（SVG）。data = [[ラベル, 値], ...]
+function barChart(box, data, unit) {
+  const W = 640, H = 260, L = 8, R = 8, T = 24, B = 26;
+  const max = Math.max(...data.map((d) => d[1])) * 1.1;
+  const slot = (W - L - R) / data.length, bw = Math.min(44, slot * 0.6);
+  const y = (v) => T + (H - T - B) * (1 - v / max);
+  const ns = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(ns, "svg");
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  svg.setAttribute("role", "img");
+  const mk = (name, attrs, text) => {
+    const n = document.createElementNS(ns, name);
+    for (const k in attrs) n.setAttribute(k, attrs[k]);
+    if (text != null) n.textContent = text;
+    svg.append(n);
+    return n;
+  };
+  mk("line", { class: "gridline", x1: L, x2: W - R, y1: H - B, y2: H - B });
+  const tip = document.querySelector(".tooltip") || document.body.appendChild(el("div", "tooltip"));
+  const fmt = (v) => v.toLocaleString("ja-JP") + unit;
+  data.forEach(([label, v], i) => {
+    const cx = L + slot * i + slot / 2;
+    const top = y(v), h = H - B - top;
+    // 上側だけ角を丸めた棒（下端は基準線に接する）
+    const r = Math.min(4, h);
+    const x0 = cx - bw / 2, x1 = cx + bw / 2;
+    const bar = mk("path", {
+      class: "bar",
+      d: `M${x0},${H - B} V${top + r} Q${x0},${top} ${x0 + r},${top} H${x1 - r} Q${x1},${top} ${x1},${top + r} V${H - B} Z`,
+    });
+    mk("text", { class: "axis", x: cx, y: H - 8, "text-anchor": "middle" }, label);
+    // 最初と最後の値だけ直接表示（全部に数字を付けない）
+    if (i === 0 || i === data.length - 1) {
+      mk("text", { class: "val", x: cx, y: top - 6, "text-anchor": "middle" }, v.toLocaleString("ja-JP"));
+    }
+    // 棒より広い当たり判定
+    const hit = mk("rect", { x: L + slot * i, y: T, width: slot, height: H - T - B, fill: "transparent" });
+    hit.addEventListener("mousemove", (e) => {
+      bar.classList.add("active");
+      tip.textContent = `${label}年：${fmt(v)}`;
+      tip.style.display = "block";
+      tip.style.left = e.clientX + 12 + "px";
+      tip.style.top = e.clientY - 28 + "px";
+    });
+    hit.addEventListener("mouseleave", () => { bar.classList.remove("active"); tip.style.display = "none"; });
+  });
+  box.append(svg);
+}
+</script>
+<script>
+const DATA = {"updated": "2026-10-12 16:45", "market": {"_説明": "子供服の市場環境ページに載せる統計データ（手入力）。新しい統計が出たら数値と出典を追記してください。", "checked": "2026-10-12", "kpis": [{"label": "出生数（2025年）", "value": "67.1万人", "note": "前年比 −2.2%・10年連続で過去最少", "source": 0}, {"label": "合計特殊出生率（2025年）", "value": "1.14", "note": "過去最低・東京都は0.96", "source": 0}, {"label": "ベビー・こども服 小売市場（2024年）", "value": "8,405億円", "note": "前年比 +0.2%・値上げとインバウンドで横ばい", "source": 1}, {"label": "ベビー関連ビジネス市場（2025年）", "value": "4兆6,570億円", "note": "前年比 +2.0%・ただしベビー衣料品は減少", "source": 2}], "charts": [{"title": "出生数の推移", "unit": "人", "source": 0, "note": "日本における日本人の出生数（確定数）", "data": [["2016", 976978], ["2017", 946146], ["2018", 918400], ["2019", 865239], ["2020", 840835], ["2021", 811622], ["2022", 770759], ["2023", 727288], ["2024", 686173], ["2025", 671270]]}, {"title": "ベビー・こども服 小売市場規模の推移", "unit": "億円", "source": 1, "note": "2022年は2023年の値と前年比（+2.6%）から逆算した概算値。2024年は予測値。", "data": [["2019", 9141], ["2020", 7872], ["2021", 8118], ["2022", 8172], ["2023", 8385], ["2024", 8405]]}], "insights": [{"title": "子どもの数は毎年2〜5%ずつ減っている", "body": "出生数は10年で約98万人→約67万人と3割以上減りました。お客さんになる家庭の数そのものは、今後も減り続ける前提で考える必要があります。"}, {"title": "それでも市場の金額は横ばい", "body": "子供服の市場規模は2021年以降むしろ少し増えています。値上げに加え、1人の子どもにかけるお金が増えていること、訪日客の購入（インバウンド）が支えています。"}, {"title": "「数」より「1人あたりの単価」の勝負に", "body": "子どもが少ない分、1着の質・デザイン・ギフト性にお金を払う家庭が増えています。安さで量を売るより、世界観やストーリーで選ばれるブランドが伸びやすい環境です。"}, {"title": "ベビー衣料は特に厳しい", "body": "ベビー関連ビジネス全体は伸びていますが、伸びているのは保育サービスなどで、ベビー用衣料品は減少しています。出産祝い・ギフトなど“買う理由”をはっきりさせることが大切です。"}], "sources": [{"label": "厚生労働省「令和7年 人口動態統計（確定数）」ほか", "url": "https://www.mhlw.go.jp/toukei/list/81-1a.html"}, {"label": "矢野経済研究所「ベビー・こども服小売市場に関する調査（2025年）」", "url": "https://www.yano.co.jp/press-release/show/press_id/3819"}, {"label": "矢野経済研究所「ベビー関連ビジネス市場に関する調査（2026年）」", "url": "https://www.yano.co.jp/press-release/show/press_id/4082"}]}, "articles": [{"title": "ワールド傘下のナルミヤが中国大陸1号店を杭州にオープン", "link": "https://news.google.com/rss/articles/CBMiU0FVX3lxTFBCSWwyT3psU3NzNEkzRS14dDZ4YTJkcHExU2c5Vm5sMlR6bFlwWHhZWjcwV1ZwT09oajZiakVYbGVhN1ptekd1NmlNdUJJdGc5QTdR?oc=5", "source": "ニュースメディアVOIX", "published": "2026-10-08T15:31:54+09:00", "category": "市場・消費動向", "keyword": "ベビー キッズ 市場規模", "brand": null}, {"title": "日本発の人気ベビー・キッズブランド「petit main（プティマイン）」台湾・香港での展開を基盤に、中国大陸市場へ進出。アジア市場での成長をさらに加速 | 株式会社ナルミヤ・インターナショナルのプレスリリース", "link": "https://news.google.com/rss/articles/CBMiakFVX3lxTE5KYW01QmFYNXdtQWJyNEVEb2NPa1IzTXp0U3luUnMzSjNSZW1XVVc0UTVnSWl4ZU5mc2RITTJVVk81Um1VUHhlcURhV3VPVk1ZcHpQSGZiYndSQldvVjVsN0k5dFBRYlZoX0E?oc=5", "source": "PR TIMES", "published": "2026-10-08T15:30:02+09:00", "category": "市場・消費動向", "keyword": "ベビー キッズ 市場規模", "brand": null}], "trends": [["コラボ", 6], ["ロンパース", 1], ["親子コーデ", 1]], "total": 28};
+const M = DATA.market;
+const $ = (id) => document.getElementById(id);
+$("updated").textContent = "統計の確認日：" + M.checked + "　／　ニュース最終更新：" + DATA.updated;
+
+const srcMark = (i) => "［出典" + (i + 1) + "］";
+
+$("kpis").replaceChildren(...M.kpis.map((k) => {
+  const c = el("div", "card kpi");
+  c.append(el("div", "label", k.label), el("div", "value", k.value), el("div", "sub", k.note + " " + srcMark(k.source)));
+  return c;
+}));
+
+$("insights").replaceChildren(...M.insights.map((p) => {
+  const c = el("div", "card");
+  c.append(el("h3", null, p.title), el("div", "note", p.body));
+  c.lastChild.style.margin = "0";
+  return c;
+}));
+
+M.charts.forEach((ch) => {
+  const sec = el("section");
+  sec.append(el("h2", null, ch.title + "（" + ch.unit + "）"));
+  const card = el("div", "card chart");
+  barChart(card, ch.data, ch.unit);
+  const det = el("details");
+  det.append(el("summary", null, "数値を表で見る"));
+  const tbl = el("table");
+  tbl.append(...ch.data.map(([k, v]) => {
+    const tr = el("tr");
+    tr.append(el("td", null, k + "年"), el("td", "num", v.toLocaleString("ja-JP") + ch.unit));
+    return tr;
+  }));
+  det.append(tbl);
+  card.append(el("p", "note", ch.note + " " + srcMark(ch.source)), det);
+  card.querySelector("p").style.margin = "8px 0 0";
+  sec.append(card);
+  $("charts").append(sec);
+});
+
+$("trend-note").textContent = "直近" + DATA.total + "件の記事タイトルに、各キーワードが何件含まれていたか（自動集計）";
+if (DATA.trends.length) {
+  const max = DATA.trends[0][1];
+  $("trends").replaceChildren(...DATA.trends.slice(0, 15).map(([t, n]) => {
+    const row = el("div", "hbar");
+    const track = el("div", "track"), fill = el("div", "fill");
+    fill.style.width = (n / max * 100) + "%";
+    track.append(fill);
+    row.append(el("span", null, t), track, el("span", "num", n + "件"));
+    return row;
+  }));
+} else {
+  $("trends").append(el("p", "empty", "まだ集計できる記事がありません"));
+}
+
+$("news-empty").hidden = DATA.articles.length > 0;
+renderNews($("news"), DATA.articles, false);
+
+$("sources").replaceChildren(...M.sources.map((s) => {
+  const li = el("li"), a = el("a", null, s.label);
+  a.href = s.url; a.target = "_blank"; a.rel = "noopener noreferrer";
+  li.append(a);
+  return li;
+}));
+</script>
+</body>
+</html>
