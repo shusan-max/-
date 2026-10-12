@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{TITLE}}｜市場環境</title>
+<style>{{STYLE}}</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>{{TITLE}}</h1>
+  {{NAV}}
+  <p class="updated" id="updated"></p>
+
+  <h2>主要な数字</h2>
+  <div class="grid" id="kpis"></div>
+
+  <h2>市場のポイント</h2>
+  <div class="grid" id="insights"></div>
+
+  <div id="charts"></div>
+
+  <h2>ニュースに多く出てくる言葉</h2>
+  <p class="note" id="trend-note"></p>
+  <div class="card" id="trends"></div>
+
+  <h2>市場・消費動向の最新ニュース</h2>
+  <ul class="list" id="news"></ul>
+  <p class="empty" id="news-empty" hidden>直近の記事はまだありません</p>
+
+  <h2>出典</h2>
+  <ol class="sources" id="sources"></ol>
+</div>
+<script>{{COMMON_JS}}</script>
+<script>
+const DATA = {{DATA}};
+const M = DATA.market;
+const $ = (id) => document.getElementById(id);
+$("updated").textContent = "統計の確認日：" + M.checked + "　／　ニュース最終更新：" + DATA.updated;
+
+const srcMark = (i) => "［出典" + (i + 1) + "］";
+
+$("kpis").replaceChildren(...M.kpis.map((k) => {
+  const c = el("div", "card kpi");
+  c.append(el("div", "label", k.label), el("div", "value", k.value), el("div", "sub", k.note + " " + srcMark(k.source)));
+  return c;
+}));
+
+$("insights").replaceChildren(...M.insights.map((p) => {
+  const c = el("div", "card");
+  c.append(el("h3", null, p.title), el("div", "note", p.body));
+  c.lastChild.style.margin = "0";
+  return c;
+}));
+
+M.charts.forEach((ch) => {
+  const sec = el("section");
+  sec.append(el("h2", null, ch.title + "（" + ch.unit + "）"));
+  const card = el("div", "card chart");
+  barChart(card, ch.data, ch.unit);
+  const det = el("details");
+  det.append(el("summary", null, "数値を表で見る"));
+  const tbl = el("table");
+  tbl.append(...ch.data.map(([k, v]) => {
+    const tr = el("tr");
+    tr.append(el("td", null, k + "年"), el("td", "num", v.toLocaleString("ja-JP") + ch.unit));
+    return tr;
+  }));
+  det.append(tbl);
+  card.append(el("p", "note", ch.note + " " + srcMark(ch.source)), det);
+  card.querySelector("p").style.margin = "8px 0 0";
+  sec.append(card);
+  $("charts").append(sec);
+});
+
+$("trend-note").textContent = "直近" + DATA.total + "件の記事タイトルに、各キーワードが何件含まれていたか（自動集計）";
+if (DATA.trends.length) {
+  const max = DATA.trends[0][1];
+  $("trends").replaceChildren(...DATA.trends.slice(0, 15).map(([t, n]) => {
+    const row = el("div", "hbar");
+    const track = el("div", "track"), fill = el("div", "fill");
+    fill.style.width = (n / max * 100) + "%";
+    track.append(fill);
+    row.append(el("span", null, t), track, el("span", "num", n + "件"));
+    return row;
+  }));
+} else {
+  $("trends").append(el("p", "empty", "まだ集計できる記事がありません"));
+}
+
+$("news-empty").hidden = DATA.articles.length > 0;
+renderNews($("news"), DATA.articles, false);
+
+$("sources").replaceChildren(...M.sources.map((s) => {
+  const li = el("li"), a = el("a", null, s.label);
+  a.href = s.url; a.target = "_blank"; a.rel = "noopener noreferrer";
+  li.append(a);
+  return li;
+}));
+</script>
+</body>
+</html>

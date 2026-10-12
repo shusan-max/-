@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{TITLE}}｜SNSブランド分析</title>
+<style>{{STYLE}}</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>{{TITLE}}</h1>
+  {{NAV}}
+  <p class="updated">SNSを中心に人気を集める子供服ブランドの特徴と、自分のお店に活かせるポイントをまとめています。</p>
+
+  <h2>ブランド共通の傾向</h2>
+  <div class="grid" id="common"></div>
+
+  <h2>比較表</h2>
+  <div class="card scroll-x"><table id="compare"></table></div>
+
+  <div id="brands"></div>
+
+  <h2>ブランド関連の最新ニュース</h2>
+  <p class="note" id="news-note"></p>
+  <ul class="list" id="news"></ul>
+  <p class="empty" id="news-empty" hidden>直近7日〜30日のニュースはまだありません（SNS中心のブランドは記事になる頻度が低めです）</p>
+</div>
+<script>{{COMMON_JS}}</script>
+<script>
+const DATA = {{DATA}};
+const $ = (id) => document.getElementById(id);
+
+$("common").replaceChildren(...DATA.common_trends.map((t) => {
+  const c = el("div", "card");
+  const p = el("p", "note", t.body); p.style.margin = "0";
+  c.append(el("h3", null, t.title), p);
+  return c;
+}));
+
+// 比較表：ブランドごとの profile の項目を行にする
+const keys = [...new Set(DATA.brands.flatMap((b) => Object.keys(b.profile)))];
+const head = el("tr");
+head.append(el("th"), ...DATA.brands.map((b) => el("th", null, b.name)));
+$("compare").append(head);
+keys.forEach((k) => {
+  const tr = el("tr");
+  tr.append(el("th", null, k), ...DATA.brands.map((b) => el("td", null, b.profile[k] || "—")));
+  $("compare").append(tr);
+});
+const newsCount = el("tr");
+newsCount.append(el("th", null, "直近の記事数"),
+  ...DATA.brands.map((b) => el("td", null, DATA.articles.filter((a) => a.brand === b.name).length + "件")));
+$("compare").append(newsCount);
+
+const list = (items) => {
+  const ul = el("ul", "points");
+  ul.append(...items.map((t) => el("li", null, t)));
+  return ul;
+};
+
+DATA.brands.forEach((b) => {
+  const sec = el("section");
+  sec.append(el("h2", null, b.name));
+  const card = el("div", "card");
+  card.append(el("p", "tagline", "「" + b.tagline + "」"));
+  const chips = el("div", "chips");
+  chips.append(...b.tags.map((t) => el("span", "chip", t)));
+  card.append(chips);
+  const dl = el("dl", "profile");
+  Object.entries(b.profile).forEach(([k, v]) => dl.append(el("dt", null, k), el("dd", null, v)));
+  card.append(dl);
+  card.append(el("h3", null, "人気の理由（分析）"), list(b.strengths));
+  const h = el("h3", null, "自分のお店に活かせるポイント"); h.style.marginTop = "14px";
+  card.append(h, list(b.takeaways));
+  const unk = el("p", "note", "※ " + b.unknown + "（確認日：" + b.checked + "）");
+  unk.style.margin = "12px 0 4px";
+  card.append(unk);
+  const src = el("ul", "sources");
+  src.append(...b.sources.map((s) => {
+    const li = el("li"), a = el("a", null, s.label);
+    a.href = s.url; a.target = "_blank"; a.rel = "noopener noreferrer";
+    li.append(a);
+    return li;
+  }));
+  card.append(src);
+  const bn = DATA.articles.filter((a) => a.brand === b.name);
+  if (bn.length) {
+    const h4 = el("h3", null, "最新ニュース"); h4.style.marginTop = "14px";
+    const ul = el("ul", "list");
+    renderNews(ul, bn.slice(0, 5), false);
+    card.append(h4, ul);
+  }
+  sec.append(card);
+  $("brands").append(sec);
+});
+
+$("news-note").textContent = "最終更新：" + DATA.updated;
+$("news-empty").hidden = DATA.articles.length > 0;
+renderNews($("news"), DATA.articles);
+</script>
+</body>
+</html>

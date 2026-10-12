@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{TITLE}}｜ニュース</title>
+<style>{{STYLE}}</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>{{TITLE}}</h1>
+  {{NAV}}
+  <p class="updated" id="updated"></p>
+  <input class="search" id="q" type="search" placeholder="記事タイトル・媒体名で絞り込み（例：ベビー、ポップアップ）">
+  <div class="tabs" id="tabs" role="group" aria-label="カテゴリ"></div>
+  <ul class="list" id="list"></ul>
+  <p class="empty" id="empty" hidden>該当する記事がありません</p>
+</div>
+<script>{{COMMON_JS}}</script>
+<script>
+const DATA = {{DATA}};
+const state = { cat: "すべて", q: "" };
+const $ = (id) => document.getElementById(id);
+$("updated").textContent = "最終更新：" + DATA.updated + "（子供服に関係する直近の記事 " + DATA.articles.length + " 件）";
+
+function renderTabs() {
+  const names = ["すべて", ...DATA.categories];
+  $("tabs").replaceChildren(...names.map((name) => {
+    const b = el("button", "tab", name);
+    b.setAttribute("aria-pressed", String(state.cat === name));
+    const n = name === "すべて" ? DATA.articles.length : DATA.articles.filter((a) => a.category === name).length;
+    b.append(el("span", "n", n));
+    b.onclick = () => { state.cat = name; renderTabs(); renderList(); };
+    return b;
+  }));
+}
+
+function renderList() {
+  const q = state.q.trim().toLowerCase();
+  const rows = DATA.articles.filter((a) =>
+    (state.cat === "すべて" || a.category === state.cat) &&
+    (!q || (a.title + " " + a.source).toLowerCase().includes(q)));
+  $("empty").hidden = rows.length > 0;
+  renderNews($("list"), rows);
+}
+
+$("q").addEventListener("input", (e) => { state.q = e.target.value; renderList(); });
+renderTabs(); renderList();
+</script>
+</body>
+</html>
