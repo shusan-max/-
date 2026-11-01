@@ -7,17 +7,15 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Zen+Maru+Gothic:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&display=swap">
 <style>
-/* Layout: maximom風。グレージュの地にチェリーレッドを一点、角は丸く柔らかく。1カラムの読み物。上部にブランド切替、各ブランドは「概要→沿革→成功→課題→数字→マーケ分析→示唆→出典」の順 */
+/* Layout: maximom風。グレージュの地にチェリーレッドを一点。1ページ1テーマ：ホーム → ブランド（8つの小ページ）→ 比較 */
 :root {
   --bg: #e8e4db; --card: #f5f2ec; --text: #22252a; --muted: #6b655b;
   --line: #d6d0c4; --accent: #901d22; --accent-soft: #f1dedb; --on-accent: #f5f2ec;
   --bar: #901d22; --grid: #dbd5c9; --good: #56603f; --good-soft: #dfe1d2;
   --warn: #8a5a1e; --warn-soft: #efe2cc; --info: #2f3a52; --info-soft: #dcdfe4;
-  --font-body: "Zen Kaku Gothic New", -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", sans-serif;
-  --font-display: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Hiragino Sans", sans-serif;
-  --font-brand: "Fredoka", "Zen Maru Gothic", "Hiragino Maru Gothic ProN", sans-serif;
+  --font: "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -36,172 +34,191 @@
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
-body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font-body); line-height: 1.75; font-size: 15px; }
-.wrap { max-width: 900px; margin: 0 auto; padding-block: 20px 72px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
-h1, h2, h3, .tl-title, .kpi .value { font-family: var(--font-display); }
-h1 { font-size: 1.5rem; letter-spacing: .04em; margin: 0 0 4px; text-wrap: balance; }
-h2 { font-size: 1.15rem; margin: 0 0 12px; text-wrap: balance; }
-h3 { font-size: 1rem; margin: 0 0 4px; text-wrap: balance; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font); line-height: 1.85; font-size: 15px; }
+.wrap { max-width: 860px; margin: 0 auto; padding-block: 20px 72px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-weight: 700; text-wrap: balance; }
+h1 { font-size: 1.35rem; margin: 0; letter-spacing: .06em; }
+h2 { font-size: 1.25rem; margin: 0 0 16px; letter-spacing: .04em; }
+h3 { font-size: 1rem; margin: 0 0 4px; }
 a { color: var(--accent); }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.lead { color: var(--muted); font-size: .9rem; margin: 0 0 14px; max-width: 46em; }
-.note { color: var(--muted); font-size: .82rem; margin: 6px 0 0; }
-.sitenav { display: flex; gap: 4px; margin: 0 0 18px; border-bottom: 1px solid var(--line); overflow-x: auto; }
-.sitenav a { padding: 8px 12px; color: var(--muted); text-decoration: none; font-weight: 600; white-space: nowrap; border-bottom: 3px solid transparent; margin-bottom: -1px; }
-.sitenav a[aria-current="page"] { color: var(--text); border-bottom-color: var(--accent); }
-
-/* ブランド切替 */
-.switcher { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 8px; }
-.switcher a { border: 1px solid var(--line); background: var(--card); color: var(--text); padding: 6px 14px; border-radius: 999px; font-size: .9rem; text-decoration: none; font-weight: 600; }
-.switcher a[aria-current="page"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
-.switcher a.ghost { border-style: dashed; color: var(--muted); font-weight: 400; }
-
-/* セクション目次（スクロール位置へ移動） */
-.toc { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); display: flex; gap: 2px; overflow-x: auto; padding: 8px 0; margin: 10px 0 20px; border-bottom: 1px solid var(--line); }
-.toc button { font: inherit; font-size: .82rem; background: none; border: 0; color: var(--muted); padding: 4px 10px; border-radius: 6px; cursor: pointer; white-space: nowrap; }
-.toc button:hover { background: var(--accent-soft); color: var(--accent); }
+.note { color: var(--muted); font-size: .8rem; margin: 8px 0 0; }
+.muted { color: var(--muted); }
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
 
-section.block { margin: 0 0 44px; scroll-margin-top: 60px; }
-.eyebrow { font-family: var(--font-brand); font-size: .85rem; letter-spacing: .06em; text-transform: lowercase; color: var(--accent); font-weight: 700; margin: 0 0 2px; }
-.card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 16px; min-width: 0; }
+/* サイト上部 */
+.masthead { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+.masthead a { text-decoration: none; color: var(--text); }
+.masthead .checked { font-size: .75rem; color: var(--muted); }
+.sitenav { display: flex; gap: 4px; margin: 0 0 14px; border-bottom: 1px solid var(--line); overflow-x: auto; }
+.sitenav a { padding: 8px 12px; color: var(--muted); text-decoration: none; font-weight: 600; white-space: nowrap; border-bottom: 3px solid transparent; margin-bottom: -1px; font-size: .9rem; }
+.sitenav a[aria-current="page"] { color: var(--text); border-bottom-color: var(--accent); }
+.mainnav { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 28px; }
+.mainnav a { border: 1px solid var(--line); background: var(--card); color: var(--text); padding: 5px 14px; border-radius: 999px; font-size: .85rem; text-decoration: none; white-space: nowrap; }
+.mainnav a[aria-current="page"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
 
-/* ヒーロー */
-.hero { display: grid; gap: 16px; grid-template-columns: 1.3fr 1fr; align-items: start; margin-bottom: 20px; }
-.brandname { font-family: var(--font-brand); font-weight: 600; color: var(--accent); font-size: clamp(2.2rem, 7vw, 3.4rem); line-height: 1.05; margin: 6px 0 6px; letter-spacing: .01em; }
-.brandname small { font-size: .4em; color: var(--muted); font-family: var(--font-body); margin-left: 8px; letter-spacing: 0; }
-.concept { font-family: var(--font-brand); font-weight: 500; font-size: 1.05rem; margin: 6px 0 10px; }
-.status { display: inline-block; font-size: .75rem; padding: 1px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-weight: 700; }
-dl.profile { display: grid; grid-template-columns: 6.5em 1fr; gap: 6px 12px; margin: 0; font-size: .88rem; }
+/* ブランドページの見出しと小ページタブ */
+.brandhead { margin-bottom: 4px; }
+.brandhead .status { font-size: .72rem; color: var(--accent); letter-spacing: .1em; }
+.brandname { font-size: clamp(1.9rem, 6vw, 2.6rem); line-height: 1.2; margin: 2px 0 2px; letter-spacing: .02em; font-weight: 700; color: var(--accent); }
+.brandname small { font-size: .42em; color: var(--muted); margin-left: 10px; font-weight: 400; letter-spacing: .08em; }
+.subnav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); display: flex; gap: 0; overflow-x: auto; margin: 14px 0 26px; border-bottom: 1px solid var(--line); }
+.subnav a { padding: 10px 12px; font-size: .85rem; color: var(--muted); text-decoration: none; white-space: nowrap; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.subnav a[aria-current="page"] { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+.subnav a:hover { color: var(--text); }
+.pager { display: flex; justify-content: space-between; gap: 12px; margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--line); font-size: .88rem; }
+.pager a { text-decoration: none; color: var(--text); }
+.pager a span { display: block; font-size: .72rem; color: var(--muted); }
+.pager .next { text-align: right; margin-left: auto; }
+
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 18px; min-width: 0; }
+.intro { font-size: .95rem; max-width: 40em; margin: 0 0 22px; }
+
+/* ホーム */
+.brandcards { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.brandcard { display: flex; flex-direction: column; gap: 6px; text-decoration: none; color: var(--text); background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 20px; transition: border-color .15s; }
+.brandcard:hover { border-color: var(--accent); }
+.brandcard .nm { font-size: 1.4rem; font-weight: 700; color: var(--accent); line-height: 1.3; }
+.brandcard .kn { font-size: .75rem; color: var(--muted); letter-spacing: .08em; }
+.brandcard .tl { font-size: .9rem; }
+.brandcard .go { font-size: .8rem; color: var(--accent); margin-top: auto; padding-top: 8px; }
+.brandcard.add { border-style: dashed; color: var(--muted); justify-content: center; align-items: center; text-align: center; min-height: 160px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font-size: .72rem; padding: 0 9px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+.homefoot { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); margin-top: 28px; }
+.homefoot h3 { font-size: .95rem; }
+.homefoot p { margin: 0; font-size: .85rem; }
+
+/* 概要 */
+.concept { font-size: 1.05rem; font-weight: 600; margin: 0 0 6px; }
+dl.profile { display: grid; grid-template-columns: 6.5em 1fr; gap: 10px 14px; margin: 0; font-size: .9rem; }
 dl.profile dt { color: var(--muted); }
 dl.profile dd { margin: 0; min-width: 0; }
-.kpis { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
-.kpi .label { font-size: .78rem; color: var(--muted); }
-.kpi .value { font-size: 1.45rem; font-weight: 700; line-height: 1.3; margin: 2px 0; font-variant-numeric: tabular-nums; }
-.kpi .sub { font-size: .78rem; color: var(--muted); }
+.kpis { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); margin-top: 14px; }
+.kpi .label { font-size: .75rem; color: var(--muted); }
+.kpi .value { font-size: 1.35rem; font-weight: 700; line-height: 1.4; margin: 2px 0; font-variant-numeric: tabular-nums; }
+.kpi .sub { font-size: .75rem; color: var(--muted); line-height: 1.6; }
+.stack { display: grid; gap: 14px; }
 
-/* 出典・事実/分析ラベル */
-sup.src { font-size: .68rem; margin-left: 2px; white-space: nowrap; }
+/* 出典・ラベル */
+sup.src { font-size: .62rem; margin-left: 2px; white-space: nowrap; }
 sup.src a { text-decoration: none; color: var(--muted); }
 sup.src a:hover { color: var(--accent); }
-.tag { display: inline-block; font-size: .7rem; font-weight: 700; padding: 0 7px; border-radius: 4px; vertical-align: 2px; margin-right: 6px; white-space: nowrap; }
+.tag { display: inline-block; font-size: .68rem; font-weight: 600; padding: 0 7px; border-radius: 4px; vertical-align: 2px; margin-right: 6px; white-space: nowrap; line-height: 1.7; }
 .tag.fact { background: var(--info-soft); color: var(--info); }
 .tag.analysis { background: var(--warn-soft); color: var(--warn); }
-.tag.estimate { background: var(--warn-soft); color: var(--warn); }
 
 /* 年表 */
 ol.timeline { list-style: none; margin: 0; padding: 0; border-left: 2px solid var(--line); }
-ol.timeline li { position: relative; padding: 0 0 18px 20px; }
-ol.timeline li::before { content: ""; position: absolute; left: -7px; top: 7px; width: 12px; height: 12px; border-radius: 50%; background: var(--card); border: 2px solid var(--accent); }
+ol.timeline li { position: relative; padding: 0 0 24px 22px; }
+ol.timeline li::before { content: ""; position: absolute; left: -7px; top: 8px; width: 12px; height: 12px; border-radius: 50%; background: var(--bg); border: 2px solid var(--accent); }
 ol.timeline li.major::before { background: var(--accent); }
-.tl-date { font-size: .8rem; color: var(--accent); font-weight: 700; font-variant-numeric: tabular-nums; }
+.tl-date { font-size: .78rem; color: var(--accent); font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: .04em; }
 .tl-title { font-weight: 700; }
-.tl-body { font-size: .88rem; color: var(--muted); }
+.tl-body { font-size: .88rem; color: var(--muted); margin-top: 2px; }
 
-/* 成功・課題カード */
+/* 成功事例 */
 .cases { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
-.case h3 { line-height: 1.5; }
-.case p { margin: 4px 0 0; font-size: .88rem; }
-.case .why { margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--line); font-size: .84rem; color: var(--muted); }
+.case p { margin: 6px 0 0; font-size: .88rem; }
+.case .why { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--line); font-size: .84rem; color: var(--muted); }
 .case .why b { color: var(--text); font-weight: 600; }
-.risk-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--line); border-radius: 18px; overflow: hidden; background: var(--card); }
+
+/* 課題 */
+.callout { background: var(--info-soft); border-radius: 12px; padding: 12px 16px; font-size: .86rem; margin: 0 0 16px; }
+.risk-row { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); border-radius: 18px; overflow: hidden; background: var(--card); }
 .risk-row + .risk-row { margin-top: 10px; }
-.risk-row > div { padding: 12px 16px; min-width: 0; }
+.risk-row > div { padding: 14px 18px; min-width: 0; }
 .risk-row > div:first-child { border-right: 1px solid var(--line); }
-.risk-row .lbl { font-size: .72rem; font-weight: 700; letter-spacing: .06em; margin-bottom: 2px; }
+.risk-row .lbl { font-size: .7rem; font-weight: 600; letter-spacing: .08em; margin-bottom: 4px; }
 .risk-row .lbl.problem { color: var(--warn); }
 .risk-row .lbl.fix { color: var(--good); }
 .risk-row p { margin: 0; font-size: .88rem; }
-.callout { background: var(--info-soft); color: var(--text); border-radius: 10px; padding: 10px 14px; font-size: .86rem; margin: 0 0 12px; }
 
-/* グラフ（横棒・同一スケール） */
-.chart-grid { display: grid; gap: 12px; grid-template-columns: 1fr; }
-.hbars { display: grid; gap: 10px; margin-top: 10px; }
-.hb { display: grid; grid-template-columns: minmax(7em, 11em) 1fr 8em; gap: 10px; align-items: center; font-size: .84rem; }
-.hb .lab { min-width: 0; line-height: 1.35; }
-.hb .lab small { display: block; color: var(--muted); font-size: .74rem; }
-.hb .track { position: relative; height: 14px; background: var(--grid); border-radius: 0 4px 4px 0; cursor: default; }
+/* グラフ */
+.hbars { display: grid; gap: 12px; margin-top: 12px; }
+.hb, .axis { display: grid; grid-template-columns: minmax(7em, 11em) 1fr 8em; gap: 10px; align-items: center; }
+.hb { font-size: .84rem; }
+.hb .lab { min-width: 0; line-height: 1.4; }
+.hb .lab small { display: block; color: var(--muted); font-size: .72rem; }
+.hb .track { position: relative; height: 14px; background: var(--grid); border-radius: 0 4px 4px 0; }
 .hb .fill { position: absolute; inset: 0 auto 0 0; background: var(--bar); border-radius: 0 4px 4px 0; }
 .hb .fill.est { background: repeating-linear-gradient(135deg, var(--bar) 0 4px, transparent 4px 7px); border: 1px solid var(--bar); }
 .hb .range { position: absolute; top: 0; bottom: 0; background: repeating-linear-gradient(135deg, var(--bar) 0 2px, transparent 2px 7px); opacity: .55; border-radius: 0 4px 4px 0; }
 .hb .num { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
-.hb .track:hover .fill, .hb .track:focus .fill { filter: brightness(1.08); }
-.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: .78rem; color: var(--muted); margin-top: 10px; }
+.axis { font-size: .68rem; color: var(--muted); font-variant-numeric: tabular-nums; margin-top: 4px; }
+.axis .ticks { display: flex; justify-content: space-between; }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: .76rem; color: var(--muted); margin-top: 10px; }
 .legend i { display: inline-block; width: 18px; height: 10px; vertical-align: -1px; margin-right: 5px; border-radius: 2px; }
 .legend i.solid { background: var(--bar); }
 .legend i.hatch { background: repeating-linear-gradient(135deg, var(--bar) 0 3px, transparent 3px 6px); border: 1px solid var(--bar); }
-.axis { display: grid; grid-template-columns: minmax(7em, 11em) 1fr 8em; gap: 10px; font-size: .7rem; color: var(--muted); font-variant-numeric: tabular-nums; }
-.axis .ticks { display: flex; justify-content: space-between; }
 .tooltip { position: fixed; pointer-events: none; background: var(--text); color: var(--bg); padding: 6px 10px; border-radius: 6px; font-size: .78rem; z-index: 20; max-width: 260px; line-height: 1.5; }
 .scroll-x { overflow-x: auto; }
 table { border-collapse: collapse; width: 100%; font-size: .85rem; }
-th, td { border-bottom: 1px solid var(--line); padding: 8px; text-align: left; vertical-align: top; }
-th { color: var(--muted); font-weight: 600; white-space: nowrap; }
+th, td { border-bottom: 1px solid var(--line); padding: 9px 8px; text-align: left; vertical-align: top; }
+thead th { color: var(--muted); font-weight: 600; white-space: nowrap; }
+tbody th { color: var(--muted); font-weight: 600; white-space: nowrap; }
 td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
-details { margin-top: 10px; font-size: .85rem; }
+details { margin-top: 10px; font-size: .84rem; }
 summary { cursor: pointer; color: var(--muted); }
 
-/* マーケティング分析 */
+/* マーケ分析 */
+.mtabs { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 18px; }
+.mtabs button { font: inherit; font-size: .82rem; border: 1px solid var(--line); background: var(--card); color: var(--text); padding: 4px 14px; border-radius: 999px; cursor: pointer; }
+.mtabs button[aria-pressed="true"] { background: var(--text); color: var(--bg); border-color: var(--text); }
+.mlead { font-size: .85rem; color: var(--muted); margin: 0 0 14px; }
 .persona { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
-.persona ul, .plain { margin: 6px 0 0; padding-left: 1.2em; font-size: .88rem; }
-.persona li, .plain li { margin: 2px 0; }
-.funnel { display: grid; gap: 6px; }
-.fn { display: grid; grid-template-columns: 7.5em 1fr; gap: 0; border-radius: 10px; overflow: hidden; border: 1px solid var(--line); background: var(--card); }
-.fn .stage { background: var(--accent-soft); color: var(--accent); font-weight: 700; padding: 10px 12px; font-size: .88rem; display: flex; flex-direction: column; justify-content: center; line-height: 1.35; }
-.fn .stage small { font-weight: 400; font-size: .7rem; letter-spacing: .06em; }
-.fn .body { padding: 10px 14px; font-size: .86rem; min-width: 0; }
+.plain { margin: 8px 0 0; padding-left: 1.2em; font-size: .88rem; }
+.plain li { margin: 3px 0; }
+.funnel { display: grid; gap: 8px; }
+.fn { display: grid; grid-template-columns: 7.5em 1fr; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); background: var(--card); }
+.fn .stage { background: var(--accent-soft); color: var(--accent); font-weight: 700; padding: 12px; font-size: .88rem; display: flex; flex-direction: column; justify-content: center; line-height: 1.4; }
+.fn .stage small { font-weight: 400; font-size: .64rem; letter-spacing: .08em; }
+.fn .body { padding: 12px 16px; font-size: .86rem; min-width: 0; }
 .fn .body b { font-weight: 600; }
 .fourp { display: grid; gap: 12px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.swot { display: grid; gap: 0; grid-template-columns: repeat(2, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; background: var(--card); }
-.swot > div { padding: 14px 16px; min-width: 0; }
+.swot { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; background: var(--card); }
+.swot > div { padding: 16px 18px; min-width: 0; }
 .swot > div:nth-child(1), .swot > div:nth-child(2) { border-bottom: 1px solid var(--line); }
 .swot > div:nth-child(odd) { border-right: 1px solid var(--line); }
-.swot h3 { font-size: .9rem; }
-.swot h3 span { color: var(--muted); font-weight: 400; font-size: .75rem; margin-left: 6px; }
-.subhead { font-size: .95rem; margin: 26px 0 10px; }
+.swot h3 span { color: var(--muted); font-weight: 400; font-size: .72rem; margin-left: 6px; }
 
-/* 示唆 */
-ol.lessons { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; counter-reset: l; }
-ol.lessons li { counter-increment: l; display: grid; grid-template-columns: 2.2em 1fr; gap: 10px; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 14px 16px; }
-ol.lessons li::before { content: counter(l); font-family: var(--font-brand); font-weight: 600; font-size: 1.5rem; color: var(--accent); line-height: 1.1; }
+/* お店へのヒント */
+ol.lessons { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; counter-reset: l; }
+ol.lessons li { counter-increment: l; display: grid; grid-template-columns: 2em 1fr; gap: 10px; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 16px 18px; }
+ol.lessons li::before { content: counter(l); font-size: 1.5rem; font-weight: 700; color: var(--accent); line-height: 1.2; }
 ol.lessons h3 { margin: 0; }
 ol.lessons p { margin: 4px 0 0; font-size: .88rem; }
-ol.lessons .try { margin-top: 6px; font-size: .84rem; background: var(--good-soft); color: var(--text); border-radius: 8px; padding: 6px 10px; }
+ol.lessons .try { margin-top: 8px; font-size: .84rem; background: var(--good-soft); border-radius: 10px; padding: 8px 12px; }
 ol.lessons .try b { color: var(--good); }
 
-ol.sources { margin: 0; padding-left: 2.6em; font-size: .82rem; }
-ol.sources li { margin: 4px 0; overflow-wrap: anywhere; }
-ol.sources li:target { background: var(--accent-soft); }
-.muted { color: var(--muted); }
-.placeholder { border: 1px dashed var(--line); color: var(--muted); text-align: center; }
-pre.code { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: .78rem; overflow-x: auto; line-height: 1.5; }
+ol.sources { margin: 0; padding-left: 2.4em; font-size: .84rem; }
+ol.sources li { margin: 6px 0; overflow-wrap: anywhere; }
+.flash { background: var(--accent-soft); }
+pre.code { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px; font-size: .76rem; overflow-x: auto; line-height: 1.5; font-family: ui-monospace, Menlo, monospace; }
+.placeholder { color: var(--muted); }
 
 @media (max-width: 640px) {
-  .hero { grid-template-columns: 1fr; }
   .fourp, .swot { grid-template-columns: 1fr; }
   .swot > div { border-right: 0 !important; border-bottom: 1px solid var(--line); }
   .swot > div:last-child { border-bottom: 0; }
   .risk-row { grid-template-columns: 1fr; }
   .risk-row > div:first-child { border-right: 0; border-bottom: 1px solid var(--line); }
-  .hb, .axis { grid-template-columns: 6.5em 1fr 5em; gap: 8px; }
+  .hb, .axis { grid-template-columns: 6.5em 1fr 5.5em; gap: 8px; }
   .fn { grid-template-columns: 5.5em 1fr; }
-}
-@media (prefers-reduced-motion: no-preference) {
-  html { scroll-behavior: smooth; }
+  dl.profile { grid-template-columns: 5.5em 1fr; }
 }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>SNSブランド研究室</h1>
+  <div class="masthead"><h1><a href="#home">SNSブランド研究室</a></h1><span class="checked" id="checked"></span></div>
   <nav class="sitenav" aria-label="サイト内のページ">
     <a href="index.html">ニュース</a>
     <a href="market.html">市場環境</a>
     <a href="brands.html">SNSブランド分析</a>
     <a href="brand-research.html" aria-current="page">ブランド深掘り</a>
   </nav>
-  <p class="lead" id="lead"></p>
-  <nav class="switcher" id="switcher" aria-label="ブランドの切り替え"></nav>
+  <nav class="mainnav" id="mainnav" aria-label="ページの切り替え"></nav>
   <main id="view"></main>
 </div>
 <div class="tooltip" id="tip" hidden></div>
@@ -209,179 +226,1333 @@ pre.code { background: var(--card); border: 1px solid var(--line); border-radius
 <!--
   ▼▼▼ ここがデータ部分です ▼▼▼
   ブランドを増やすときは "brands" の中に同じ形のブロックを1つ足すだけで、
-  切り替えボタン・比較表・各ページが自動で増えます。
-  "src" には下の "sources" の id（"S1" など）を書くと、本文に出典番号が付きます。
+  ホームのカード・切り替えボタン・比較表・各ページが自動で増えます。
+  "src" には そのブランドの "sources" の id（"S1" など）を書くと、本文に出典番号が付きます。
   "kind" は "fact"（報道・公式で確認できた事実）か "analysis"（このサイトの分析・推察）です。
 -->
 <script type="application/json" id="brand-data">
 {
-  "site": {
-    "checked": "2026-11-01",
-    "target_summary": "22歳〜40歳の育児中ママ（レディースアパレル・子供服）"
-  },
-  "brands": [
+ "site": {
+  "checked": "2026-11-01",
+  "target_summary": "22歳〜40歳の育児中ママ（レディースアパレル・子供服）"
+ },
+ "brands": [
+  {
+   "id": "bibiy",
+   "name": "Bibiy.",
+   "kana": "ビビィ",
+   "status": "メイン分析対象",
+   "checked": "2026-11-01",
+   "concept": "クラシカルかつエッジの効いたフレンチガーリー。フリル・リボン・チュールに、メンズ由来のディテールを足した「ひとクセある可愛さ」。",
+   "concept_word": "Street feminine ／ Girls just wanted to have fun",
+   "profile": [
     {
-      "id": "bibiy",
-      "name": "Bibiy.",
-      "kana": "ビビィ",
-      "status": "メイン分析対象",
-      "checked": "2026-11-01",
-      "concept": "クラシカルかつエッジの効いたフレンチガーリー。フリル・リボン・チュールに、メンズ由来のディテールを足した「ひとクセある可愛さ」。",
-      "concept_word": "Street feminine ／ Girls just wanted to have fun",
-      "profile": [
-        {"k": "スタート", "v": "2019年7月（2026年で8年目）", "src": ["S1"]},
-        {"k": "創業者", "v": "小松友結子（1997年生まれ・大阪出身）。大学在学中に立ち上げ、服作りは独学", "src": ["S1", "S4"]},
-        {"k": "運営会社", "v": "グルグル／GURUGURU（大阪）。インフルエンサーブランドの運営会社", "src": ["S5", "S3"]},
-        {"k": "主なSNS", "v": "Instagram（ブランド公式・創業者個人）。TikTokの公式運用は今回の調査では確認できず", "src": ["S1"]},
-        {"k": "販路", "v": "自社EC（D2C）＋百貨店などの期間限定店（ポップアップ）＋招待制ショールーム。40カ国以上に販売", "src": ["S6", "S8", "S11"]},
-        {"k": "価格帯", "v": "ドレス 約7,000〜11,000円、アウター 約12,000〜20,000円（報道時点）", "src": ["S2"]}
-      ],
-      "kpis": [
-        {"label": "年商（報道）", "value": "5.5億円", "sub": "設立4年目（2023年頃）時点", "src": ["S3"]},
-        {"label": "成長率", "value": "毎年2桁増", "sub": "24年9月期は前期比60%増見込み", "src": ["S6", "S5"]},
-        {"label": "百貨店POPUP 1週間", "value": "最大4,800万円", "sub": "阪急うめだ本店（23〜24年秋冬）", "src": ["S5"]},
-        {"label": "POPUPの平均購入単価", "value": "約8万円", "sub": "1人2〜3点のまとめ買い", "src": ["S5"]}
-      ],
-      "timeline": [
-        {"date": "2019.07", "major": true, "title": "大学4年でブランドを立ち上げ", "body": "武庫川女子大学に在学中、GURUGURUに参加してBibiy.をスタート。InstagramとECだけで売る形から始めた。最初は発送用の段ボールやテープが足りず慌てて発注するなど、手探りだった。", "src": ["S1", "S4", "S7"]},
-        {"date": "2020頃", "title": "初の百貨店ポップアップで1,000万円超", "body": "立ち上げ約1年後、伊勢丹新宿本店・阪急うめだ本店のポップアップでそれぞれ1,000万円を超える売上。", "src": ["S6"]},
-        {"date": "2021", "major": true, "title": "デザイナー3人を採用、「インフルエンサーブランド」からの脱却へ", "body": "品番（商品の種類）を増やし、創業者の人気だけに頼らないブランドづくりへ。同年7月にはキャンディのようなフレームのサングラスがインスタで話題に。", "src": ["S4", "S9"]},
-        {"date": "2022冬", "title": "伊勢丹新宿本店で1週間3,400万円", "body": "SNSで集めたファンを、百貨店の期間限定店に呼び込む型が定着。", "src": ["S4"]},
-        {"date": "2023頃", "major": true, "title": "設立4年で年商5.5億円", "body": "販路はECとポップアップのみ。人気商品は即完売が続いた。11月には世界観を表現したポップアップ「CONCEPT BOUTIQUE」を東京・大阪で開催。", "src": ["S3", "S19"]},
-        {"date": "2023〜24", "title": "阪急うめだ 4,800万円・伊勢丹 4,400万円（各1週間）", "body": "平均購入単価は約8万円、1人2〜3点を買う。百貨店の期間限定店と雑誌掲載で、客層が20代中心から10〜60代へ広がり、百貨店の外商顧客も増えた。24年9月期は前期比60%増の見込み。", "src": ["S5"]},
-        {"date": "2024.11", "title": "靴ブランドÖffenとのコラボ靴", "body": "阪急うめだ本店のポップアップでコラボ新作を発表。", "src": ["S17"]},
-        {"date": "2025.03", "major": true, "title": "子供服の老舗ファミリアと初コラボ", "body": "ファミリアチェックのチュールやリボンを使ったバッグなど5型。初日は1注文につき各1点までに制限。後日、バッグ類の再販売も決まった。", "src": ["S10", "S11"]},
-        {"date": "2026.01", "title": "デビュー以来、毎年2桁の増収", "body": "毎シーズン30%前後の伸び。客層を見直した商品構成、百貨店でのポップアップ、毎月の新作投入が効いた。30〜60代の購入が増加。若い人向けの入口商品は価格を据え置き、手間をかけたアウターは値上げ。", "src": ["S6"]},
-        {"date": "2026.03", "title": "ジュエリーブランドとのコラボ", "body": "ビジュードエムとのジュエリーを展開。", "src": ["S16"]},
-        {"date": "2026.07", "major": true, "title": "青山に招待制ショールームを開設", "body": "ポップアップで待ち時間が出るほど混むため、これまでのお客さまにゆっくり見てもらう場として常設。販売は主目的にしていない。", "src": ["S8", "S7"]},
-        {"date": "2026.09〜10", "title": "六本木ヒルズ初出店・名古屋タカシマヤでポップアップ", "body": "最初の数日は事前予約制、その後はフリー入場（混雑時は整理券）。", "src": ["S12", "S14"]}
-      ],
-      "successes": [
-        {"title": "作り手本人が「顔」として発信", "body": "公式インスタグラムも創業者自身が運営していた。本人の着こなし・好きなものの発信が、そのままブランドの世界観になっている。", "why": "<b>なぜ効いたか：</b>広告より「この人が作っている」という親近感と信頼が先に立つ。", "src": ["S1", "S18"], "kind": "fact"},
-        {"title": "ECの客を「イベント」で百貨店へ呼ぶ", "body": "普段はネットで売り、シーズンごとに百貨店で1週間だけの期間限定店を開く。1週間で3,400万〜4,800万円を売り、平均購入単価は約8万円。", "why": "<b>なぜ効いたか：</b>「今だけ・ここだけ」で来店の理由ができ、実物を試して複数点まとめ買いされる。", "src": ["S4", "S5"], "kind": "fact"},
-        {"title": "即完売 → 予約販売で取りこぼさない", "body": "初回入荷が売り切れた商品は、予約注文に切り替えて受け付ける。", "why": "<b>なぜ効いたか：</b>売れる数を見てから追加で作れるので、在庫を抱えるリスクが小さい。", "src": ["S15", "S3"], "kind": "fact"},
-        {"title": "毎月の新作で「次」を待たせる", "body": "毎月新作を出し続けたことが2桁成長の要因の一つと報じられている。", "why": "<b>なぜ効いたか：</b>フォロワーがアカウントを見に来る理由が途切れない。", "src": ["S6"], "kind": "fact"},
-        {"title": "創業者頼みから「チームのブランド」へ", "body": "2021年にデザイナーを3人採用し、商品の種類を増やした。インフルエンサーブランドと呼ばれることからの脱却をめざした。", "why": "<b>なぜ効いたか：</b>個人の人気が落ちても続く体制になり、百貨店の大人客にも届くようになった。", "src": ["S4"], "kind": "fact"},
-        {"title": "異業種・老舗とのコラボで客層を広げる", "body": "ファミリア（子供服）、Öffen（靴）、ビジュードエム（ジュエリー）などと協業。ファミリアとのコラボはママ層への入口にもなった。", "why": "<b>なぜ効いたか：</b>相手ブランドのファンに知ってもらえ、話題がニュースにもなる。", "src": ["S10", "S17", "S16"], "kind": "fact"},
-        {"title": "価格の二段構え", "body": "若い人向けの入口商品は価格を据え置き、付加価値の高いアウターは値上げ。", "why": "<b>なぜ効いたか：</b>新しいファンを逃さず、大人客から単価を取れる。", "src": ["S6"], "kind": "fact"}
-      ],
-      "risks_note": "今回の調査では、Bibiy.について大きな炎上や品質問題の報道は見つかりませんでした。ここでは、人気が出たことで起きた「困りごと」と、ブランドがどう対処したかを並べています。",
-      "risks": [
-        {"problem": "立ち上げ当初、発送の資材（段ボール・テープ）が足りないなど、裏側の準備が追いつかなかった。", "fix": "創業者は「毎日小さなエラーはあったが、止まるほどの問題はなかった」と振り返る。", "src": ["S7"], "kind": "fact"},
-        {"problem": "人気商品が即完売し、予約販売の発送が遅れることがある。発送予定が1か月後ろ倒しになった商品も。", "fix": "商品ページに発送予定日と「遅れる可能性」を明記して先に伝えている。", "src": ["S15"], "kind": "fact"},
-        {"problem": "ポップアップが混み、待ち時間が出る。整理券が「奇跡的に取れた」という声も。", "fix": "初日から数日は事前予約制、1枠30分・1人まで、混雑時は公式LINE登録で整理券。さらに招待制ショールームを開設。", "src": ["S12", "S13", "S8"], "kind": "fact"},
-        {"problem": "人気商品の転売や、ポップアップ会場での無断ライブ配信。", "fix": "転売目的の購入とライブ配信をお断りと明記。コラボ品は1注文1点に制限。", "src": ["S12", "S14", "S10"], "kind": "fact"},
-        {"problem": "大量生産ではないため、価格を抑えにくい。", "fix": "デザインの中で「こだわる所」と「妥協する所」の優先順位を決めて価格帯を守っている。", "src": ["S2"], "kind": "fact"},
-        {"problem": "創業者個人の人気に依存しやすい構造（インフルエンサーブランドの共通リスク）。", "fix": "デザイナー採用でチーム化を進めた。今後も、本人の発信と「ブランドの世界観」をどう両立させるかが課題。", "src": ["S4"], "kind": "analysis"},
-        {"problem": "客層が10〜60代に広がった分、若い初期ファンが「自分たちのブランドではなくなった」と感じる可能性。", "fix": "入口商品の価格を据え置くことで、若い層の買いやすさを残している。", "src": ["S6"], "kind": "analysis"}
-      ],
-      "charts": {
-        "popup": {
-          "title": "百貨店ポップアップ 1週間の売上",
-          "unit": "万円",
-          "note": "報道ベース。初回（2020頃）は「1,000万円超」のため1,000万円で表示。",
-          "rows": [
-            {"label": "伊勢丹・阪急（初回）", "sub": "2020頃", "value": 1000, "src": ["S6"]},
-            {"label": "伊勢丹新宿本店", "sub": "2022冬", "value": 3400, "src": ["S4"]},
-            {"label": "阪急うめだ本店", "sub": "2023〜24秋冬", "value": 4800, "src": ["S5"]},
-            {"label": "伊勢丹新宿本店", "sub": "2024春夏", "value": 4400, "src": ["S5"]}
-          ]
-        },
-        "annual": {
-          "title": "年商の推移（報道値と試算）",
-          "unit": "億円",
-          "note": "報道で確認できる年商は5.5億円のみです。24年9月期は「前期比60%増の見込み」を5.5億円に掛けた試算、25年9月期は「2桁成長（10〜30%）」を仮定した試算の幅です。5.5億円がどの決算期かは記事により表記が異なります。",
-          "rows": [
-            {"label": "2023年頃", "sub": "報道値", "value": 5.5, "kind": "reported", "src": ["S3"]},
-            {"label": "2024年9月期", "sub": "試算", "value": 8.8, "kind": "estimate", "src": ["S5"]},
-            {"label": "2025年9月期", "sub": "試算（幅）", "value": 9.7, "high": 11.4, "kind": "estimate", "src": ["S6"]}
-          ]
-        }
-      },
-      "sns_accounts": [
-        {"account": "@bibiy_official（ブランド公式）", "when": "2022年5月頃", "followers": "約8.3万", "src": ["S20"]},
-        {"account": "@bibiy_official（ブランド公式）", "when": "2024年頃", "followers": "約14.5万〜16万", "src": ["S20"]},
-        {"account": "@yuyukmt（小松友結子・個人）", "when": "2022年5月頃", "followers": "約11万", "src": ["S18"]}
-      ],
-      "marketing": {
-        "persona": {
-          "core": {
-            "title": "実際の主な顧客像",
-            "items": ["初期は20代前半の女性が中心（ブランドとしてはターゲットを決めていない）", "百貨店の期間限定店で30〜60代の大人客、外商顧客、インバウンド客が増加", "「甘すぎない可愛さ」「体形を気にせず着られるシルエット」を求める人"],
-            "src": ["S2", "S5", "S6", "S3"]
-          },
-          "target": {
-            "title": "あなたのターゲット（育児中ママ）との接点",
-            "items": ["ファミリアとのコラボで「ママ×子ども」の文脈が生まれた", "ポップアップは小学生以下の子どもの同伴OK（阪急うめだの例）", "30代以上の購入増＝育児世代にも届き始めている", "ただし子供服そのものは展開していない（親子で揃えたい需要は空白）"],
-            "src": ["S10", "S13", "S6"],
-            "kind": "analysis"
-          }
-        },
-        "funnel": [
-          {"stage": "知る", "en": "AWARENESS", "body": "<b>Instagram</b>（公式・創業者本人）、ファッション誌・ニュースサイトの記事、コラボ相手のファン、来場者のvlog・レポ投稿。", "src": ["S1", "S5"]},
-          {"stage": "興味をもつ", "en": "INTEREST", "body": "<b>毎月の新作告知</b>と世界観のある写真。「即完売」「再入荷」の情報が欲しくなる気持ちをあおる。", "src": ["S6", "S3"]},
-          {"stage": "買う", "en": "PURCHASE", "body": "<b>自社EC</b>（在庫品・予約品）と<b>期間限定店</b>（事前予約→フリー入場→整理券）。会場では2〜3点まとめ買い。", "src": ["S15", "S12", "S5"]},
-          {"stage": "また買う", "en": "REPEAT", "body": "毎月の新作、シーズンごとのポップアップ、公式LINE登録（整理券の受け取りにも使う）。", "src": ["S6", "S12"]},
-          {"stage": "広める", "en": "ADVOCACY", "body": "購入品レビュー・ポップアップvlogなどファンの投稿。招待制ショールームで常連客をさらに大切に扱う。", "src": ["S8"]}
-        ],
-        "fourp": {
-          "product": {"title": "商品", "items": ["フレンチガーリー＋メンズ由来のディテール", "ハリのある素材と体形を拾わないシルエット", "サングラス・マフラー・バッグなど小物のヒット"], "src": ["S7", "S3", "S9"]},
-          "price": {"title": "価格", "items": ["ドレス約7,000〜11,000円／アウター約12,000〜20,000円（報道時点）", "入口商品は据え置き、アウターは値上げ", "POPUPの平均購入単価は約8万円"], "src": ["S2", "S6", "S5"]},
-          "place": {"title": "販路", "items": ["自社EC（D2C）が基本", "百貨店・商業施設の期間限定店", "青山の招待制ショールーム", "40カ国以上へ販売"], "src": ["S6", "S8", "S11"]},
-          "promotion": {"title": "販促", "items": ["創業者本人のInstagram発信", "毎月の新作投入・即完売→予約販売", "老舗・異業種コラボ", "予約制・整理券による「並ぶ価値」の演出"], "src": ["S1", "S6", "S10", "S12"]}
-        },
-        "swot": {
-          "s": {"title": "強み", "en": "Strengths", "items": ["創業者の発信力と世界観の一貫性", "百貨店で1週間数千万円を売る集客力", "予約販売による在庫リスクの低さ"]},
-          "w": {"title": "弱み", "en": "Weaknesses", "items": ["大量生産でないため価格を下げにくい", "人気商品の品薄・発送遅れ", "常設店が少なく、実物を見る機会が限られる"]},
-          "o": {"title": "機会", "en": "Opportunities", "items": ["30〜60代・インバウンドへの客層拡大", "コラボによる新しいファン層（ママ層含む）", "海外販売の拡大"]},
-          "t": {"title": "脅威", "en": "Threats", "items": ["似たテイストの低価格ブランドの増加", "転売・混雑による体験の悪化", "SNSのアルゴリズム変化による露出減"]},
-          "note": "SWOTはこのサイトによる整理（分析）で、事実の部分は上の各セクションと出典に基づきます。"
-        }
-      },
-      "lessons": [
-        {"title": "店主自身が「顔」になって発信する", "body": "Bibiy.の出発点は、作り手本人のインスタグラムでした。子供服でも「どんな人が、どんな思いで選んでいるか」が見えると信頼されます。", "try": "週1回、商品撮影の裏側や「この服を選んだ理由」を自分の言葉でストーリーズに。"},
-        {"title": "「期間限定」で買う理由をつくる", "body": "普段はネット、年に数回だけ実物に触れられる場を用意する形は、小さなお店でも真似できます。", "try": "受注期間を区切った予約会、地域のマルシェや委託販売で年2回の出店から。"},
-        {"title": "予約販売で在庫を持ちすぎない", "body": "売れる数を見てから作る・仕入れることで、子供服で怖い「サイズ別の売れ残り」を減らせます。", "try": "新作の一部を予約制に。発送予定日は大きく書き、遅れそうなら先に連絡する。"},
-        {"title": "新作の日を決めて習慣にする", "body": "毎月の新作投入はBibiy.の成長要因の一つでした。「毎月◯日は新作の日」と決めると、フォロワーが見に来る習慣になります。", "try": "月1回の新作日を固定し、3日前から予告投稿。"},
-        {"title": "ママ×子どもの「おそろい」は空白地帯", "body": "Bibiy.はファミリアとのコラボでママ層に届きましたが、子供服そのものは出していません。ママ向けブランドのテイストに合う子供服は需要があると考えられます。", "try": "人気レディースブランドの服と合わせやすい色・素材の子供服を「リンクコーデ」として提案。"},
-        {"title": "入口商品と看板商品を分ける", "body": "手に取りやすい価格の小物で新しいお客さまを呼び、こだわりのアウターなどで単価を上げる二段構えです。", "try": "ヘアアクセ・靴下などの入口商品と、コートやセレモニー服などの看板商品を意識して並べる。"},
-        {"title": "人気が出る前にルールを決めておく", "body": "転売や混雑はブランドの評判を傷つけます。Bibiy.は購入数の制限や予約制で対応しました。", "try": "限定品は「お一人様1点」「転売目的の購入お断り」を最初から明記。"}
-      ],
-      "sources": [
-        {"id": "S1", "title": "ビビィ : Bibiy.（ブランド情報）", "site": "ファッションプレス", "url": "https://www.fashion-press.net/brands/5783"},
-        {"id": "S2", "title": "インスタ発ブランド「ビビィ」が好調 創業者が語る、“妥協しても100点満点以上”の服作り（PR）", "site": "WWDJAPAN", "url": "https://www.wwdjapan.com/articles/1252539"},
-        {"id": "S3", "title": "「ビビィ」、設立4年で年商5.5億のブランドの野望【特集：若きクリエイターの肖像】", "site": "WWDJAPAN", "url": "https://www.wwdjapan.com/articles/1603462"},
-        {"id": "S4", "title": "SNS発「Bibiy.」 百貨店の期間限定店が盛況 甘すぎないフレンチガーリー", "site": "繊研plus（2023年4月）", "url": "https://senken.co.jp/posts/bibiy-230426"},
-        {"id": "S5", "title": "ECブランド「Bibiy.」が好調、百貨店の期間限定店で客層広がる", "site": "繊研plus／FASHIONSNAP（2024年8月）", "url": "https://www.fashionsnap.com/article/2024-08-26/ec-bibiy/"},
-        {"id": "S6", "title": "小松友結子の「ビビィ」2桁増収続く 年内のショールーム開設を計画", "site": "FASHIONSNAP（2026年1月）", "url": "https://www.fashionsnap.com/article/2026-01-23/bibiy-brand-sales/"},
-        {"id": "S7", "title": "一癖ある可愛さで好調のビビィ 「ブランドのファン」目線で顧客に還元していく", "site": "FASHIONSNAP", "url": "https://www.fashionsnap.com/article/bibiy-interview/"},
-        {"id": "S8", "title": "ビビィが招待制ショールームをオープン 10周年を見据えた小松友結子の今の気持ち", "site": "FASHIONSNAP（Yahoo!ニュース）", "url": "https://news.yahoo.co.jp/articles/4a3dc1409a1bfcc02b8e8517031036c4d502e95b"},
-        {"id": "S9", "title": "キャンディのようなフレーム、Bibiyのサングラスがインスタで話題に", "site": "FASHIONSNAP（2021年7月）", "url": "https://www.fashionsnap.com/article/2021-07-25/bibiy/"},
-        {"id": "S10", "title": "Bibiy.×familiar 初のコラボレーション", "site": "PR TIMES（2025年）", "url": "https://prtimes.jp/main/html/rd/p/000000286.000013326.html"},
-        {"id": "S11", "title": "Bibiy. x familiar's first collaboration item（再販売のお知らせ）", "site": "familiar 公式", "url": "https://familiar.co.jp/en/blogs/item/bibiy2025"},
-        {"id": "S12", "title": "26AW ROPPONGI HILLS POPUP STORE", "site": "Bibiy. 公式", "url": "https://bibiy.store/en/blogs/%E3%83%8B%E3%83%A5%E3%83%BC%E3%82%B9/26aw-roppongi-hills-popup-store"},
-        {"id": "S13", "title": "26SS 阪急うめだ POPUP STORE", "site": "Bibiy. 公式", "url": "https://bibiy.store/en/blogs/%E3%83%8B%E3%83%A5%E3%83%BC%E3%82%B9/26ss-osaka-limited-store"},
-        {"id": "S14", "title": "26AW NAGOYA POPUP STORE", "site": "Bibiy. 公式", "url": "https://bibiy.store/en/blogs/%E3%83%8B%E3%83%A5%E3%83%BC%E3%82%B9/26aw-nagoya-popup-store"},
-        {"id": "S15", "title": "商品ページ（予約販売・発送予定の記載）", "site": "Bibiy. 公式通販", "url": "https://bibiy.store/products/tbc-chez-bibiy-jacket-gray"},
-        {"id": "S16", "title": "ビビィ × ビジュードエム", "site": "FASHIONSNAP（2026年3月）", "url": "https://www.fashionsnap.com/article/2026-03-01/bibiy-bijoudem/"},
-        {"id": "S17", "title": "Bibiy.が阪急うめだ本店にてPOPUPを開催！Öffenとのコラボシューズの新作も登場", "site": "SOEN（2024年11月）", "url": "https://soen.tokyo/fashion/news/bibiy-20241105/"},
-        {"id": "S18", "title": "EC専業の「ビビィ」とは？ブランドを手掛けるフォロワー11万の小松友結子の経歴から", "site": "FASHIONSNAP", "url": "https://www.fashionsnap.com/brand/bibiy/"},
-        {"id": "S19", "title": "Bibiy.の世界観を表現したポップアップストア「CONCEPT BOUTIQUE」が東京・大阪にて開催", "site": "SOEN（2023年11月）", "url": "https://soen.tokyo/fashion/news/bibiy20231101/"},
-        {"id": "S20", "title": "今話題の「Bibiy(ビビィ)」とは？デザイナーや店舗情報まで", "site": "Influencer Marketing Guide（2024年3月）", "url": "https://adtechmanagement.com/minnadepr-column/2024/03/31/what_is_bibiy/"}
-      ],
-      "compare": {
-        "設立": "2019年7月",
-        "運営": "グルグル（大阪）",
-        "主なSNS": "Instagram",
-        "年商（報道）": "5.5億円（2023年頃）",
-        "公式IGフォロワー": "約14.5万〜16万（2024年頃）",
-        "主な販路": "自社EC＋百貨店POPUP",
-        "価格帯": "ドレス7千〜1.1万円",
-        "主な客層": "20代中心→10〜60代",
-        "成長のカギ": "本人発信×期間限定店×毎月新作"
-      }
+     "k": "スタート",
+     "v": "2019年7月（2026年で8年目）",
+     "src": [
+      "S1"
+     ]
+    },
+    {
+     "k": "創業者",
+     "v": "小松友結子（1997年生まれ・大阪出身）。大学在学中に立ち上げ、服作りは独学",
+     "src": [
+      "S1",
+      "S4"
+     ]
+    },
+    {
+     "k": "運営会社",
+     "v": "グルグル／GURUGURU（大阪）。インフルエンサーブランドの運営会社",
+     "src": [
+      "S5",
+      "S3"
+     ]
+    },
+    {
+     "k": "主なSNS",
+     "v": "Instagram（ブランド公式・創業者個人）。TikTokの公式運用は今回の調査では確認できず",
+     "src": [
+      "S1"
+     ]
+    },
+    {
+     "k": "販路",
+     "v": "自社EC（D2C）＋百貨店などの期間限定店（ポップアップ）＋招待制ショールーム。40カ国以上に販売",
+     "src": [
+      "S6",
+      "S8",
+      "S11"
+     ]
+    },
+    {
+     "k": "価格帯",
+     "v": "ドレス 約7,000〜11,000円、アウター 約12,000〜20,000円（報道時点）",
+     "src": [
+      "S2"
+     ]
     }
-  ]
+   ],
+   "kpis": [
+    {
+     "label": "年商（報道）",
+     "value": "5.5億円",
+     "sub": "設立4年目（2023年頃）時点",
+     "src": [
+      "S3"
+     ]
+    },
+    {
+     "label": "成長率",
+     "value": "毎年2桁増",
+     "sub": "24年9月期は前期比60%増見込み",
+     "src": [
+      "S6",
+      "S5"
+     ]
+    },
+    {
+     "label": "百貨店POPUP 1週間",
+     "value": "最大4,800万円",
+     "sub": "阪急うめだ本店（23〜24年秋冬）",
+     "src": [
+      "S5"
+     ]
+    },
+    {
+     "label": "POPUPの平均購入単価",
+     "value": "約8万円",
+     "sub": "1人2〜3点のまとめ買い",
+     "src": [
+      "S5"
+     ]
+    }
+   ],
+   "timeline": [
+    {
+     "date": "2019.07",
+     "major": true,
+     "title": "大学4年でブランドを立ち上げ",
+     "body": "武庫川女子大学に在学中、GURUGURUに参加してBibiy.をスタート。InstagramとECだけで売る形から始めた。最初は発送用の段ボールやテープが足りず慌てて発注するなど、手探りだった。",
+     "src": [
+      "S1",
+      "S4",
+      "S7"
+     ]
+    },
+    {
+     "date": "2020頃",
+     "title": "初の百貨店ポップアップで1,000万円超",
+     "body": "立ち上げ約1年後、伊勢丹新宿本店・阪急うめだ本店のポップアップでそれぞれ1,000万円を超える売上。",
+     "src": [
+      "S6"
+     ]
+    },
+    {
+     "date": "2021",
+     "major": true,
+     "title": "デザイナー3人を採用、「インフルエンサーブランド」からの脱却へ",
+     "body": "品番（商品の種類）を増やし、創業者の人気だけに頼らないブランドづくりへ。同年7月にはキャンディのようなフレームのサングラスがインスタで話題に。",
+     "src": [
+      "S4",
+      "S9"
+     ]
+    },
+    {
+     "date": "2022冬",
+     "title": "伊勢丹新宿本店で1週間3,400万円",
+     "body": "SNSで集めたファンを、百貨店の期間限定店に呼び込む型が定着。",
+     "src": [
+      "S4"
+     ]
+    },
+    {
+     "date": "2023頃",
+     "major": true,
+     "title": "設立4年で年商5.5億円",
+     "body": "販路はECとポップアップのみ。人気商品は即完売が続いた。11月には世界観を表現したポップアップ「CONCEPT BOUTIQUE」を東京・大阪で開催。",
+     "src": [
+      "S3",
+      "S19"
+     ]
+    },
+    {
+     "date": "2023〜24",
+     "title": "阪急うめだ 4,800万円・伊勢丹 4,400万円（各1週間）",
+     "body": "平均購入単価は約8万円、1人2〜3点を買う。百貨店の期間限定店と雑誌掲載で、客層が20代中心から10〜60代へ広がり、百貨店の外商顧客も増えた。24年9月期は前期比60%増の見込み。",
+     "src": [
+      "S5"
+     ]
+    },
+    {
+     "date": "2024.11",
+     "title": "靴ブランドÖffenとのコラボ靴",
+     "body": "阪急うめだ本店のポップアップでコラボ新作を発表。",
+     "src": [
+      "S17"
+     ]
+    },
+    {
+     "date": "2025.03",
+     "major": true,
+     "title": "子供服の老舗ファミリアと初コラボ",
+     "body": "ファミリアチェックのチュールやリボンを使ったバッグなど5型。初日は1注文につき各1点までに制限。後日、バッグ類の再販売も決まった。",
+     "src": [
+      "S10",
+      "S11"
+     ]
+    },
+    {
+     "date": "2026.01",
+     "title": "デビュー以来、毎年2桁の増収",
+     "body": "毎シーズン30%前後の伸び。客層を見直した商品構成、百貨店でのポップアップ、毎月の新作投入が効いた。30〜60代の購入が増加。若い人向けの入口商品は価格を据え置き、手間をかけたアウターは値上げ。",
+     "src": [
+      "S6"
+     ]
+    },
+    {
+     "date": "2026.03",
+     "title": "ジュエリーブランドとのコラボ",
+     "body": "ビジュードエムとのジュエリーを展開。",
+     "src": [
+      "S16"
+     ]
+    },
+    {
+     "date": "2026.07",
+     "major": true,
+     "title": "青山に招待制ショールームを開設",
+     "body": "ポップアップで待ち時間が出るほど混むため、これまでのお客さまにゆっくり見てもらう場として常設。販売は主目的にしていない。",
+     "src": [
+      "S8",
+      "S7"
+     ]
+    },
+    {
+     "date": "2026.09〜10",
+     "title": "六本木ヒルズ初出店・名古屋タカシマヤでポップアップ",
+     "body": "最初の数日は事前予約制、その後はフリー入場（混雑時は整理券）。",
+     "src": [
+      "S12",
+      "S14"
+     ]
+    }
+   ],
+   "successes": [
+    {
+     "title": "作り手本人が「顔」として発信",
+     "body": "公式インスタグラムも創業者自身が運営していた。本人の着こなし・好きなものの発信が、そのままブランドの世界観になっている。",
+     "why": "<b>なぜ効いたか：</b>広告より「この人が作っている」という親近感と信頼が先に立つ。",
+     "src": [
+      "S1",
+      "S18"
+     ],
+     "kind": "fact"
+    },
+    {
+     "title": "ECの客を「イベント」で百貨店へ呼ぶ",
+     "body": "普段はネットで売り、シーズンごとに百貨店で1週間だけの期間限定店を開く。1週間で3,400万〜4,800万円を売り、平均購入単価は約8万円。",
+     "why": "<b>なぜ効いたか：</b>「今だけ・ここだけ」で来店の理由ができ、実物を試して複数点まとめ買いされる。",
+     "src": [
+      "S4",
+      "S5"
+     ],
+     "kind": "fact"
+    },
+    {
+     "title": "即完売 → 予約販売で取りこぼさない",
+     "body": "初回入荷が売り切れた商品は、予約注文に切り替えて受け付ける。",
+     "why": "<b>なぜ効いたか：</b>売れる数を見てから追加で作れるので、在庫を抱えるリスクが小さい。",
+     "src": [
+      "S15",
+      "S3"
+     ],
+     "kind": "fact"
+    },
+    {
+     "title": "毎月の新作で「次」を待たせる",
+     "body": "毎月新作を出し続けたことが2桁成長の要因の一つと報じられている。",
+     "why": "<b>なぜ効いたか：</b>フォロワーがアカウントを見に来る理由が途切れない。",
+     "src": [
+      "S6"
+     ],
+     "kind": "fact"
+    },
+    {
+     "title": "創業者頼みから「チームのブランド」へ",
+     "body": "2021年にデザイナーを3人採用し、商品の種類を増やした。インフルエンサーブランドと呼ばれることからの脱却をめざした。",
+     "why": "<b>なぜ効いたか：</b>個人の人気が落ちても続く体制になり、百貨店の大人客にも届くようになった。",
+     "src": [
+      "S4"
+     ],
+     "kind": "fact"
+    },
+    {
+     "title": "異業種・老舗とのコラボで客層を広げる",
+     "body": "ファミリア（子供服）、Öffen（靴）、ビジュードエム（ジュエリー）などと協業。ファミリアとのコラボはママ層への入口にもなった。",
+     "why": "<b>なぜ効いたか：</b>相手ブランドのファンに知ってもらえ、話題がニュースにもなる。",
+     "src": [
+      "S10",
+      "S17",
+      "S16"
+     ],
+     "kind": "fact"
+    },
+    {
+     "title": "価格の二段構え",
+     "body": "若い人向けの入口商品は価格を据え置き、付加価値の高いアウターは値上げ。",
+     "why": "<b>なぜ効いたか：</b>新しいファンを逃さず、大人客から単価を取れる。",
+     "src": [
+      "S6"
+     ],
+     "kind": "fact"
+    }
+   ],
+   "risks_note": "今回の調査では、Bibiy.について大きな炎上や品質問題の報道は見つかりませんでした。ここでは、人気が出たことで起きた「困りごと」と、ブランドがどう対処したかを並べています。",
+   "risks": [
+    {
+     "problem": "立ち上げ当初、発送の資材（段ボール・テープ）が足りないなど、裏側の準備が追いつかなかった。",
+     "fix": "創業者は「毎日小さなエラーはあったが、止まるほどの問題はなかった」と振り返る。",
+     "src": [
+      "S7"
+     ],
+     "kind": "fact"
+    },
+    {
+     "problem": "人気商品が即完売し、予約販売の発送が遅れることがある。発送予定が1か月後ろ倒しになった商品も。",
+     "fix": "商品ページに発送予定日と「遅れる可能性」を明記して先に伝えている。",
+     "src": [
+      "S15"
+     ],
+     "kind": "fact"
+    },
+    {
+     "problem": "ポップアップが混み、待ち時間が出る。整理券が「奇跡的に取れた」という声も。",
+     "fix": "初日から数日は事前予約制、1枠30分・1人まで、混雑時は公式LINE登録で整理券。さらに招待制ショールームを開設。",
+     "src": [
+      "S12",
+      "S13",
+      "S8"
+     ],
+     "kind": "fact"
+    },
+    {
+     "problem": "人気商品の転売や、ポップアップ会場での無断ライブ配信。",
+     "fix": "転売目的の購入とライブ配信をお断りと明記。コラボ品は1注文1点に制限。",
+     "src": [
+      "S12",
+      "S14",
+      "S10"
+     ],
+     "kind": "fact"
+    },
+    {
+     "problem": "大量生産ではないため、価格を抑えにくい。",
+     "fix": "デザインの中で「こだわる所」と「妥協する所」の優先順位を決めて価格帯を守っている。",
+     "src": [
+      "S2"
+     ],
+     "kind": "fact"
+    },
+    {
+     "problem": "創業者個人の人気に依存しやすい構造（インフルエンサーブランドの共通リスク）。",
+     "fix": "デザイナー採用でチーム化を進めた。今後も、本人の発信と「ブランドの世界観」をどう両立させるかが課題。",
+     "src": [
+      "S4"
+     ],
+     "kind": "analysis"
+    },
+    {
+     "problem": "客層が10〜60代に広がった分、若い初期ファンが「自分たちのブランドではなくなった」と感じる可能性。",
+     "fix": "入口商品の価格を据え置くことで、若い層の買いやすさを残している。",
+     "src": [
+      "S6"
+     ],
+     "kind": "analysis"
+    }
+   ],
+   "charts": [
+    {
+     "title": "百貨店ポップアップ 1週間の売上",
+     "unit": "万円",
+     "note": "報道ベース。初回（2020頃）は「1,000万円超」のため1,000万円で表示。",
+     "rows": [
+      {
+       "label": "伊勢丹・阪急（初回）",
+       "sub": "2020頃",
+       "value": 1000,
+       "src": [
+        "S6"
+       ]
+      },
+      {
+       "label": "伊勢丹新宿本店",
+       "sub": "2022冬",
+       "value": 3400,
+       "src": [
+        "S4"
+       ]
+      },
+      {
+       "label": "阪急うめだ本店",
+       "sub": "2023〜24秋冬",
+       "value": 4800,
+       "src": [
+        "S5"
+       ]
+      },
+      {
+       "label": "伊勢丹新宿本店",
+       "sub": "2024春夏",
+       "value": 4400,
+       "src": [
+        "S5"
+       ]
+      }
+     ],
+     "id": "popup"
+    },
+    {
+     "title": "年商の推移（報道値と試算）",
+     "unit": "億円",
+     "note": "報道で確認できる年商は5.5億円のみです。24年9月期は「前期比60%増の見込み」を5.5億円に掛けた試算、25年9月期は「2桁成長（10〜30%）」を仮定した試算の幅です。5.5億円がどの決算期かは記事により表記が異なります。",
+     "rows": [
+      {
+       "label": "2023年頃",
+       "sub": "報道値",
+       "value": 5.5,
+       "kind": "reported",
+       "src": [
+        "S3"
+       ]
+      },
+      {
+       "label": "2024年9月期",
+       "sub": "試算",
+       "value": 8.8,
+       "kind": "estimate",
+       "src": [
+        "S5"
+       ]
+      },
+      {
+       "label": "2025年9月期",
+       "sub": "試算（幅）",
+       "value": 9.7,
+       "high": 11.4,
+       "kind": "estimate",
+       "src": [
+        "S6"
+       ]
+      }
+     ],
+     "id": "annual"
+    }
+   ],
+   "sns_accounts": [
+    {
+     "account": "@bibiy_official（ブランド公式）",
+     "when": "2022年5月頃",
+     "followers": "約8.3万",
+     "src": [
+      "S20"
+     ]
+    },
+    {
+     "account": "@bibiy_official（ブランド公式）",
+     "when": "2024年頃",
+     "followers": "約14.5万〜16万",
+     "src": [
+      "S20"
+     ]
+    },
+    {
+     "account": "@yuyukmt（小松友結子・個人）",
+     "when": "2022年5月頃",
+     "followers": "約11万",
+     "src": [
+      "S18"
+     ]
+    }
+   ],
+   "marketing": {
+    "persona": {
+     "core": {
+      "title": "実際の主な顧客像",
+      "items": [
+       "初期は20代前半の女性が中心（ブランドとしてはターゲットを決めていない）",
+       "百貨店の期間限定店で30〜60代の大人客、外商顧客、インバウンド客が増加",
+       "「甘すぎない可愛さ」「体形を気にせず着られるシルエット」を求める人"
+      ],
+      "src": [
+       "S2",
+       "S5",
+       "S6",
+       "S3"
+      ]
+     },
+     "target": {
+      "title": "あなたのターゲット（育児中ママ）との接点",
+      "items": [
+       "ファミリアとのコラボで「ママ×子ども」の文脈が生まれた",
+       "ポップアップは小学生以下の子どもの同伴OK（阪急うめだの例）",
+       "30代以上の購入増＝育児世代にも届き始めている",
+       "ただし子供服そのものは展開していない（親子で揃えたい需要は空白）"
+      ],
+      "src": [
+       "S10",
+       "S13",
+       "S6"
+      ],
+      "kind": "analysis"
+     }
+    },
+    "funnel": [
+     {
+      "stage": "知る",
+      "en": "AWARENESS",
+      "body": "<b>Instagram</b>（公式・創業者本人）、ファッション誌・ニュースサイトの記事、コラボ相手のファン、来場者のvlog・レポ投稿。",
+      "src": [
+       "S1",
+       "S5"
+      ]
+     },
+     {
+      "stage": "興味をもつ",
+      "en": "INTEREST",
+      "body": "<b>毎月の新作告知</b>と世界観のある写真。「即完売」「再入荷」の情報が欲しくなる気持ちをあおる。",
+      "src": [
+       "S6",
+       "S3"
+      ]
+     },
+     {
+      "stage": "買う",
+      "en": "PURCHASE",
+      "body": "<b>自社EC</b>（在庫品・予約品）と<b>期間限定店</b>（事前予約→フリー入場→整理券）。会場では2〜3点まとめ買い。",
+      "src": [
+       "S15",
+       "S12",
+       "S5"
+      ]
+     },
+     {
+      "stage": "また買う",
+      "en": "REPEAT",
+      "body": "毎月の新作、シーズンごとのポップアップ、公式LINE登録（整理券の受け取りにも使う）。",
+      "src": [
+       "S6",
+       "S12"
+      ]
+     },
+     {
+      "stage": "広める",
+      "en": "ADVOCACY",
+      "body": "購入品レビュー・ポップアップvlogなどファンの投稿。招待制ショールームで常連客をさらに大切に扱う。",
+      "src": [
+       "S8"
+      ]
+     }
+    ],
+    "fourp": {
+     "product": {
+      "title": "商品",
+      "items": [
+       "フレンチガーリー＋メンズ由来のディテール",
+       "ハリのある素材と体形を拾わないシルエット",
+       "サングラス・マフラー・バッグなど小物のヒット"
+      ],
+      "src": [
+       "S7",
+       "S3",
+       "S9"
+      ]
+     },
+     "price": {
+      "title": "価格",
+      "items": [
+       "ドレス約7,000〜11,000円／アウター約12,000〜20,000円（報道時点）",
+       "入口商品は据え置き、アウターは値上げ",
+       "POPUPの平均購入単価は約8万円"
+      ],
+      "src": [
+       "S2",
+       "S6",
+       "S5"
+      ]
+     },
+     "place": {
+      "title": "販路",
+      "items": [
+       "自社EC（D2C）が基本",
+       "百貨店・商業施設の期間限定店",
+       "青山の招待制ショールーム",
+       "40カ国以上へ販売"
+      ],
+      "src": [
+       "S6",
+       "S8",
+       "S11"
+      ]
+     },
+     "promotion": {
+      "title": "販促",
+      "items": [
+       "創業者本人のInstagram発信",
+       "毎月の新作投入・即完売→予約販売",
+       "老舗・異業種コラボ",
+       "予約制・整理券による「並ぶ価値」の演出"
+      ],
+      "src": [
+       "S1",
+       "S6",
+       "S10",
+       "S12"
+      ]
+     }
+    },
+    "swot": {
+     "s": {
+      "title": "強み",
+      "en": "Strengths",
+      "items": [
+       "創業者の発信力と世界観の一貫性",
+       "百貨店で1週間数千万円を売る集客力",
+       "予約販売による在庫リスクの低さ"
+      ]
+     },
+     "w": {
+      "title": "弱み",
+      "en": "Weaknesses",
+      "items": [
+       "大量生産でないため価格を下げにくい",
+       "人気商品の品薄・発送遅れ",
+       "常設店が少なく、実物を見る機会が限られる"
+      ]
+     },
+     "o": {
+      "title": "機会",
+      "en": "Opportunities",
+      "items": [
+       "30〜60代・インバウンドへの客層拡大",
+       "コラボによる新しいファン層（ママ層含む）",
+       "海外販売の拡大"
+      ]
+     },
+     "t": {
+      "title": "脅威",
+      "en": "Threats",
+      "items": [
+       "似たテイストの低価格ブランドの増加",
+       "転売・混雑による体験の悪化",
+       "SNSのアルゴリズム変化による露出減"
+      ]
+     },
+     "note": "SWOTはこのサイトによる整理（分析）で、事実の部分は上の各セクションと出典に基づきます。"
+    }
+   },
+   "lessons": [
+    {
+     "title": "店主自身が「顔」になって発信する",
+     "body": "Bibiy.の出発点は、作り手本人のインスタグラムでした。子供服でも「どんな人が、どんな思いで選んでいるか」が見えると信頼されます。",
+     "try": "週1回、商品撮影の裏側や「この服を選んだ理由」を自分の言葉でストーリーズに。"
+    },
+    {
+     "title": "「期間限定」で買う理由をつくる",
+     "body": "普段はネット、年に数回だけ実物に触れられる場を用意する形は、小さなお店でも真似できます。",
+     "try": "受注期間を区切った予約会、地域のマルシェや委託販売で年2回の出店から。"
+    },
+    {
+     "title": "予約販売で在庫を持ちすぎない",
+     "body": "売れる数を見てから作る・仕入れることで、子供服で怖い「サイズ別の売れ残り」を減らせます。",
+     "try": "新作の一部を予約制に。発送予定日は大きく書き、遅れそうなら先に連絡する。"
+    },
+    {
+     "title": "新作の日を決めて習慣にする",
+     "body": "毎月の新作投入はBibiy.の成長要因の一つでした。「毎月◯日は新作の日」と決めると、フォロワーが見に来る習慣になります。",
+     "try": "月1回の新作日を固定し、3日前から予告投稿。"
+    },
+    {
+     "title": "ママ×子どもの「おそろい」は空白地帯",
+     "body": "Bibiy.はファミリアとのコラボでママ層に届きましたが、子供服そのものは出していません。ママ向けブランドのテイストに合う子供服は需要があると考えられます。",
+     "try": "人気レディースブランドの服と合わせやすい色・素材の子供服を「リンクコーデ」として提案。"
+    },
+    {
+     "title": "入口商品と看板商品を分ける",
+     "body": "手に取りやすい価格の小物で新しいお客さまを呼び、こだわりのアウターなどで単価を上げる二段構えです。",
+     "try": "ヘアアクセ・靴下などの入口商品と、コートやセレモニー服などの看板商品を意識して並べる。"
+    },
+    {
+     "title": "人気が出る前にルールを決めておく",
+     "body": "転売や混雑はブランドの評判を傷つけます。Bibiy.は購入数の制限や予約制で対応しました。",
+     "try": "限定品は「お一人様1点」「転売目的の購入お断り」を最初から明記。"
+    }
+   ],
+   "sources": [
+    {
+     "id": "S1",
+     "title": "ビビィ : Bibiy.（ブランド情報）",
+     "site": "ファッションプレス",
+     "url": "https://www.fashion-press.net/brands/5783"
+    },
+    {
+     "id": "S2",
+     "title": "インスタ発ブランド「ビビィ」が好調 創業者が語る、“妥協しても100点満点以上”の服作り（PR）",
+     "site": "WWDJAPAN",
+     "url": "https://www.wwdjapan.com/articles/1252539"
+    },
+    {
+     "id": "S3",
+     "title": "「ビビィ」、設立4年で年商5.5億のブランドの野望【特集：若きクリエイターの肖像】",
+     "site": "WWDJAPAN",
+     "url": "https://www.wwdjapan.com/articles/1603462"
+    },
+    {
+     "id": "S4",
+     "title": "SNS発「Bibiy.」 百貨店の期間限定店が盛況 甘すぎないフレンチガーリー",
+     "site": "繊研plus（2023年4月）",
+     "url": "https://senken.co.jp/posts/bibiy-230426"
+    },
+    {
+     "id": "S5",
+     "title": "ECブランド「Bibiy.」が好調、百貨店の期間限定店で客層広がる",
+     "site": "繊研plus／FASHIONSNAP（2024年8月）",
+     "url": "https://www.fashionsnap.com/article/2024-08-26/ec-bibiy/"
+    },
+    {
+     "id": "S6",
+     "title": "小松友結子の「ビビィ」2桁増収続く 年内のショールーム開設を計画",
+     "site": "FASHIONSNAP（2026年1月）",
+     "url": "https://www.fashionsnap.com/article/2026-01-23/bibiy-brand-sales/"
+    },
+    {
+     "id": "S7",
+     "title": "一癖ある可愛さで好調のビビィ 「ブランドのファン」目線で顧客に還元していく",
+     "site": "FASHIONSNAP",
+     "url": "https://www.fashionsnap.com/article/bibiy-interview/"
+    },
+    {
+     "id": "S8",
+     "title": "ビビィが招待制ショールームをオープン 10周年を見据えた小松友結子の今の気持ち",
+     "site": "FASHIONSNAP（Yahoo!ニュース）",
+     "url": "https://news.yahoo.co.jp/articles/4a3dc1409a1bfcc02b8e8517031036c4d502e95b"
+    },
+    {
+     "id": "S9",
+     "title": "キャンディのようなフレーム、Bibiyのサングラスがインスタで話題に",
+     "site": "FASHIONSNAP（2021年7月）",
+     "url": "https://www.fashionsnap.com/article/2021-07-25/bibiy/"
+    },
+    {
+     "id": "S10",
+     "title": "Bibiy.×familiar 初のコラボレーション",
+     "site": "PR TIMES（2025年）",
+     "url": "https://prtimes.jp/main/html/rd/p/000000286.000013326.html"
+    },
+    {
+     "id": "S11",
+     "title": "Bibiy. x familiar's first collaboration item（再販売のお知らせ）",
+     "site": "familiar 公式",
+     "url": "https://familiar.co.jp/en/blogs/item/bibiy2025"
+    },
+    {
+     "id": "S12",
+     "title": "26AW ROPPONGI HILLS POPUP STORE",
+     "site": "Bibiy. 公式",
+     "url": "https://bibiy.store/en/blogs/%E3%83%8B%E3%83%A5%E3%83%BC%E3%82%B9/26aw-roppongi-hills-popup-store"
+    },
+    {
+     "id": "S13",
+     "title": "26SS 阪急うめだ POPUP STORE",
+     "site": "Bibiy. 公式",
+     "url": "https://bibiy.store/en/blogs/%E3%83%8B%E3%83%A5%E3%83%BC%E3%82%B9/26ss-osaka-limited-store"
+    },
+    {
+     "id": "S14",
+     "title": "26AW NAGOYA POPUP STORE",
+     "site": "Bibiy. 公式",
+     "url": "https://bibiy.store/en/blogs/%E3%83%8B%E3%83%A5%E3%83%BC%E3%82%B9/26aw-nagoya-popup-store"
+    },
+    {
+     "id": "S15",
+     "title": "商品ページ（予約販売・発送予定の記載）",
+     "site": "Bibiy. 公式通販",
+     "url": "https://bibiy.store/products/tbc-chez-bibiy-jacket-gray"
+    },
+    {
+     "id": "S16",
+     "title": "ビビィ × ビジュードエム",
+     "site": "FASHIONSNAP（2026年3月）",
+     "url": "https://www.fashionsnap.com/article/2026-03-01/bibiy-bijoudem/"
+    },
+    {
+     "id": "S17",
+     "title": "Bibiy.が阪急うめだ本店にてPOPUPを開催！Öffenとのコラボシューズの新作も登場",
+     "site": "SOEN（2024年11月）",
+     "url": "https://soen.tokyo/fashion/news/bibiy-20241105/"
+    },
+    {
+     "id": "S18",
+     "title": "EC専業の「ビビィ」とは？ブランドを手掛けるフォロワー11万の小松友結子の経歴から",
+     "site": "FASHIONSNAP",
+     "url": "https://www.fashionsnap.com/brand/bibiy/"
+    },
+    {
+     "id": "S19",
+     "title": "Bibiy.の世界観を表現したポップアップストア「CONCEPT BOUTIQUE」が東京・大阪にて開催",
+     "site": "SOEN（2023年11月）",
+     "url": "https://soen.tokyo/fashion/news/bibiy20231101/"
+    },
+    {
+     "id": "S20",
+     "title": "今話題の「Bibiy(ビビィ)」とは？デザイナーや店舗情報まで",
+     "site": "Influencer Marketing Guide（2024年3月）",
+     "url": "https://adtechmanagement.com/minnadepr-column/2024/03/31/what_is_bibiy/"
+    }
+   ],
+   "compare": {
+    "対象": "大人の女性（レディース）",
+    "設立": "2019年7月",
+    "作り手": "小松友結子（創業者・発信者）",
+    "主なSNS": "Instagram",
+    "年商（報道）": "5.5億円（2023年頃）",
+    "公式IGフォロワー": "約14.5万〜16万（2024年頃）",
+    "主な販路": "自社EC＋百貨店POPUP",
+    "売り方": "EC常時販売＋即完品は予約販売",
+    "価格帯": "ドレス7千〜1.1万円",
+    "主な客層": "20代中心→10〜60代",
+    "成長のカギ": "本人発信×期間限定店×毎月新作"
+   },
+   "tagline": "SNS発・大人のフレンチガーリー",
+   "tags": [
+    "レディース",
+    "D2C",
+    "百貨店POPUP",
+    "毎月新作",
+    "コラボ"
+   ]
+  },
+  {
+   "id": "hoth",
+   "name": "House on the Hill",
+   "kana": "ハウス オン ザ ヒル",
+   "status": "比較対象（子供服）",
+   "checked": "2026-11-01",
+   "tagline": "新作は即完売・抽選制の子供服",
+   "tags": [
+    "ベビー・キッズ",
+    "親子リンク",
+    "抽選制POPUP",
+    "番号付きコレクション",
+    "ギフト"
+   ],
+   "concept_word": "子どもの成長と思い出を紡ぐ服",
+   "concept": "元ジュエリーデザイナーの母親が、「好みのデザインと価格のバランスがとれたベビー服がない」という自身の育児体験から始めたベビー・キッズ服。親子でリンクコーデできるアイテムもある。",
+   "profile": [
+    {
+     "k": "デビュー",
+     "v": "2023年8月（2026年で4年目）",
+     "src": [
+      "H1"
+     ]
+    },
+    {
+     "k": "デザイナー",
+     "v": "渡邊みなみ（元ジュエリーデザイナー・一児の母）",
+     "src": [
+      "H1"
+     ]
+    },
+    {
+     "k": "対象",
+     "v": "ベビー・キッズ（親子でおそろいにできる商品も）",
+     "src": [
+      "H1",
+      "H5"
+     ]
+    },
+    {
+     "k": "主なSNS",
+     "v": "Instagram（フォロワー数は今回の調査では確認できず）",
+     "src": []
+    },
+    {
+     "k": "販路",
+     "v": "自社サイトでの新作発売＋シーズンごとのポップアップ（全日程 完全抽選予約制）。ポップアップ後は全商品をオンライン販売",
+     "src": [
+      "H2"
+     ]
+    },
+    {
+     "k": "価格帯",
+     "v": "コート 22,500円、タイツ 2,800円、ギフトボックス 3,200円",
+     "src": [
+      "H2",
+      "H3"
+     ]
+    }
+   ],
+   "kpis": [
+    {
+     "label": "コレクション数",
+     "value": "8シーズン",
+     "sub": "2023年8月〜2026年秋冬",
+     "src": [
+      "H2"
+     ]
+    },
+    {
+     "label": "26年秋冬の型数",
+     "value": "29型",
+     "sub": "71バリエーション（色・柄違い）",
+     "src": [
+      "H2"
+     ]
+    },
+    {
+     "label": "ポップアップ",
+     "value": "全日程 抽選制",
+     "sub": "応募は公式サイトで2日間だけ",
+     "src": [
+      "H2"
+     ]
+    },
+    {
+     "label": "年商",
+     "value": "非公開",
+     "sub": "報道では確認できず",
+     "src": []
+    }
+   ],
+   "timeline": [
+    {
+     "date": "2023.08",
+     "major": true,
+     "title": "ファーストコレクションでデビュー",
+     "body": "娘のベビー服を買いに行ったが、好みのデザインと価格のバランスがとれた服に出会えず、自分で作ることに。手頃な価格でデザイン性の高い国内ブランドが少ないことが出発点。",
+     "src": [
+      "H1"
+     ]
+    },
+    {
+     "date": "2023〜25",
+     "title": "新作が毎回オンラインで即完売",
+     "body": "「入手困難」と言われるようになり、ファーストコレクションから買い続けるリピーターが多い。フリマアプリでも出品が目立つように。",
+     "src": [
+      "H1",
+      "H6"
+     ]
+    },
+    {
+     "date": "2026.06",
+     "major": true,
+     "title": "The 7th Collection とギフトボックス",
+     "body": "全22型。新橋 STUDIO DA VINCI でのポップアップ（6/10〜16）は全日程 完全抽選予約制。家の形のギフトボックス「Dollhouse」（3,200円）が新登場。空き箱もおもちゃやインテリアに使える作り。",
+     "src": [
+      "H3"
+     ]
+    },
+    {
+     "date": "2026.07",
+     "title": "FASHIONSNAPがブランドを特集",
+     "body": "「子どもの成長と思い出を紡ぐ服」として、支持されるまでの道のりがインタビュー記事に。",
+     "src": [
+      "H1"
+     ]
+    },
+    {
+     "date": "2026.11",
+     "major": true,
+     "title": "The 8th Collection で初のコート",
+     "body": "29型・71バリエーション。コートやタイツが初登場。ポップアップ（11/11〜15）の抽選応募は10/5〜6の2日間。2万円以上の購入で限定ミニトート。終了後は全商品をオンライン販売。",
+     "src": [
+      "H2"
+     ]
+    }
+   ],
+   "successes": [
+    {
+     "title": "作り手の育児体験が「ブランドの理由」",
+     "body": "「自分の娘に着せたい服がなかった」という出発点が、同じ悩みを持つママの共感を集めている。",
+     "why": "<b>なぜ効いたか：</b>商品説明より先に、作り手への信頼と共感が生まれる。",
+     "src": [
+      "H1"
+     ],
+     "kind": "fact"
+    },
+    {
+     "title": "コレクションに番号を付けて「作品」にする",
+     "body": "「The 7th」「The 8th」のように、シーズンごとに番号付きのコレクションとして発表する。",
+     "why": "<b>なぜ効いたか：</b>次の番号を待つ楽しみが生まれ、過去作を集めるファンも出てくる。",
+     "src": [
+      "H2",
+      "H3"
+     ],
+     "kind": "fact"
+    },
+    {
+     "title": "抽選制ポップアップで「手に入りにくさ」を価値に",
+     "body": "全日程 完全抽選予約制。応募期間は2日間だけ。",
+     "why": "<b>なぜ効いたか：</b>当たること自体がうれしい体験になり、SNSで話題になる。混雑も防げる。",
+     "src": [
+      "H2"
+     ],
+     "kind": "fact"
+    },
+    {
+     "title": "親子でおそろいにできる",
+     "body": "0歳のベビーから親子でリンクコーデできるアイテムが支持されている。",
+     "why": "<b>なぜ効いたか：</b>ママ自身の「着たい」気持ちも動かし、写真に残したくなる。",
+     "src": [
+      "H1",
+      "H5"
+     ],
+     "kind": "fact"
+    },
+    {
+     "title": "箱まで価値があるギフトボックス",
+     "body": "家の形のギフトボックス「Dollhouse」（3,200円）。空き箱になってもおもちゃやインテリアに使える。",
+     "why": "<b>なぜ効いたか：</b>出産祝いなど「贈る人」という新しいお客さまを呼べる。",
+     "src": [
+      "H3"
+     ],
+     "kind": "fact"
+    },
+    {
+     "title": "ブランドらしい購入特典でまとめ買い",
+     "body": "2万円以上の購入で限定ミニトートをプレゼント。",
+     "why": "<b>なぜ効いたか：</b>「あと1点」で特典がもらえるので、客単価が上がる。",
+     "src": [
+      "H2"
+     ],
+     "kind": "fact"
+    }
+   ],
+   "risks_note": "今回の調査では、House on the Hill について大きな炎上や品質問題の報道は見つかりませんでした。ここでは、人気ゆえの困りごとと、ブランドの対処・今後の課題を並べています。",
+   "risks": [
+    {
+     "problem": "新作がすぐ売り切れ、欲しくても買えない人が多い。",
+     "fix": "ポップアップ終了後に全ラインナップをオンラインで販売し、来場できなかった人にも買える機会を用意。",
+     "src": [
+      "H1",
+      "H2"
+     ],
+     "kind": "fact"
+    },
+    {
+     "problem": "ポップアップは抽選制のため、行けるのは当選した人だけ。",
+     "fix": "会場では完売した過去作のタオルが販売されていたという来場者の声も。来場者の満足度を上げる工夫と考えられる。",
+     "src": [
+      "H8"
+     ],
+     "kind": "fact"
+    },
+    {
+     "problem": "フリマアプリで完売品が多数出品され、高値で売られることも。",
+     "fix": "二次流通で値下がりしにくいことは「新品を買う理由」にもなる一方、転売目的の購入が増えると本当のファンが買えなくなる。",
+     "src": [
+      "H6"
+     ],
+     "kind": "analysis"
+    },
+    {
+     "problem": "「作りが少し小さめ」という口コミがあり、1サイズ上を選ぶ人が多い。",
+     "fix": "サイズ選びの不安は返品や購入見送りにつながる。実寸や月齢・体重の目安をていねいに出すことが課題。",
+     "src": [
+      "H7"
+     ],
+     "kind": "analysis"
+    },
+    {
+     "problem": "売上やフォロワー数などの数字がほとんど公開されていない。",
+     "fix": "外からは規模が見えにくい。比較するときは「型数」「抽選倍率」「完売までの時間」など別の物差しで見る必要がある。",
+     "src": [],
+     "kind": "analysis"
+    }
+   ],
+   "charts": [
+    {
+     "id": "collection",
+     "title": "コレクションの型数",
+     "unit": "型",
+     "note": "報道で型数が確認できた2シーズンのみ。8th は71バリエーション（色・柄違い）。",
+     "rows": [
+      {
+       "label": "The 7th Collection",
+       "sub": "2026年春夏",
+       "value": 22,
+       "src": [
+        "H3"
+       ]
+      },
+      {
+       "label": "The 8th Collection",
+       "sub": "2026年秋冬",
+       "value": 29,
+       "src": [
+        "H2"
+       ]
+      }
+     ]
+    }
+   ],
+   "sns_accounts": [],
+   "sns_note": "Instagramのフォロワー数は、今回の調査では報道などで確認できませんでした。公式アカウントで直接確認してください。",
+   "marketing": {
+    "persona": {
+     "core": {
+      "title": "実際の主な顧客像",
+      "items": [
+       "0歳〜の子どもを持ち、デザインと価格のバランスを重視するママ",
+       "ファーストコレクションから買い続けるリピーター",
+       "出産祝いなどで贈り物を探す人（ギフトボックス）"
+      ],
+      "src": [
+       "H1",
+       "H3"
+      ]
+     },
+     "target": {
+      "title": "あなたのターゲット（育児中ママ）との接点",
+      "items": [
+       "ターゲットがほぼ重なる、最も参考になる比較相手",
+       "即完売・抽選で「買えなかったママ」が多い＝似たテイストの受け皿に需要がある",
+       "親子リンク・ギフトは、小さなお店でも取り入れやすい切り口"
+      ],
+      "src": [],
+      "kind": "analysis"
+     }
+    },
+    "funnel": [
+     {
+      "stage": "知る",
+      "en": "AWARENESS",
+      "body": "<b>Instagram</b>、FASHIONSNAP・HugMugなどの記事、ママ同士の口コミ（Threadsなど）、フリマアプリで見かける。",
+      "src": [
+       "H1",
+       "H5",
+       "H7"
+      ]
+     },
+     {
+      "stage": "興味をもつ",
+      "en": "INTEREST",
+      "body": "<b>番号付きコレクション</b>の発表と、新作が即完売したという評判。",
+      "src": [
+       "H2",
+       "H1"
+      ]
+     },
+     {
+      "stage": "買う",
+      "en": "PURCHASE",
+      "body": "<b>公式サイトの新作発売</b>（即完売）、<b>抽選制ポップアップ</b>、ポップアップ後のオンライン販売。",
+      "src": [
+       "H2"
+      ]
+     },
+     {
+      "stage": "また買う",
+      "en": "REPEAT",
+      "body": "子どもの成長に合わせて次のサイズ・次のコレクションへ。ファーストコレクションからのリピーターが多い。",
+      "src": [
+       "H1"
+      ]
+     },
+     {
+      "stage": "広める",
+      "en": "ADVOCACY",
+      "body": "着画やサイズ感の口コミ投稿、ギフトとして贈ることでの紹介。",
+      "src": [
+       "H7",
+       "H3"
+      ]
+     }
+    ],
+    "fourp": {
+     "product": {
+      "title": "商品",
+      "items": [
+       "ベビー・キッズのシーズンコレクション（26年秋冬は29型）",
+       "コート、ボアジャケット＆パンツ、タイツ",
+       "親子リンク、ギフトボックス「Dollhouse」"
+      ],
+      "src": [
+       "H2",
+       "H3",
+       "H5"
+      ]
+     },
+     "price": {
+      "title": "価格",
+      "items": [
+       "コート 22,500円、タイツ 2,800円",
+       "ギフトボックス 3,200円",
+       "2万円以上の購入で限定ミニトート"
+      ],
+      "src": [
+       "H2",
+       "H3"
+      ]
+     },
+     "place": {
+      "title": "販路",
+      "items": [
+       "自社サイト（新作発売）",
+       "抽選制ポップアップ（新橋 STUDIO DA VINCI）",
+       "ポップアップ後に全商品をオンライン販売"
+      ],
+      "src": [
+       "H2",
+       "H3"
+      ]
+     },
+     "promotion": {
+      "title": "販促",
+      "items": [
+       "番号付きコレクションの発表",
+       "2日間だけの抽選応募",
+       "購入金額に応じた特典",
+       "メディア掲載（FASHIONSNAP・HugMug）"
+      ],
+      "src": [
+       "H2",
+       "H1",
+       "H5"
+      ]
+     }
+    },
+    "swot": {
+     "s": {
+      "title": "強み",
+      "en": "Strengths",
+      "items": [
+       "母親目線のデザインと共感される物語",
+       "即完売の人気と多いリピーター",
+       "親子リンク・ギフトなど買う理由の多さ"
+      ]
+     },
+     "w": {
+      "title": "弱み",
+      "en": "Weaknesses",
+      "items": [
+       "少量生産で売り逃しが出る",
+       "サイズが小さめという口コミ",
+       "規模や数字が外から見えにくい"
+      ]
+     },
+     "o": {
+      "title": "機会",
+      "en": "Opportunities",
+      "items": [
+       "出産祝い・ギフト需要",
+       "コートなど新しいカテゴリー",
+       "親子でそろえる商品の拡大"
+      ]
+     },
+     "t": {
+      "title": "脅威",
+      "en": "Threats",
+      "items": [
+       "転売による価格高騰とファン離れ",
+       "少子化で市場そのものは縮小",
+       "似たテイストの子供服ブランドの増加"
+      ]
+     },
+     "note": "SWOTはこのサイトによる整理（分析）で、事実の部分は各ページと出典に基づきます。"
+    }
+   },
+   "lessons": [
+    {
+     "title": "「なぜこの店を始めたか」を語る",
+     "body": "House on the Hill の出発点は、作り手自身の「娘に着せたい服がなかった」という体験でした。子供服は、店主の育児体験がそのまま信頼になります。",
+     "try": "プロフィールとショップの「About」に、お店を始めたきっかけを3行で書く。"
+    },
+    {
+     "title": "シーズンに番号や名前を付ける",
+     "body": "「The 8th Collection」のように番号を付けると、次を待つ楽しみと「集める楽しみ」が生まれます。",
+     "try": "次の新作から「1st collection」と名付けて、発売日を1週間前に予告。"
+    },
+    {
+     "title": "買えなかった人の受け皿を用意する",
+     "body": "抽選や即完売は話題になる一方、買えない人を生みます。House on the Hill はポップアップ後にオンラインで全商品を販売しています。",
+     "try": "限定販売のあとに「再販の予約受付」や「入荷お知らせ登録」を用意する。"
+    },
+    {
+     "title": "ギフトは箱まで設計する",
+     "body": "空き箱もおもちゃになるギフトボックスは、出産祝いを探す人という新しいお客さまを呼びます。",
+     "try": "ラッピングを有料オプションにせず、「贈れるセット」として商品化する。"
+    },
+    {
+     "title": "サイズの不安を先回りして消す",
+     "body": "「少し小さめ」という口コミがあるように、ネットで子供服を買うときの一番の不安はサイズです。",
+     "try": "商品ページに実寸と「月齢・身長・体重の目安」「着用モデルの体格」を必ず載せる。"
+    },
+    {
+     "title": "特典はブランドらしいモノで",
+     "body": "2万円以上でミニトート、のように特典にブランドの世界観を持たせると、まとめ買いのきっかけになります。",
+     "try": "「◯円以上でオリジナルのヘアゴム」など、原価の低いブランドらしい小物を特典に。"
+    }
+   ],
+   "sources": [
+    {
+     "id": "H1",
+     "title": "子どもの成長と思い出を紡ぐ服 「ハウス オン ザ ヒル」が支持されるまで",
+     "site": "FASHIONSNAP（2026年7月）",
+     "url": "https://www.fashionsnap.com/article/house-on-the-hill-interview-2026/"
+    },
+    {
+     "id": "H2",
+     "title": "ベビー・キッズ服「ハウス オン ザ ヒル」26年秋冬のポップアップ開催 コートが初登場",
+     "site": "FASHIONSNAP（2026年10月）",
+     "url": "https://www.fashionsnap.com/article/2026-10-02/house-on-the-hill-the-8th-popup/"
+    },
+    {
+     "id": "H3",
+     "title": "キッズ・ベビーブランド「ハウス オン ザ ヒル」がポップアップ開催、ギフトボックスが新登場",
+     "site": "FASHIONSNAP（2026年4月）",
+     "url": "https://www.fashionsnap.com/article/2026-04-28/houseonthehill-7th-popup/"
+    },
+    {
+     "id": "H5",
+     "title": "0歳ベビーから親子でお揃いが叶う今注目のブランド「House on the Hill」",
+     "site": "HugMug",
+     "url": "https://hugmug.jp/blog/175955"
+    },
+    {
+     "id": "H6",
+     "title": "ハウスオンザヒルのフリマアイテム一覧",
+     "site": "フリル（ラクマ）",
+     "url": "https://fril.jp/s?query=%E3%83%8F%E3%82%A6%E3%82%B9%E3%82%AA%E3%83%B3%E3%82%B6%E3%83%92%E3%83%AB"
+    },
+    {
+     "id": "H7",
+     "title": "サイズ感についての利用者の投稿（「少し作り小さい」）",
+     "site": "Threads（個人の感想）",
+     "url": "https://www.threads.com/@shi_nomon/post/DQUPrpNgY_h"
+    },
+    {
+     "id": "H8",
+     "title": "ポップアップで完売した過去作のタオルが販売されていたという投稿",
+     "site": "Threads（個人の感想）",
+     "url": "https://www.threads.com/@shi_nomon/post/DZo6KPoHfa8"
+    }
+   ],
+   "compare": {
+    "対象": "ベビー・キッズ（親子リンクあり）",
+    "設立": "2023年8月",
+    "作り手": "渡邊みなみ（元ジュエリーデザイナー）",
+    "主なSNS": "Instagram",
+    "年商（報道）": "非公開",
+    "公式IGフォロワー": "未確認",
+    "主な販路": "自社サイト＋抽選制POPUP",
+    "売り方": "シーズンごとに一斉発売（即完売）",
+    "価格帯": "コート22,500円・タイツ2,800円",
+    "主な客層": "0歳〜の子を持つママ・贈る人",
+    "成長のカギ": "作り手の物語×番号付きコレクション×抽選"
+   }
+  }
+ ]
 }
 </script>
 
@@ -392,208 +1563,235 @@ pre.code { background: var(--card); border: 1px solid var(--line); border-radius
   var BRANDS = DATA.brands || [];
   var view = document.getElementById("view");
   var tip = document.getElementById("tip");
+  var PAGES = [
+    ["overview", "概要"], ["history", "成り立ち・年表"], ["success", "成功事例"], ["risks", "課題・失敗"],
+    ["numbers", "数字"], ["marketing", "マーケ分析"], ["lessons", "お店へのヒント"], ["sources", "出典"]
+  ];
+  var mTab = "persona";
 
   function esc(s) {
     return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
       return {"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c];
     });
   }
-  // 本文中で <b> だけ許可（データは自分で書くもの）
   function rich(s) { return esc(s).replace(/&lt;(\/?)b&gt;/g, "<$1b>"); }
-  function srcs(list, brand) {
-    if (!list || !list.length) return "";
-    return '<sup class="src">' + list.map(function (id) {
-      var n = id.replace(/^S/, "");
-      return '<a href="#" data-src="' + esc(brand.id + "-" + id) + '" title="出典 ' + esc(id) + '">[' + esc(n) + "]</a>";
+  function list(a) { return a || []; }
+  function srcs(ids, b) {
+    ids = list(ids);
+    if (!ids.length) return "";
+    return '<sup class="src">' + ids.map(function (id) {
+      var n = list(b.sources).map(function (s) { return s.id; }).indexOf(id) + 1;
+      return '<a href="#' + esc(b.id) + '-sources" data-src="' + esc(b.id + "-" + id) + '" title="出典を見る">[' + (n || esc(id)) + "]</a>";
     }).join("") + "</sup>";
   }
-  function kindTag(kind) {
-    if (kind === "analysis") return '<span class="tag analysis">分析</span>';
-    if (kind === "fact") return '<span class="tag fact">事実</span>';
+  function kindTag(k) {
+    if (k === "analysis") return '<span class="tag analysis">分析</span>';
+    if (k === "fact") return '<span class="tag fact">事実</span>';
     return "";
   }
+  function ul(items) { return '<ul class="plain">' + list(items).map(function (i) { return "<li>" + esc(i) + "</li>"; }).join("") + "</ul>"; }
 
-  document.getElementById("lead").textContent =
-    "SNS発ブランドの成り立ち・成功事例・課題・数字・マーケティング分析を、出典付きでまとめた研究ノートです。" +
-    "想定ターゲット：" + (DATA.site.target_summary || "") + "。確認日：" + (DATA.site.checked || "");
+  document.getElementById("checked").textContent = "確認日 " + (DATA.site.checked || "");
 
-  // ブランド切替
-  function renderSwitcher(current) {
-    var html = BRANDS.map(function (b) {
-      return '<a href="#' + esc(b.id) + '"' + (current === b.id ? ' aria-current="page"' : "") + ">" + esc(b.name) + "</a>";
+  function renderNav(current) {
+    var items = [["home", "ホーム"]].concat(BRANDS.map(function (b) { return [b.id, b.name]; }), [["compare", "ブランド比較"], ["howto", "＋追加"]]);
+    document.getElementById("mainnav").innerHTML = items.map(function (it) {
+      return '<a href="#' + esc(it[0]) + '"' + (it[0] === current ? ' aria-current="page"' : "") + ">" + esc(it[1]) + "</a>";
     }).join("");
-    html += '<a href="#compare"' + (current === "compare" ? ' aria-current="page"' : "") + ">ブランド比較</a>";
-    html += '<a href="#howto" class="ghost"' + (current === "howto" ? ' aria-current="page"' : "") + ">＋ ブランドを追加するには</a>";
-    document.getElementById("switcher").innerHTML = html;
   }
 
-  // 横棒グラフ（同じ物差しで描く）
+  /* ---------- グラフ（横棒・同じ物差し） ---------- */
   function niceMax(v) {
     var p = Math.pow(10, Math.floor(Math.log10(v)));
-    var steps = [1, 2, 2.5, 5, 10];
-    for (var i = 0; i < steps.length; i++) { if (steps[i] * p >= v) return steps[i] * p; }
+    var st = [1, 2, 2.5, 5, 10];
+    for (var i = 0; i < st.length; i++) { if (st[i] * p >= v) return st[i] * p; }
     return 10 * p;
   }
-  function fmt(v, unit) { return (unit === "万円" ? v.toLocaleString("ja-JP") : String(v)) + unit; }
-  function hbars(chart, brand) {
+  function fmt(v, unit) { return (v >= 1000 ? v.toLocaleString("ja-JP") : String(v)) + unit; }
+  function hbars(chart, b) {
     var max = niceMax(Math.max.apply(null, chart.rows.map(function (r) { return r.high || r.value; })) * 1.05);
     var hasEst = chart.rows.some(function (r) { return r.kind === "estimate"; });
     var rows = chart.rows.map(function (r) {
       var w = (r.value / max * 100).toFixed(2);
-      var label = r.high ? fmt(r.value, chart.unit).replace(chart.unit, "") + "〜" + fmt(r.high, chart.unit) : fmt(r.value, chart.unit);
-      var tipText = r.label + "（" + r.sub + "）：" + label + (r.kind === "estimate" ? "　※試算" : "");
+      var label = r.high ? r.value + "〜" + fmt(r.high, chart.unit) : fmt(r.value, chart.unit);
+      var t = r.label + "（" + r.sub + "）：" + label + (r.kind === "estimate" ? "　※試算" : "");
       var range = r.high ? '<span class="range" style="left:' + w + "%;width:" + ((r.high - r.value) / max * 100).toFixed(2) + '%"></span>' : "";
       return '<div class="hb"><div class="lab">' + esc(r.label) + "<small>" + esc(r.sub) + "</small></div>" +
-        '<div class="track" tabindex="0" data-tip="' + esc(tipText) + '" aria-label="' + esc(tipText) + '">' +
-        '<span class="fill' + (r.kind === "estimate" ? " est" : "") + '" style="width:' + w + '%"></span>' + range + "</div>" +
-        '<div class="num">' + esc(label) + srcs(r.src, brand) + "</div></div>";
+        '<div class="track" tabindex="0" data-tip="' + esc(t) + '" aria-label="' + esc(t) + '"><span class="fill' + (r.kind === "estimate" ? " est" : "") + '" style="width:' + w + '%"></span>' + range + "</div>" +
+        '<div class="num">' + esc(label) + srcs(r.src, r._b || b) + "</div></div>";
     }).join("");
     var ticks = [0, max / 2, max].map(function (t) { return "<span>" + esc(fmt(t, chart.unit)) + "</span>"; }).join("");
     var legend = hasEst ? '<div class="legend"><span><i class="solid"></i>報道値</span><span><i class="hatch"></i>試算（推定）</span></div>' : "";
     var table = '<details><summary>表で見る</summary><div class="scroll-x"><table><thead><tr><th>項目</th><th>時期</th><th>値</th><th>種別</th></tr></thead><tbody>' +
       chart.rows.map(function (r) {
-        return "<tr><td>" + esc(r.label) + "</td><td>" + esc(r.sub) + '</td><td class="num">' + esc(r.high ? r.value + "〜" + r.high + chart.unit : fmt(r.value, chart.unit)) +
-          "</td><td>" + (r.kind === "estimate" ? "試算" : "報道値") + "</td></tr>";
+        return "<tr><td>" + esc(r.label) + "</td><td>" + esc(r.sub) + '</td><td class="num">' + esc(r.high ? r.value + "〜" + fmt(r.high, chart.unit) : fmt(r.value, chart.unit)) + "</td><td>" + (r.kind === "estimate" ? "試算" : "報道値") + "</td></tr>";
       }).join("") + "</tbody></table></div></details>";
     return '<div class="card"><h3>' + esc(chart.title) + '</h3><div class="hbars">' + rows + "</div>" +
       '<div class="axis" aria-hidden="true"><span></span><div class="ticks">' + ticks + "</div><span></span></div>" +
-      legend + '<p class="note">' + esc(chart.note || "") + "</p>" + table + "</div>";
+      legend + (chart.note ? '<p class="note">' + esc(chart.note) + "</p>" : "") + table + "</div>";
   }
 
-  function section(id, eyebrow, title, inner) {
-    return '<section class="block" id="sec-' + id + '"><p class="eyebrow">' + esc(eyebrow) + "</p><h2>" + esc(title) + "</h2>" + inner + "</section>";
+  /* ---------- ホーム ---------- */
+  function renderHome() {
+    var cards = BRANDS.map(function (b) {
+      return '<a class="brandcard" href="#' + esc(b.id) + '"><span class="kn">' + esc(b.status) + '</span><span class="nm">' + esc(b.name) + '</span><span class="tl">' + esc(b.tagline || b.concept_word) + '</span><div class="chips">' +
+        list(b.tags).map(function (t) { return '<span class="chip">' + esc(t) + "</span>"; }).join("") + '</div><span class="go">くわしく見る →</span></a>';
+    }).join("") + '<a class="brandcard add" href="#howto">＋ ブランドを追加する</a>';
+    return '<p class="intro">SNSから人気になったブランドの成り立ち・成功事例・課題・数字・マーケティングを、出典付きでまとめた研究ノートです。自分の子供服ショップに活かすことを目的にしています。</p>' +
+      '<h2>ブランド一覧</h2><div class="brandcards">' + cards + "</div>" +
+      '<div class="homefoot"><a class="card" href="#compare" style="text-decoration:none;color:inherit"><h3>ブランド比較 →</h3><p class="muted">設立・販路・価格帯・成長のカギなどを横に並べて比べます。</p></a>' +
+      '<div class="card"><h3>想定ターゲット</h3><p class="muted">' + esc(DATA.site.target_summary) + "</p></div></div>";
   }
 
-  function renderBrand(b) {
-    var toc = [["overview", "概要"], ["history", "成り立ち"], ["success", "成功事例"], ["risk", "課題・失敗"], ["numbers", "数字"], ["marketing", "マーケ分析"], ["lessons", "お店への活かし方"], ["sources", "出典"]];
-    var h = "";
-    h += '<nav class="toc" aria-label="このページの目次">' + toc.map(function (t) { return '<button type="button" data-go="sec-' + t[0] + '">' + t[1] + "</button>"; }).join("") + "</nav>";
-
-    // 概要
-    var hero = '<div class="hero"><div><span class="status">' + esc(b.status) + "</span>" +
-      '<p class="brandname">' + esc(b.name) + "<small>" + esc(b.kana) + "</small></p>" +
-      '<p class="concept">' + esc(b.concept_word) + "</p><p style=\"margin:0;font-size:.9rem\">" + esc(b.concept) + "</p></div>" +
-      '<div class="card"><dl class="profile">' + b.profile.map(function (p) { return "<dt>" + esc(p.k) + "</dt><dd>" + esc(p.v) + srcs(p.src, b) + "</dd>"; }).join("") + "</dl></div></div>";
-    var kpis = '<div class="kpis">' + b.kpis.map(function (k) {
-      return '<div class="card kpi"><div class="label">' + esc(k.label) + '</div><div class="value">' + esc(k.value) + srcs(k.src, b) + '</div><div class="sub">' + esc(k.sub) + "</div></div>";
-    }).join("") + "</div>";
-    h += section("overview", "Overview", "概要", hero + kpis);
-
-    // 沿革
-    h += section("history", "History", "成り立ちと年表",
-      '<ol class="timeline">' + b.timeline.map(function (t) {
+  /* ---------- ブランドの小ページ ---------- */
+  var BP = {
+    overview: function (b) {
+      return '<div class="stack"><div class="card"><p class="concept">' + esc(b.concept_word) + '</p><p style="margin:0;font-size:.9rem">' + esc(b.concept) + "</p></div>" +
+        '<div class="card"><dl class="profile">' + list(b.profile).map(function (p) { return "<dt>" + esc(p.k) + "</dt><dd>" + esc(p.v) + srcs(p.src, b) + "</dd>"; }).join("") + "</dl></div></div>" +
+        '<div class="kpis">' + list(b.kpis).map(function (k) {
+          return '<div class="card kpi"><div class="label">' + esc(k.label) + '</div><div class="value">' + esc(k.value) + srcs(k.src, b) + '</div><div class="sub">' + esc(k.sub) + "</div></div>";
+        }).join("") + "</div>";
+    },
+    history: function (b) {
+      return '<ol class="timeline">' + list(b.timeline).map(function (t) {
         return '<li class="' + (t.major ? "major" : "") + '"><div class="tl-date">' + esc(t.date) + '</div><div class="tl-title">' + esc(t.title) + srcs(t.src, b) + '</div><div class="tl-body">' + esc(t.body) + "</div></li>";
-      }).join("") + '</ol><p class="note">塗りつぶしの丸は、ブランドの転機になった出来事です。</p>');
-
-    // 成功事例
-    h += section("success", "Success", "成功事例とSNS戦略",
-      '<div class="cases">' + b.successes.map(function (s) {
+      }).join("") + '</ol><p class="note">塗りつぶしの丸は、ブランドの転機になった出来事です。</p>';
+    },
+    success: function (b) {
+      return '<div class="cases">' + list(b.successes).map(function (s) {
         return '<div class="card case"><h3>' + esc(s.title) + srcs(s.src, b) + "</h3><p>" + esc(s.body) + '</p><div class="why">' + rich(s.why) + "</div></div>";
-      }).join("") + "</div>");
-
-    // 課題・失敗
-    h += section("risk", "Risks", "課題・失敗事例と対処",
-      '<p class="callout">' + esc(b.risks_note) + "</p>" +
-      b.risks.map(function (r) {
+      }).join("") + "</div>";
+    },
+    risks: function (b) {
+      return (b.risks_note ? '<p class="callout">' + esc(b.risks_note) + "</p>" : "") + list(b.risks).map(function (r) {
         return '<div class="risk-row"><div><div class="lbl problem">起きたこと・リスク</div><p>' + kindTag(r.kind) + esc(r.problem) + srcs(r.src, b) + '</p></div><div><div class="lbl fix">対処・考え方</div><p>' + esc(r.fix) + "</p></div></div>";
-      }).join("") + '<p class="note"><span class="tag fact">事実</span>報道・公式で確認できた内容　<span class="tag analysis">分析</span>このサイトによる推察</p>');
-
-    // 数字
-    var sns = '<div class="card"><h3>Instagramフォロワー数（時点ごとの記録）</h3><div class="scroll-x"><table><thead><tr><th>アカウント</th><th>時点</th><th>フォロワー</th></tr></thead><tbody>' +
-      b.sns_accounts.map(function (a) { return "<tr><td>" + esc(a.account) + "</td><td>" + esc(a.when) + '</td><td class="num">' + esc(a.followers) + srcs(a.src, b) + "</td></tr>"; }).join("") +
-      '</tbody></table></div><p class="note">記事ごとに時点が違う参考値です。最新の数はInstagramで直接確認してください。</p></div>';
-    h += section("numbers", "Numbers", "数字で見る", '<div class="chart-grid">' + hbars(b.charts.popup, b) + hbars(b.charts.annual, b) + sns + "</div>");
-
-    // マーケ分析
-    var m = b.marketing;
-    var persona = '<div class="persona">' + ["core", "target"].map(function (k) {
-      var p = m.persona[k];
-      return '<div class="card"><h3>' + kindTag(p.kind || "fact") + esc(p.title) + srcs(p.src, b) + '</h3><ul>' + p.items.map(function (i) { return "<li>" + esc(i) + "</li>"; }).join("") + "</ul></div>";
-    }).join("") + "</div>";
-    var funnel = '<div class="funnel">' + m.funnel.map(function (f) {
-      return '<div class="fn"><div class="stage">' + esc(f.stage) + "<small>" + esc(f.en) + '</small></div><div class="body">' + rich(f.body) + srcs(f.src, b) + "</div></div>";
-    }).join("") + "</div>";
-    var fourp = '<div class="fourp">' + ["product", "price", "place", "promotion"].map(function (k) {
-      var p = m.fourp[k];
-      return '<div class="card"><h3>' + esc(p.title) + ' <span class="muted" style="font-weight:400;font-size:.75rem">' + esc(k.charAt(0).toUpperCase() + k.slice(1)) + "</span>" + srcs(p.src, b) + '</h3><ul class="plain">' + p.items.map(function (i) { return "<li>" + esc(i) + "</li>"; }).join("") + "</ul></div>";
-    }).join("") + "</div>";
-    var swot = '<div class="swot">' + ["s", "w", "o", "t"].map(function (k) {
-      var p = m.swot[k];
-      return "<div><h3>" + esc(p.title) + "<span>" + esc(p.en) + '</span></h3><ul class="plain">' + p.items.map(function (i) { return "<li>" + esc(i) + "</li>"; }).join("") + "</ul></div>";
-    }).join("") + '</div><p class="note">' + esc(m.swot.note) + "</p>";
-    h += section("marketing", "Marketing", "マーケティング分析",
-      '<h3 class="subhead">ターゲット・ペルソナ</h3>' + persona +
-      '<h3 class="subhead">集客から購入、ファン化までの流れ</h3>' + funnel +
-      '<h3 class="subhead">商品・価格・販路・販促（4P）</h3>' + fourp +
-      '<h3 class="subhead">強み・弱み・機会・脅威（SWOT）</h3>' + swot);
-
-    // 示唆
-    h += section("lessons", "For my shop", "自分の子供服ショップへの活かし方",
-      '<ol class="lessons">' + b.lessons.map(function (l) {
-        return "<li><div><h3>" + esc(l.title) + "</h3><p>" + esc(l.body) + '</p><div class="try"><b>試すなら：</b>' + esc(l.try) + "</div></div></li>";
-      }).join("") + "</ol>");
-
-    // 出典
-    h += section("sources", "Sources", "出典",
-      '<div class="card"><ol class="sources">' + b.sources.map(function (s) {
+      }).join("") + '<p class="note"><span class="tag fact">事実</span>報道・公式・利用者の投稿で確認できた内容　<span class="tag analysis">分析</span>このサイトによる推察</p>';
+    },
+    numbers: function (b) {
+      var charts = list(b.charts).map(function (c) { return hbars(c, b); }).join("");
+      var acc = list(b.sns_accounts);
+      var sns = '<div class="card"><h3>Instagramフォロワー数</h3>' + (acc.length
+        ? '<div class="scroll-x"><table><thead><tr><th>アカウント</th><th>時点</th><th>フォロワー</th></tr></thead><tbody>' + acc.map(function (a) { return "<tr><td>" + esc(a.account) + "</td><td>" + esc(a.when) + '</td><td class="num">' + esc(a.followers) + srcs(a.src, b) + "</td></tr>"; }).join("") + '</tbody></table></div><p class="note">記事ごとに時点が違う参考値です。最新の数はInstagramで直接確認してください。</p>'
+        : '<p class="note">' + esc(b.sns_note || "フォロワー数は確認できていません。") + "</p>") + "</div>";
+      return '<div class="stack">' + charts + sns + "</div>";
+    },
+    marketing: function (b) {
+      var m = b.marketing || {};
+      var tabs = [["persona", "ターゲット"], ["funnel", "集客〜ファン化"], ["fourp", "4P"], ["swot", "SWOT"]];
+      var body = "";
+      if (mTab === "persona") {
+        body = '<p class="mlead">誰に、どんな気持ちで買われているか。</p><div class="persona">' + ["core", "target"].map(function (k) {
+          var p = (m.persona || {})[k]; if (!p) return "";
+          return '<div class="card"><h3>' + kindTag(p.kind || "fact") + esc(p.title) + srcs(p.src, b) + "</h3>" + ul(p.items) + "</div>";
+        }).join("") + "</div>";
+      } else if (mTab === "funnel") {
+        body = '<p class="mlead">知ってから、買って、人に広めるまでの流れ。</p><div class="funnel">' + list(m.funnel).map(function (f) {
+          return '<div class="fn"><div class="stage">' + esc(f.stage) + "<small>" + esc(f.en) + '</small></div><div class="body">' + rich(f.body) + srcs(f.src, b) + "</div></div>";
+        }).join("") + "</div>";
+      } else if (mTab === "fourp") {
+        body = '<p class="mlead">商品・価格・販路・販促の4つの視点で整理。</p><div class="fourp">' + ["product", "price", "place", "promotion"].map(function (k) {
+          var p = (m.fourp || {})[k]; if (!p) return "";
+          return '<div class="card"><h3>' + esc(p.title) + srcs(p.src, b) + "</h3>" + ul(p.items) + "</div>";
+        }).join("") + "</div>";
+      } else {
+        var s = m.swot || {};
+        body = '<p class="mlead">強み・弱み（ブランドの内側）と、機会・脅威（外の環境）。</p><div class="swot">' + ["s", "w", "o", "t"].map(function (k) {
+          var p = s[k] || {items: []};
+          return "<div><h3>" + esc(p.title) + "<span>" + esc(p.en) + "</span></h3>" + ul(p.items) + "</div>";
+        }).join("") + "</div>" + (s.note ? '<p class="note">' + esc(s.note) + "</p>" : "");
+      }
+      return '<div class="mtabs" role="group" aria-label="分析の種類">' + tabs.map(function (t) {
+        return '<button type="button" data-mtab="' + t[0] + '" aria-pressed="' + (t[0] === mTab) + '">' + t[1] + "</button>";
+      }).join("") + "</div>" + body;
+    },
+    lessons: function (b) {
+      return '<p class="intro">' + esc(b.name) + "の事例から、自分の子供服ショップで試せることをまとめました。</p>" +
+        '<ol class="lessons">' + list(b.lessons).map(function (l) {
+          return "<li><div><h3>" + esc(l.title) + "</h3><p>" + esc(l.body) + '</p><div class="try"><b>試すなら：</b>' + esc(l.try) + "</div></div></li>";
+        }).join("") + "</ol>";
+    },
+    sources: function (b) {
+      return '<div class="card"><ol class="sources">' + list(b.sources).map(function (s) {
         return '<li id="' + esc(b.id + "-" + s.id) + '"><a href="' + esc(s.url) + '" target="_blank" rel="noopener">' + esc(s.title) + '</a> <span class="muted">— ' + esc(s.site) + "</span></li>";
-      }).join("") + '</ol><p class="note">確認日：' + esc(b.checked) + "。売上などの数値は各メディアの報道で、ブランドの公式発表ではないものを含みます。</p></div>");
-    return h;
+      }).join("") + '</ol><p class="note">確認日：' + esc(b.checked) + "。売上などの数値は各メディアの報道で、ブランドの公式発表ではないものを含みます。</p></div>";
+    }
+  };
+
+  function renderBrand(b, page) {
+    var idx = PAGES.map(function (p) { return p[0]; }).indexOf(page);
+    var title = PAGES[idx][1];
+    var prev = PAGES[idx - 1], next = PAGES[idx + 1];
+    var link = function (p) { return "#" + b.id + (p[0] === "overview" ? "" : "-" + p[0]); };
+    return '<div class="brandhead"><div class="status">' + esc(b.status) + '</div><div class="brandname">' + esc(b.name) + "<small>" + esc(b.kana) + "</small></div></div>" +
+      '<nav class="subnav" aria-label="' + esc(b.name) + 'のページ">' + PAGES.map(function (p) {
+        return '<a href="' + link(p) + '"' + (p[0] === page ? ' aria-current="page"' : "") + ">" + p[1] + "</a>";
+      }).join("") + "</nav>" +
+      "<h2>" + esc(title) + "</h2>" + BP[page](b) +
+      '<nav class="pager" aria-label="前後のページ">' +
+      (prev ? '<a href="' + link(prev) + '"><span>← 前へ</span>' + prev[1] + "</a>" : "") +
+      (next ? '<a class="next" href="' + link(next) + '"><span>次へ →</span>' + next[1] + "</a>" : "") + "</nav>";
   }
 
+  /* ---------- 比較 ---------- */
   function renderCompare() {
     var keys = [];
     BRANDS.forEach(function (b) { Object.keys(b.compare || {}).forEach(function (k) { if (keys.indexOf(k) < 0) keys.push(k); }); });
-    var head = "<tr><th>項目</th>" + BRANDS.map(function (b) { return '<th><a href="#' + esc(b.id) + '">' + esc(b.name) + "</a></th>"; }).join("") + '<th class="placeholder">次のブランド</th></tr>';
+    var head = "<tr><th>項目</th>" + BRANDS.map(function (b) { return '<th><a href="#' + esc(b.id) + '">' + esc(b.name) + "</a></th>"; }).join("") + "</tr>";
     var body = keys.map(function (k) {
-      return "<tr><th>" + esc(k) + "</th>" + BRANDS.map(function (b) { return "<td>" + esc((b.compare || {})[k] || "—") + "</td>"; }).join("") + '<td class="placeholder">—</td></tr>';
+      return "<tr><th>" + esc(k) + "</th>" + BRANDS.map(function (b) { return "<td>" + esc((b.compare || {})[k] || "—") + "</td>"; }).join("") + "</tr>";
     }).join("");
-    var popupMax = {title: "百貨店ポップアップ 1週間の最高売上（ブランド別）", unit: "万円", note: "各ブランドの charts.popup の最大値を自動で並べています。",
-      rows: BRANDS.filter(function (b) { return b.charts && b.charts.popup; }).map(function (b) {
-        var best = b.charts.popup.rows.reduce(function (a, r) { return r.value > a.value ? r : a; });
-        return {label: b.name, sub: best.sub, value: best.value, src: best.src, _b: b};
-      })};
-    var chart = popupMax.rows.length ? hbars(popupMax, BRANDS[0]) : "";
-    return section("compare", "Compare", "ブランド比較",
-      (BRANDS.length < 2 ? '<p class="callout">いまは1ブランドだけです。ブランドを追加すると、ここに列が自動で増えます。</p>' : "") +
+    var lessons = '<div class="cases" style="margin-top:14px">' + BRANDS.map(function (b) {
+      return '<div class="card case"><h3>' + esc(b.name) + 'から学ぶこと</h3>' + ul(list(b.lessons).slice(0, 3).map(function (l) { return l.title; })) + '<p><a href="#' + esc(b.id) + '-lessons">すべて見る →</a></p></div>';
+    }).join("") + "</div>";
+    return "<h2>ブランド比較</h2>" +
       '<div class="card scroll-x"><table><thead>' + head + "</thead><tbody>" + body + "</tbody></table></div>" +
-      '<div style="margin-top:12px">' + chart + "</div>");
+      '<h2 style="margin-top:32px">お店へのヒント（各ブランドの上位3つ）</h2>' + lessons +
+      '<p class="note">項目はブランドごとの "compare" から自動で作られます。ブランドを追加すると列が増えます。</p>';
   }
 
+  /* ---------- 追加方法 ---------- */
   function renderHowto() {
-    var sample = '{\n  "id": "brand2",            ← 英数字で。ページのアドレスになります\n  "name": "ブランド名",\n  "kana": "よみがな",\n  "status": "競合比較対象",\n  "concept": "コンセプトの説明",\n  "profile": [ {"k": "スタート", "v": "2021年", "src": ["S1"]} ],\n  "kpis": [ ... ],  "timeline": [ ... ],  "successes": [ ... ],\n  "risks": [ ... ], "charts": { ... },   "marketing": { ... },\n  "lessons": [ ... ], "sources": [ {"id": "S1", "title": "...", "site": "...", "url": "https://..."} ],\n  "compare": { "設立": "2021年", "主なSNS": "Instagram" }\n}';
-    return section("howto", "How to add", "ブランドを追加するには",
-      '<div class="cases">' +
-      '<div class="card"><h3>いちばん簡単：Claudeに頼む</h3><p class="note" style="font-size:.88rem;color:var(--text)">「◯◯（ブランド名）を追加して」と伝えるだけで、Web調査をして同じ型（成り立ち・成功・課題・数字・マーケ分析・お店への活かし方・出典）でページを足します。</p></div>' +
-      '<div class="card"><h3>自分で書き足す</h3><p class="note" style="font-size:.88rem;color:var(--text)">このHTMLファイルの中の <code>brand-data</code> という部分（JSON）の <code>"brands"</code> に、Bibiy.と同じ形のブロックをコピーして中身を書き換えます。保存すると切り替えボタン・比較表が自動で増えます。</p></div>' +
-      "</div>" +
-      '<details open><summary>書き足すブロックの形（抜粋）</summary><pre class="code">' + esc(sample) + "</pre></details>" +
-      '<p class="note">"kind" に "fact"（事実）か "analysis"（分析）を書くと、ラベルが付きます。項目を省略するとエラーになる場合があるので、Bibiy.のブロックを丸ごとコピーして書き換えるのがおすすめです。</p>');
+    var sample = '{\n  "id": "brand3",          ← 英数字で（ページのアドレスになります）\n  "name": "ブランド名",  "kana": "よみがな",\n  "status": "比較対象",  "tagline": "ひとことで",\n  "tags": ["子供服", "Instagram"],\n  "concept_word": "...",  "concept": "...",\n  "profile": [...], "kpis": [...], "timeline": [...],\n  "successes": [...], "risks": [...], "charts": [...],\n  "marketing": {...}, "lessons": [...],\n  "sources": [ {"id": "X1", "title": "...", "site": "...", "url": "https://..."} ],\n  "compare": { "設立": "...", "主な販路": "..." }\n}';
+    return "<h2>ブランドを追加するには</h2>" +
+      '<div class="cases"><div class="card"><h3>Claudeに頼む</h3><p style="font-size:.88rem;margin:6px 0 0">「◯◯を追加して」と伝えるだけで、Web調査をして同じ型でページを足します。</p></div>' +
+      '<div class="card"><h3>自分で書き足す</h3><p style="font-size:.88rem;margin:6px 0 0">このHTMLファイルの <code>brand-data</code> 部分（JSON）の <code>"brands"</code> に、既存ブランドのブロックをコピーして書き換えます。ホーム・切り替え・比較表が自動で増えます。</p></div></div>' +
+      '<details open><summary>ブロックの形（抜粋）</summary><pre class="code">' + esc(sample) + "</pre></details>" +
+      '<p class="note">"charts" や "sns_accounts" は空でも動きます。迷ったら House on the Hill のブロックを丸ごとコピーするのがおすすめです。</p>';
   }
 
+  /* ---------- ルーティング ---------- */
   function route() {
-    var id = (location.hash || "").replace(/^#/, "");
-    if (!id && BRANDS[0]) id = BRANDS[0].id;
-    var brand = BRANDS.filter(function (b) { return b.id === id; })[0];
-    if (id === "compare") view.innerHTML = renderCompare();
-    else if (id === "howto") view.innerHTML = renderHowto();
-    else if (brand) view.innerHTML = renderBrand(brand);
-    else { brand = BRANDS[0]; id = brand ? brand.id : ""; view.innerHTML = brand ? renderBrand(brand) : '<p class="note">ブランドのデータがありません。</p>'; }
-    renderSwitcher(id);
+    var h = (location.hash || "").replace(/^#/, "") || "home";
+    var html, nav = h;
+    if (h === "home") html = renderHome();
+    else if (h === "compare") html = renderCompare();
+    else if (h === "howto") html = renderHowto();
+    else {
+      var b = null, page = "overview";
+      BRANDS.forEach(function (x) {
+        if (h === x.id) b = x;
+        else if (h.indexOf(x.id + "-") === 0 && BP[h.slice(x.id.length + 1)]) { b = x; page = h.slice(x.id.length + 1); }
+      });
+      if (b) { html = renderBrand(b, page); nav = b.id; } else { html = renderHome(); nav = "home"; }
+    }
+    view.innerHTML = html;
+    renderNav(nav);
   }
 
-  // 目次ボタン・出典番号のクリック（ハッシュを使わずにスクロール）
   document.addEventListener("click", function (e) {
-    var go = e.target.closest("[data-go]");
-    if (go) { var t = document.getElementById(go.getAttribute("data-go")); if (t) t.scrollIntoView(); return; }
+    var mt = e.target.closest("[data-mtab]");
+    if (mt) { mTab = mt.getAttribute("data-mtab"); route(); return; }
     var s = e.target.closest("[data-src]");
     if (s) {
       e.preventDefault();
-      var li = document.getElementById(s.getAttribute("data-src"));
-      if (li) { li.scrollIntoView({block: "center"}); li.style.background = "var(--accent-soft)"; setTimeout(function () { li.style.background = ""; }, 1600); }
+      var id = s.getAttribute("data-src"), bid = id.split("-")[0];
+      if (location.hash !== "#" + bid + "-sources") location.hash = bid + "-sources";
+      setTimeout(function () {
+        var li = document.getElementById(id);
+        if (li) { li.scrollIntoView({block: "center"}); li.classList.add("flash"); setTimeout(function () { li.classList.remove("flash"); }, 1600); }
+      }, 80);
     }
   });
-  // グラフのツールチップ
   function showTip(el, x, y) { tip.textContent = el.getAttribute("data-tip"); tip.hidden = false; tip.style.left = Math.min(x + 12, window.innerWidth - 270) + "px"; tip.style.top = (y + 14) + "px"; }
   document.addEventListener("mousemove", function (e) {
     var t = e.target.closest && e.target.closest("[data-tip]");
@@ -604,7 +1802,6 @@ pre.code { background: var(--card); border: 1px solid var(--line); border-radius
     if (t) { var r = t.getBoundingClientRect(); showTip(t, r.left, r.bottom); }
   });
   document.addEventListener("focusout", function () { tip.hidden = true; });
-
   window.addEventListener("hashchange", function () { route(); window.scrollTo(0, 0); });
   route();
 })();
