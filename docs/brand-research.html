@@ -7,226 +7,273 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap">
 <style>
-/* Layout: maximom風。グレージュの地にチェリーレッドを一点。1ページ1テーマ：ホーム → ブランド（8つの小ページ）→ 比較 */
+/* Layout: 分析ツール風。青い上部バー＋濃紺の左サイドメニュー＋薄グレーの地に白いパネル。差し色はオレンジ、ブランドごとに固定色 */
 :root {
-  --bg: #e8e4db; --card: #f5f2ec; --text: #22252a; --muted: #6b655b;
-  --line: #d6d0c4; --accent: #901d22; --accent-soft: #f1dedb; --on-accent: #f5f2ec;
-  --bar: #901d22; --grid: #dbd5c9; --good: #56603f; --good-soft: #dfe1d2;
-  --warn: #8a5a1e; --warn-soft: #efe2cc; --info: #2f3a52; --info-soft: #dcdfe4;
-  --font: "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --bg: #f6f6f6; --card: #ffffff; --text: #2e363d; --muted: #6b7580; --line: #e3e6ea; --line-strong: #c9ced4;
+  --top: #2575bc; --top-text: #ffffff;
+  --side: #001325; --side-active: #002d59; --side-text: #b9c3cf; --side-head: #ffffff; --side-line: #0c2338;
+  --accent: #f27900; --accent-soft: #fff2e5; --on-accent: #ffffff;
+  --grid: #eceff2; --good: #1f7a5c; --good-soft: #e5f4ee; --warn: #a35600; --warn-soft: #fdf0e1; --info: #1f5f9e; --info-soft: #e7f0f9;
+  --b1: #1f6fb2; --b2: #c2307a; --b3: #1f8a6a; --b4: #9a7b00; --b5: #6653a0;
+  --font: "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #1d1e21; --card: #27292d; --text: #ece7de; --muted: #aaa397;
-    --line: #3a3b40; --accent: #e57d80; --accent-soft: #3b2527; --on-accent: #1d1e21;
-    --bar: #d9666b; --grid: #34363b; --good: #b9c39e; --good-soft: #2c3127;
-    --warn: #dcaa6a; --warn-soft: #3a3022; --info: #aeb7c9; --info-soft: #2a2e36;
+    --bg: #14181d; --card: #1d232a; --text: #e6eaee; --muted: #9aa5b1; --line: #2c343d; --line-strong: #3b4550;
+    --top: #1b5a94; --top-text: #ffffff;
+    --side: #000c18; --side-active: #0d3561; --side-text: #9fabb9; --side-head: #ffffff; --side-line: #0f2133;
+    --accent: #ff9a3c; --accent-soft: #3a2614; --on-accent: #1a1209;
+    --grid: #27303a; --good: #6fd0aa; --good-soft: #17302a; --warn: #f0ae63; --warn-soft: #3a2a17; --info: #8ec0f0; --info-soft: #182a3d;
+    --b1: #66a8e8; --b2: #ea7fb0; --b3: #58c9a4; --b4: #dcc04a; --b5: #a796e0;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #1d1e21; --card: #27292d; --text: #ece7de; --muted: #aaa397;
-  --line: #3a3b40; --accent: #e57d80; --accent-soft: #3b2527; --on-accent: #1d1e21;
-  --bar: #d9666b; --grid: #34363b; --good: #b9c39e; --good-soft: #2c3127;
-  --warn: #dcaa6a; --warn-soft: #3a3022; --info: #aeb7c9; --info-soft: #2a2e36;
+  --bg: #14181d; --card: #1d232a; --text: #e6eaee; --muted: #9aa5b1; --line: #2c343d; --line-strong: #3b4550;
+  --top: #1b5a94; --top-text: #ffffff;
+  --side: #000c18; --side-active: #0d3561; --side-text: #9fabb9; --side-head: #ffffff; --side-line: #0f2133;
+  --accent: #ff9a3c; --accent-soft: #3a2614; --on-accent: #1a1209;
+  --grid: #27303a; --good: #6fd0aa; --good-soft: #17302a; --warn: #f0ae63; --warn-soft: #3a2a17; --info: #8ec0f0; --info-soft: #182a3d;
+  --b1: #66a8e8; --b2: #ea7fb0; --b3: #58c9a4; --b4: #dcc04a; --b5: #a796e0;
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
-body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font); line-height: 1.85; font-size: 15px; }
-.wrap { max-width: 860px; margin: 0 auto; padding-block: 20px 72px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
-h1, h2, h3 { font-weight: 700; text-wrap: balance; }
-h1 { font-size: 1.35rem; margin: 0; letter-spacing: .06em; }
-h2 { font-size: 1.25rem; margin: 0 0 16px; letter-spacing: .04em; }
-h3 { font-size: 1rem; margin: 0 0 4px; }
-a { color: var(--accent); }
+html, body { height: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font); line-height: 1.75; font-size: 14px; }
+a { color: var(--top); }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.note { color: var(--muted); font-size: .8rem; margin: 8px 0 0; }
+h1, h2, h3 { text-wrap: balance; }
+.note { color: var(--muted); font-size: .78rem; margin: 8px 0 0; }
 .muted { color: var(--muted); }
-body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 40; background: var(--top); }
 
-/* サイト上部 */
-.masthead { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
-.masthead a { text-decoration: none; color: var(--text); }
-.masthead .checked { font-size: .75rem; color: var(--muted); }
-.sitenav { display: flex; gap: 4px; margin: 0 0 14px; border-bottom: 1px solid var(--line); overflow-x: auto; }
-.sitenav a { padding: 8px 12px; color: var(--muted); text-decoration: none; font-weight: 600; white-space: nowrap; border-bottom: 3px solid transparent; margin-bottom: -1px; font-size: .9rem; }
-.sitenav a[aria-current="page"] { color: var(--text); border-bottom-color: var(--accent); }
-.mainnav { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 28px; }
-.mainnav a { border: 1px solid var(--line); background: var(--card); color: var(--text); padding: 5px 14px; border-radius: 999px; font-size: .85rem; text-decoration: none; white-space: nowrap; }
-.mainnav a[aria-current="page"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+/* 上部バー */
+.topbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 30; height: 44px; background: var(--top); color: var(--top-text); display: flex; align-items: center; gap: 14px; padding-left: max(12px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.topbar .logo { display: flex; align-items: center; gap: 8px; color: var(--top-text); text-decoration: none; font-weight: 700; font-size: .95rem; white-space: nowrap; }
+.topbar .logo i { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--top-text); display: grid; place-items: center; font-style: normal; font-size: .7rem; font-weight: 900; }
+.crumbs { font-size: .78rem; opacity: .9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; flex: 1; }
+.crumbs a { color: var(--top-text); text-decoration: none; }
+.crumbs span { opacity: .6; margin: 0 6px; }
+.topbar .checked { font-size: .74rem; opacity: .85; white-space: nowrap; }
+.menu-btn { display: none; background: none; border: 0; color: var(--top-text); font: inherit; font-size: 1.2rem; padding: 4px 6px; cursor: pointer; line-height: 1; }
 
-/* ブランドページの見出しと小ページタブ */
-.brandhead { margin-bottom: 4px; }
-.brandhead .status { font-size: .72rem; color: var(--accent); letter-spacing: .1em; }
-.brandname { font-size: clamp(1.9rem, 6vw, 2.6rem); line-height: 1.2; margin: 2px 0 2px; letter-spacing: .02em; font-weight: 700; color: var(--accent); }
-.brandname small { font-size: .42em; color: var(--muted); margin-left: 10px; font-weight: 400; letter-spacing: .08em; }
-.subnav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); display: flex; gap: 0; overflow-x: auto; margin: 14px 0 26px; border-bottom: 1px solid var(--line); }
-.subnav a { padding: 10px 12px; font-size: .85rem; color: var(--muted); text-decoration: none; white-space: nowrap; border-bottom: 2px solid transparent; margin-bottom: -1px; }
-.subnav a[aria-current="page"] { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
-.subnav a:hover { color: var(--text); }
-.pager { display: flex; justify-content: space-between; gap: 12px; margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--line); font-size: .88rem; }
-.pager a { text-decoration: none; color: var(--text); }
-.pager a span { display: block; font-size: .72rem; color: var(--muted); }
-.pager .next { text-align: right; margin-left: auto; }
+/* 左サイドメニュー */
+.shell { display: grid; grid-template-columns: 220px minmax(0, 1fr); min-height: calc(100% - 44px); }
+.side { background: var(--side); color: var(--side-text); font-size: .8rem; padding: 10px 0 40px; position: sticky; top: calc(44px + env(safe-area-inset-top, 0px)); height: calc(100vh - 44px - env(safe-area-inset-top, 0px)); overflow-y: auto; padding-left: env(safe-area-inset-left, 0px); }
+.side a, .side button { display: flex; align-items: center; gap: 8px; width: 100%; color: var(--side-text); text-decoration: none; background: none; border: 0; font: inherit; text-align: left; cursor: pointer; padding: 7px 16px; }
+.side a:hover, .side button:hover { color: var(--side-head); }
+.side .grp { border-top: 1px solid var(--side-line); margin-top: 6px; padding-top: 6px; }
+.side .label { font-size: .68rem; letter-spacing: .1em; color: var(--side-text); opacity: .7; padding: 8px 16px 2px; }
+.side .head { color: var(--side-head); font-weight: 500; }
+.side .head .caret { margin-left: auto; font-size: .7rem; opacity: .7; transition: transform .15s; }
+.side .head[aria-expanded="true"] .caret { transform: rotate(180deg); }
+.side .sub a { padding-left: 34px; font-size: .76rem; }
+.side a[aria-current="page"] { background: var(--side-active); color: var(--side-head); font-weight: 700; box-shadow: inset -4px 0 0 var(--top); }
+.dot { width: 8px; height: 8px; border-radius: 50%; flex: none; background: var(--c, var(--accent)); }
+.side .add { color: var(--accent); }
+.scrim { display: none; }
 
-.card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 18px; min-width: 0; }
-.intro { font-size: .95rem; max-width: 40em; margin: 0 0 22px; }
+/* 本文 */
+.content { min-width: 0; padding-block: 0 64px; }
+.pagebar { background: var(--card); border-bottom: 1px solid var(--line); display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; padding-block: 10px; padding-left: 24px; padding-right: max(24px, env(safe-area-inset-right, 0px)); }
+.pagebar .bn { display: flex; align-items: center; gap: 8px; font-weight: 700; color: var(--c, var(--text)); font-size: .9rem; }
+.pagebar .meta { font-size: .76rem; color: var(--muted); }
+.pagebar .pt { font-size: .9rem; font-weight: 700; }
+.inner { padding: 20px 24px 0; padding-right: max(24px, env(safe-area-inset-right, 0px)); max-width: 1120px; }
+.panel { background: var(--card); border: 1px solid var(--line); border-radius: 4px; min-width: 0; }
+.panel + .panel, .grid2 + .panel, .panel + .grid2 { margin-top: 16px; }
+.ph { display: flex; align-items: center; gap: 8px; padding: 12px 18px; border-bottom: 1px solid var(--line); font-weight: 700; font-size: .88rem; }
+.ph .sq { width: 4px; height: 14px; background: var(--c, var(--top)); border-radius: 1px; }
+.ph .tools { margin-left: auto; font-weight: 400; font-size: .74rem; color: var(--muted); }
+.pb { padding: 16px 18px; }
+.grid2 { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.grid2 > .panel, .kpis > .panel, .cases > .panel, .brandlist > .panel, .fourp > .panel { margin-top: 0 !important; }
 
-/* ホーム */
-.brandcards { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
-.brandcard { display: flex; flex-direction: column; gap: 6px; text-decoration: none; color: var(--text); background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 20px; transition: border-color .15s; }
-.brandcard:hover { border-color: var(--accent); }
-.brandcard .nm { font-size: 1.4rem; font-weight: 700; color: var(--accent); line-height: 1.3; }
-.brandcard .kn { font-size: .75rem; color: var(--muted); letter-spacing: .08em; }
-.brandcard .tl { font-size: .9rem; }
-.brandcard .go { font-size: .8rem; color: var(--accent); margin-top: auto; padding-top: 8px; }
-.brandcard.add { border-style: dashed; color: var(--muted); justify-content: center; align-items: center; text-align: center; min-height: 160px; }
-.chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.chip { font-size: .72rem; padding: 0 9px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
-.homefoot { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); margin-top: 28px; }
-.homefoot h3 { font-size: .95rem; }
-.homefoot p { margin: 0; font-size: .85rem; }
+/* トップ（LP風） */
+.hero { text-align: center; padding: 34px 0 10px; }
+.hero h1 { font-size: clamp(1.5rem, 4.4vw, 2.6rem); font-weight: 900; letter-spacing: .02em; margin: 0 0 14px; line-height: 1.35; }
+.hero p { font-weight: 700; font-size: clamp(.86rem, 1.8vw, 1rem); margin: 0 auto; max-width: 46em; }
+.lp { background: var(--card); border-radius: 28px; padding: 28px; margin-top: 26px; display: grid; gap: 26px; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); align-items: start; border: 1px solid var(--line); }
+.feat { display: grid; gap: 12px; }
+.feat a { display: block; border: 2px solid var(--line-strong); border-radius: 10px; padding: 16px 20px; text-decoration: none; color: var(--text); background: var(--card); position: relative; }
+.feat a .t { font-weight: 900; font-size: 1.05rem; display: flex; align-items: center; gap: 10px; }
+.feat a .t::after { content: "→"; margin-left: auto; font-weight: 400; }
+.feat a .d { display: none; font-size: .86rem; color: var(--muted); margin: 8px 0 0; }
+.feat a.on { border-color: var(--accent); }
+.feat a.on .t { color: var(--accent); }
+.feat a.on .d { display: block; }
+.preview { border-radius: 10px; overflow: hidden; border: 1px solid var(--line); box-shadow: 0 8px 24px rgba(0, 19, 37, .12); }
+.preview .chrome { background: #3b4048; height: 22px; display: flex; justify-content: flex-end; align-items: center; gap: 5px; padding: 0 10px; }
+.preview .chrome i { width: 7px; height: 7px; border-radius: 50%; background: #6f757d; }
+.preview .bar { background: var(--top); color: var(--top-text); font-size: .7rem; padding: 4px 10px; }
+.preview .vs { font-size: .74rem; padding: 8px 12px; border-bottom: 1px solid var(--line); }
+.preview table { font-size: .76rem; }
+.brandlist { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); margin-top: 16px; }
+.bcard { display: block; text-decoration: none; color: var(--text); border-top: 3px solid var(--c); }
+.bcard .nm { font-size: 1.15rem; font-weight: 700; color: var(--c); }
+.bcard .tl { font-size: .84rem; margin: 2px 0 8px; }
+.chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.chip { font-size: .7rem; padding: 0 8px; border-radius: 3px; background: var(--bg); color: var(--muted); border: 1px solid var(--line); }
+.secttl { font-size: 1rem; font-weight: 700; margin: 30px 0 0; display: flex; align-items: center; gap: 8px; }
+.secttl::before { content: ""; width: 4px; height: 16px; background: var(--accent); }
+
+/* 表 */
+.scroll-x { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: .84rem; }
+th, td { border-bottom: 1px solid var(--line); padding: 9px 10px; text-align: left; vertical-align: top; }
+thead th { color: var(--muted); font-weight: 500; white-space: nowrap; font-size: .76rem; }
+tbody th { color: var(--muted); font-weight: 500; white-space: nowrap; }
+td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.cmp thead th.b { color: var(--c); font-weight: 700; font-size: .84rem; border-top: 3px solid var(--c); }
+.cmp td.v { color: var(--c); font-weight: 500; }
+details { margin-top: 10px; font-size: .82rem; }
+summary { cursor: pointer; color: var(--muted); }
 
 /* 概要 */
-.concept { font-size: 1.05rem; font-weight: 600; margin: 0 0 6px; }
-dl.profile { display: grid; grid-template-columns: 6.5em 1fr; gap: 10px 14px; margin: 0; font-size: .9rem; }
+.concept { font-size: 1rem; font-weight: 700; margin: 0 0 6px; color: var(--c); }
+dl.profile { display: grid; grid-template-columns: 6.5em 1fr; gap: 0; margin: 0; font-size: .86rem; }
+dl.profile dt, dl.profile dd { padding: 8px 0; border-bottom: 1px solid var(--line); margin: 0; }
 dl.profile dt { color: var(--muted); }
-dl.profile dd { margin: 0; min-width: 0; }
-.kpis { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); margin-top: 14px; }
-.kpi .label { font-size: .75rem; color: var(--muted); }
-.kpi .value { font-size: 1.35rem; font-weight: 700; line-height: 1.4; margin: 2px 0; font-variant-numeric: tabular-nums; }
-.kpi .sub { font-size: .75rem; color: var(--muted); line-height: 1.6; }
-.stack { display: grid; gap: 14px; }
+dl.profile dd { min-width: 0; }
+.kpis { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin-top: 16px; }
+.kpi .label { font-size: .74rem; color: var(--muted); }
+.kpi .value { font-size: 1.35rem; font-weight: 700; color: var(--c); line-height: 1.4; margin: 2px 0; font-variant-numeric: tabular-nums; }
+.kpi .sub { font-size: .74rem; color: var(--muted); line-height: 1.6; }
 
 /* 出典・ラベル */
-sup.src { font-size: .62rem; margin-left: 2px; white-space: nowrap; }
+sup.src { font-size: .6rem; margin-left: 2px; white-space: nowrap; }
 sup.src a { text-decoration: none; color: var(--muted); }
 sup.src a:hover { color: var(--accent); }
-.tag { display: inline-block; font-size: .68rem; font-weight: 600; padding: 0 7px; border-radius: 4px; vertical-align: 2px; margin-right: 6px; white-space: nowrap; line-height: 1.7; }
+.tag { display: inline-block; font-size: .66rem; font-weight: 700; padding: 0 6px; border-radius: 3px; vertical-align: 1px; margin-right: 6px; white-space: nowrap; line-height: 1.7; }
 .tag.fact { background: var(--info-soft); color: var(--info); }
 .tag.analysis { background: var(--warn-soft); color: var(--warn); }
 
 /* 年表 */
 ol.timeline { list-style: none; margin: 0; padding: 0; border-left: 2px solid var(--line); }
-ol.timeline li { position: relative; padding: 0 0 24px 22px; }
-ol.timeline li::before { content: ""; position: absolute; left: -7px; top: 8px; width: 12px; height: 12px; border-radius: 50%; background: var(--bg); border: 2px solid var(--accent); }
-ol.timeline li.major::before { background: var(--accent); }
-.tl-date { font-size: .78rem; color: var(--accent); font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: .04em; }
+ol.timeline li { position: relative; padding: 0 0 20px 20px; }
+ol.timeline li:last-child { padding-bottom: 0; }
+ol.timeline li::before { content: ""; position: absolute; left: -7px; top: 7px; width: 12px; height: 12px; border-radius: 50%; background: var(--card); border: 2px solid var(--c); }
+ol.timeline li.major::before { background: var(--c); }
+.tl-date { font-size: .76rem; color: var(--c); font-weight: 700; font-variant-numeric: tabular-nums; }
 .tl-title { font-weight: 700; }
-.tl-body { font-size: .88rem; color: var(--muted); margin-top: 2px; }
+.tl-body { font-size: .84rem; color: var(--muted); margin-top: 2px; }
 
-/* 成功事例 */
-.cases { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
-.case p { margin: 6px 0 0; font-size: .88rem; }
-.case .why { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--line); font-size: .84rem; color: var(--muted); }
-.case .why b { color: var(--text); font-weight: 600; }
-
-/* 課題 */
-.callout { background: var(--info-soft); border-radius: 12px; padding: 12px 16px; font-size: .86rem; margin: 0 0 16px; }
-.risk-row { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); border-radius: 18px; overflow: hidden; background: var(--card); }
-.risk-row + .risk-row { margin-top: 10px; }
-.risk-row > div { padding: 14px 18px; min-width: 0; }
-.risk-row > div:first-child { border-right: 1px solid var(--line); }
-.risk-row .lbl { font-size: .7rem; font-weight: 600; letter-spacing: .08em; margin-bottom: 4px; }
-.risk-row .lbl.problem { color: var(--warn); }
-.risk-row .lbl.fix { color: var(--good); }
-.risk-row p { margin: 0; font-size: .88rem; }
+/* 成功事例・課題 */
+.cases { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.case h3 { font-size: .92rem; margin: 0; }
+.case p { margin: 6px 0 0; font-size: .85rem; }
+.case .why { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--line); font-size: .82rem; color: var(--muted); }
+.case .why b { color: var(--text); font-weight: 700; }
+.callout { background: var(--info-soft); border-left: 4px solid var(--info); padding: 10px 14px; font-size: .84rem; margin: 0 0 16px; }
+.risk-tbl td { font-size: .84rem; }
+.risk-tbl th.p { color: var(--warn); }
+.risk-tbl th.f { color: var(--good); }
 
 /* グラフ */
-.hbars { display: grid; gap: 12px; margin-top: 12px; }
+.hbars { display: grid; gap: 12px; }
 .hb, .axis { display: grid; grid-template-columns: minmax(7em, 11em) 1fr 8em; gap: 10px; align-items: center; }
-.hb { font-size: .84rem; }
+.hb { font-size: .82rem; }
 .hb .lab { min-width: 0; line-height: 1.4; }
-.hb .lab small { display: block; color: var(--muted); font-size: .72rem; }
+.hb .lab small { display: block; color: var(--muted); font-size: .7rem; }
 .hb .track { position: relative; height: 14px; background: var(--grid); border-radius: 0 4px 4px 0; }
-.hb .fill { position: absolute; inset: 0 auto 0 0; background: var(--bar); border-radius: 0 4px 4px 0; }
-.hb .fill.est { background: repeating-linear-gradient(135deg, var(--bar) 0 4px, transparent 4px 7px); border: 1px solid var(--bar); }
-.hb .range { position: absolute; top: 0; bottom: 0; background: repeating-linear-gradient(135deg, var(--bar) 0 2px, transparent 2px 7px); opacity: .55; border-radius: 0 4px 4px 0; }
-.hb .num { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
-.axis { font-size: .68rem; color: var(--muted); font-variant-numeric: tabular-nums; margin-top: 4px; }
+.hb .fill { position: absolute; inset: 0 auto 0 0; background: var(--c); border-radius: 0 4px 4px 0; }
+.hb .fill.est { background: repeating-linear-gradient(135deg, var(--c) 0 4px, transparent 4px 7px); border: 1px solid var(--c); }
+.hb .range { position: absolute; top: 0; bottom: 0; background: repeating-linear-gradient(135deg, var(--c) 0 2px, transparent 2px 7px); opacity: .55; border-radius: 0 4px 4px 0; }
+.hb .num { text-align: right; font-variant-numeric: tabular-nums; font-weight: 700; color: var(--c); }
+.axis { font-size: .66rem; color: var(--muted); font-variant-numeric: tabular-nums; margin-top: 4px; }
 .axis .ticks { display: flex; justify-content: space-between; }
-.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: .76rem; color: var(--muted); margin-top: 10px; }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: .74rem; color: var(--muted); margin-top: 10px; }
 .legend i { display: inline-block; width: 18px; height: 10px; vertical-align: -1px; margin-right: 5px; border-radius: 2px; }
-.legend i.solid { background: var(--bar); }
-.legend i.hatch { background: repeating-linear-gradient(135deg, var(--bar) 0 3px, transparent 3px 6px); border: 1px solid var(--bar); }
-.tooltip { position: fixed; pointer-events: none; background: var(--text); color: var(--bg); padding: 6px 10px; border-radius: 6px; font-size: .78rem; z-index: 20; max-width: 260px; line-height: 1.5; }
-.scroll-x { overflow-x: auto; }
-table { border-collapse: collapse; width: 100%; font-size: .85rem; }
-th, td { border-bottom: 1px solid var(--line); padding: 9px 8px; text-align: left; vertical-align: top; }
-thead th { color: var(--muted); font-weight: 600; white-space: nowrap; }
-tbody th { color: var(--muted); font-weight: 600; white-space: nowrap; }
-td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
-details { margin-top: 10px; font-size: .84rem; }
-summary { cursor: pointer; color: var(--muted); }
+.legend i.solid { background: var(--c); }
+.legend i.hatch { background: repeating-linear-gradient(135deg, var(--c) 0 3px, transparent 3px 6px); border: 1px solid var(--c); }
+.tooltip { position: fixed; pointer-events: none; background: var(--text); color: var(--bg); padding: 6px 10px; border-radius: 4px; font-size: .76rem; z-index: 50; max-width: 260px; line-height: 1.5; }
 
 /* マーケ分析 */
-.mtabs { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 18px; }
-.mtabs button { font: inherit; font-size: .82rem; border: 1px solid var(--line); background: var(--card); color: var(--text); padding: 4px 14px; border-radius: 999px; cursor: pointer; }
-.mtabs button[aria-pressed="true"] { background: var(--text); color: var(--bg); border-color: var(--text); }
-.mlead { font-size: .85rem; color: var(--muted); margin: 0 0 14px; }
-.persona { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
-.plain { margin: 8px 0 0; padding-left: 1.2em; font-size: .88rem; }
+.mtabs { display: flex; gap: 0; border-bottom: 1px solid var(--line); margin: -4px 0 16px; overflow-x: auto; }
+.mtabs button { font: inherit; font-size: .82rem; border: 0; background: none; color: var(--muted); padding: 8px 16px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -1px; white-space: nowrap; }
+.mtabs button[aria-pressed="true"] { color: var(--text); font-weight: 700; border-bottom-color: var(--accent); }
+.mlead { font-size: .82rem; color: var(--muted); margin: 0 0 14px; }
+.plain { margin: 8px 0 0; padding-left: 1.2em; font-size: .85rem; }
 .plain li { margin: 3px 0; }
 .funnel { display: grid; gap: 8px; }
-.fn { display: grid; grid-template-columns: 7.5em 1fr; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); background: var(--card); }
-.fn .stage { background: var(--accent-soft); color: var(--accent); font-weight: 700; padding: 12px; font-size: .88rem; display: flex; flex-direction: column; justify-content: center; line-height: 1.4; }
-.fn .stage small { font-weight: 400; font-size: .64rem; letter-spacing: .08em; }
-.fn .body { padding: 12px 16px; font-size: .86rem; min-width: 0; }
-.fn .body b { font-weight: 600; }
-.fourp { display: grid; gap: 12px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.swot { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; background: var(--card); }
-.swot > div { padding: 16px 18px; min-width: 0; }
+.fn { display: grid; grid-template-columns: 8em 1fr; border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
+.fn .stage { background: var(--side-active); color: #ffffff; font-weight: 700; padding: 10px 12px; font-size: .84rem; display: flex; flex-direction: column; justify-content: center; line-height: 1.4; }
+.fn:nth-child(2) .stage { background: #0f4a85; } .fn:nth-child(3) .stage { background: var(--top); } .fn:nth-child(4) .stage { background: #3d8fd6; } .fn:nth-child(5) .stage { background: var(--accent); }
+.fn .stage small { font-weight: 400; font-size: .62rem; letter-spacing: .08em; opacity: .85; }
+.fn .body { padding: 10px 14px; font-size: .84rem; min-width: 0; }
+.fourp { display: grid; gap: 16px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.fourp .panel + .panel { margin-top: 0; }
+.swot { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
+.swot > div { padding: 14px 16px; min-width: 0; }
 .swot > div:nth-child(1), .swot > div:nth-child(2) { border-bottom: 1px solid var(--line); }
 .swot > div:nth-child(odd) { border-right: 1px solid var(--line); }
-.swot h3 span { color: var(--muted); font-weight: 400; font-size: .72rem; margin-left: 6px; }
+.swot h3 { font-size: .9rem; margin: 0; }
+.swot h3 span { color: var(--muted); font-weight: 400; font-size: .7rem; margin-left: 6px; }
 
 /* お店へのヒント */
-ol.lessons { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; counter-reset: l; }
-ol.lessons li { counter-increment: l; display: grid; grid-template-columns: 2em 1fr; gap: 10px; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 16px 18px; }
-ol.lessons li::before { content: counter(l); font-size: 1.5rem; font-weight: 700; color: var(--accent); line-height: 1.2; }
-ol.lessons h3 { margin: 0; }
-ol.lessons p { margin: 4px 0 0; font-size: .88rem; }
-ol.lessons .try { margin-top: 8px; font-size: .84rem; background: var(--good-soft); border-radius: 10px; padding: 8px 12px; }
-ol.lessons .try b { color: var(--good); }
+ol.lessons { list-style: none; margin: 0; padding: 0; counter-reset: l; }
+ol.lessons li { counter-increment: l; display: grid; grid-template-columns: 2.2em 1fr; gap: 12px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+ol.lessons li:first-child { padding-top: 0; }
+ol.lessons li:last-child { border-bottom: 0; padding-bottom: 0; }
+ol.lessons li::before { content: counter(l); width: 2em; height: 2em; border-radius: 50%; background: var(--accent); color: var(--on-accent); font-weight: 700; display: grid; place-items: center; font-size: .9rem; }
+ol.lessons h3 { margin: 0; font-size: .95rem; }
+ol.lessons p { margin: 4px 0 0; font-size: .85rem; }
+ol.lessons .try { margin-top: 8px; font-size: .82rem; background: var(--accent-soft); border-radius: 4px; padding: 8px 12px; }
+ol.lessons .try b { color: var(--accent); }
 
-ol.sources { margin: 0; padding-left: 2.4em; font-size: .84rem; }
+ol.sources { margin: 0; padding-left: 2.4em; font-size: .82rem; }
 ol.sources li { margin: 6px 0; overflow-wrap: anywhere; }
 .flash { background: var(--accent-soft); }
-pre.code { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px; font-size: .76rem; overflow-x: auto; line-height: 1.5; font-family: ui-monospace, Menlo, monospace; }
-.placeholder { color: var(--muted); }
+.pager { display: flex; justify-content: space-between; gap: 12px; margin-top: 24px; font-size: .84rem; }
+.pager a { text-decoration: none; color: var(--text); background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 8px 14px; }
+.pager a span { display: block; font-size: .7rem; color: var(--muted); }
+.pager .next { text-align: right; margin-left: auto; }
+pre.code { background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 12px; font-size: .74rem; overflow-x: auto; line-height: 1.5; font-family: ui-monospace, Menlo, monospace; }
 
-@media (max-width: 640px) {
+@media (max-width: 860px) {
+  .menu-btn { display: block; }
+  .topbar .checked { display: none; }
+  .shell { grid-template-columns: minmax(0, 1fr); }
+  .side { position: fixed; z-index: 35; left: 0; top: calc(44px + env(safe-area-inset-top, 0px)); width: min(280px, 84vw); height: calc(100% - 44px - env(safe-area-inset-top, 0px)); transform: translateX(-100%); transition: transform .2s; padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px)); }
+  .side.open { transform: none; }
+  .scrim { position: fixed; inset: 0; background: rgba(0, 10, 20, .45); z-index: 34; }
+  .side.open + .scrim { display: block; }
+  .lp { grid-template-columns: 1fr; padding: 18px; border-radius: 18px; }
+  .pagebar { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .inner { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+}
+@media (max-width: 560px) {
   .fourp, .swot { grid-template-columns: 1fr; }
   .swot > div { border-right: 0 !important; border-bottom: 1px solid var(--line); }
   .swot > div:last-child { border-bottom: 0; }
-  .risk-row { grid-template-columns: 1fr; }
-  .risk-row > div:first-child { border-right: 0; border-bottom: 1px solid var(--line); }
   .hb, .axis { grid-template-columns: 6.5em 1fr 5.5em; gap: 8px; }
   .fn { grid-template-columns: 5.5em 1fr; }
   dl.profile { grid-template-columns: 5.5em 1fr; }
+  .crumbs { display: none; }
 }
+@media (prefers-reduced-motion: reduce) { .side { transition: none; } }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="masthead"><h1><a href="#home">SNSブランド研究室</a></h1><span class="checked" id="checked"></span></div>
-  <nav class="sitenav" aria-label="サイト内のページ">
-    <a href="index.html">ニュース</a>
-    <a href="market.html">市場環境</a>
-    <a href="brands.html">SNSブランド分析</a>
-    <a href="brand-research.html" aria-current="page">ブランド深掘り</a>
-  </nav>
-  <nav class="mainnav" id="mainnav" aria-label="ページの切り替え"></nav>
-  <main id="view"></main>
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" type="button" aria-label="メニューを開く" aria-expanded="false" aria-controls="side">☰</button>
+  <a class="logo" href="#home"><i>S</i>SNSブランド研究室</a>
+  <div class="crumbs" id="crumbs"></div>
+  <span class="checked" id="checked"></span>
+</header>
+<div class="shell">
+  <aside class="side" id="side" aria-label="メニュー"></aside>
+  <div class="scrim" id="scrim"></div>
+  <main class="content" id="view"></main>
 </div>
 <div class="tooltip" id="tip" hidden></div>
 
 <!--
   ▼▼▼ ここがデータ部分です ▼▼▼
   ブランドを増やすときは "brands" の中に同じ形のブロックを1つ足すだけで、
-  ホームのカード・切り替えボタン・比較表・各ページが自動で増えます。
+  メニュー・トップ・比較表・各ページが自動で増えます。ブランドの色は並び順で自動で決まります（最大5色）。
   "src" には そのブランドの "sources" の id（"S1" など）を書くと、本文に出典番号が付きます。
   "kind" は "fact"（報道・公式で確認できた事実）か "analysis"（このサイトの分析・推察）です。
 -->
@@ -1556,19 +1603,26 @@ pre.code { background: var(--card); border: 1px solid var(--line); border-radius
 }
 </script>
 
+<script>window.BOARD_LINKS=[["index.html","ニュース"],["market.html","市場環境"],["brands.html","SNSブランド分析（一覧）"]];</script>
 <script>
 (function () {
   "use strict";
   var DATA = JSON.parse(document.getElementById("brand-data").textContent);
   var BRANDS = DATA.brands || [];
+  var BOARD = window.BOARD_LINKS || [];
   var view = document.getElementById("view");
+  var side = document.getElementById("side");
   var tip = document.getElementById("tip");
   var PAGES = [
     ["overview", "概要"], ["history", "成り立ち・年表"], ["success", "成功事例"], ["risks", "課題・失敗"],
     ["numbers", "数字"], ["marketing", "マーケ分析"], ["lessons", "お店へのヒント"], ["sources", "出典"]
   ];
   var mTab = "persona";
+  var open = {};
+  var curKey = "home";
 
+  function color(b) { return "var(--b" + ((BRANDS.indexOf(b) % 5) + 1) + ")"; }
+  function cs(b) { return ' style="--c:' + color(b) + '"'; }
   function esc(s) {
     return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
       return {"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c];
@@ -1590,17 +1644,42 @@ pre.code { background: var(--card); border: 1px solid var(--line); border-radius
     return "";
   }
   function ul(items) { return '<ul class="plain">' + list(items).map(function (i) { return "<li>" + esc(i) + "</li>"; }).join("") + "</ul>"; }
+  function panel(title, inner, opt) {
+    opt = opt || {};
+    return '<section class="panel"' + (opt.c ? ' style="--c:' + opt.c + '"' : "") + '><div class="ph"><span class="sq"></span>' + esc(title) + (opt.tools ? '<span class="tools">' + opt.tools + "</span>" : "") + '</div><div class="pb">' + inner + "</div></section>";
+  }
+  function link(b, p) { return "#" + b.id + (p === "overview" ? "" : "-" + p); }
 
   document.getElementById("checked").textContent = "確認日 " + (DATA.site.checked || "");
 
-  function renderNav(current) {
-    var items = [["home", "ホーム"]].concat(BRANDS.map(function (b) { return [b.id, b.name]; }), [["compare", "ブランド比較"], ["howto", "＋追加"]]);
-    document.getElementById("mainnav").innerHTML = items.map(function (it) {
-      return '<a href="#' + esc(it[0]) + '"' + (it[0] === current ? ' aria-current="page"' : "") + ">" + esc(it[1]) + "</a>";
-    }).join("");
+  /* ---------- サイドメニュー ---------- */
+  function renderSide(cur) {
+    var h = '<a href="#home"' + (cur === "home" ? ' aria-current="page"' : "") + '>⌂　トップ</a>';
+    h += '<div class="grp"><div class="label">比較</div><a href="#compare"' + (cur === "compare" ? ' aria-current="page"' : "") + ">▤　ブランド比較</a></div>";
+    h += '<div class="grp"><div class="label">ブランド分析</div>';
+    BRANDS.forEach(function (b) {
+      var isOpen = !!open[b.id];
+      h += '<button type="button" class="head" data-toggle="' + esc(b.id) + '" aria-expanded="' + isOpen + '"' + cs(b) + '><span class="dot"></span>' + esc(b.name) + '<span class="caret">▾</span></button>';
+      if (isOpen) {
+        h += '<div class="sub">' + PAGES.map(function (p) {
+          var key = b.id + "-" + p[0];
+          return '<a href="' + link(b, p[0]) + '"' + (cur === key ? ' aria-current="page"' : "") + ">" + p[1] + "</a>";
+        }).join("") + "</div>";
+      }
+    });
+    h += '<a class="add" href="#howto"' + (cur === "howto" ? ' aria-current="page"' : "") + ">＋　ブランドを追加</a></div>";
+    if (BOARD.length) {
+      h += '<div class="grp"><div class="label">情報ボード</div>' + BOARD.map(function (l) { return '<a href="' + esc(l[0]) + '">' + esc(l[1]) + "</a>"; }).join("") + "</div>";
+    }
+    side.innerHTML = h;
+  }
+  function crumbs(parts) {
+    document.getElementById("crumbs").innerHTML = parts.map(function (p) {
+      return p[1] ? '<a href="' + p[1] + '">' + esc(p[0]) + "</a>" : esc(p[0]);
+    }).join("<span>/</span>");
   }
 
-  /* ---------- グラフ（横棒・同じ物差し） ---------- */
+  /* ---------- グラフ ---------- */
   function niceMax(v) {
     var p = Math.pow(10, Math.floor(Math.log10(v)));
     var st = [1, 2, 2.5, 5, 10];
@@ -1618,7 +1697,7 @@ pre.code { background: var(--card); border: 1px solid var(--line); border-radius
       var range = r.high ? '<span class="range" style="left:' + w + "%;width:" + ((r.high - r.value) / max * 100).toFixed(2) + '%"></span>' : "";
       return '<div class="hb"><div class="lab">' + esc(r.label) + "<small>" + esc(r.sub) + "</small></div>" +
         '<div class="track" tabindex="0" data-tip="' + esc(t) + '" aria-label="' + esc(t) + '"><span class="fill' + (r.kind === "estimate" ? " est" : "") + '" style="width:' + w + '%"></span>' + range + "</div>" +
-        '<div class="num">' + esc(label) + srcs(r.src, r._b || b) + "</div></div>";
+        '<div class="num">' + esc(label) + srcs(r.src, b) + "</div></div>";
     }).join("");
     var ticks = [0, max / 2, max].map(function (t) { return "<span>" + esc(fmt(t, chart.unit)) + "</span>"; }).join("");
     var legend = hasEst ? '<div class="legend"><span><i class="solid"></i>報道値</span><span><i class="hatch"></i>試算（推定）</span></div>' : "";
@@ -1626,63 +1705,89 @@ pre.code { background: var(--card); border: 1px solid var(--line); border-radius
       chart.rows.map(function (r) {
         return "<tr><td>" + esc(r.label) + "</td><td>" + esc(r.sub) + '</td><td class="num">' + esc(r.high ? r.value + "〜" + fmt(r.high, chart.unit) : fmt(r.value, chart.unit)) + "</td><td>" + (r.kind === "estimate" ? "試算" : "報道値") + "</td></tr>";
       }).join("") + "</tbody></table></div></details>";
-    return '<div class="card"><h3>' + esc(chart.title) + '</h3><div class="hbars">' + rows + "</div>" +
-      '<div class="axis" aria-hidden="true"><span></span><div class="ticks">' + ticks + "</div><span></span></div>" +
-      legend + (chart.note ? '<p class="note">' + esc(chart.note) + "</p>" : "") + table + "</div>";
+    return panel(chart.title, '<div class="hbars">' + rows + '</div><div class="axis" aria-hidden="true"><span></span><div class="ticks">' + ticks + "</div><span></span></div>" + legend + (chart.note ? '<p class="note">' + esc(chart.note) + "</p>" : "") + table, {c: color(b)});
   }
 
-  /* ---------- ホーム ---------- */
+  /* ---------- 比較表（基本指標） ---------- */
+  function compareTable(keys) {
+    var all = [];
+    BRANDS.forEach(function (b) { Object.keys(b.compare || {}).forEach(function (k) { if (all.indexOf(k) < 0) all.push(k); }); });
+    keys = keys || all;
+    return '<div class="scroll-x"><table class="cmp"><thead><tr><th></th>' + BRANDS.map(function (b) {
+      return '<th class="b"' + cs(b) + '><a href="#' + esc(b.id) + '" style="color:inherit;text-decoration:none">' + esc(b.name) + "</a></th>";
+    }).join("") + "</tr></thead><tbody>" + keys.map(function (k) {
+      return "<tr><th>" + esc(k) + "</th>" + BRANDS.map(function (b) { return '<td class="v"' + cs(b) + ">" + esc((b.compare || {})[k] || "—") + "</td>"; }).join("") + "</tr>";
+    }).join("") + "</tbody></table></div>";
+  }
+
+  /* ---------- トップ ---------- */
+  var FEATS = [
+    ["compare", "「基本指標」を比べる", "設立年・年商・販路・価格帯・客層などを、ブランド横並びで比較。違いがひと目で分かります。"],
+    ["history", "「成り立ち」を知る", "創業のきっかけから転機になった出来事まで、年表でたどります。"],
+    ["success", "「成功事例」を見る", "なぜ売れたのかを「なぜ効いたか」とセットで整理しています。"],
+    ["risks", "「課題・失敗」を知る", "人気ゆえの困りごとと、ブランドがどう対処したかをまとめています。"],
+    ["marketing", "「マーケ分析」を見る", "ターゲット・集客の流れ・4P・SWOTの4つの型で分析します。"],
+    ["lessons", "「お店へのヒント」を得る", "自分の子供服ショップで試せることを、具体的な一歩つきで紹介します。"]
+  ];
   function renderHome() {
+    var first = BRANDS[0];
+    var feats = FEATS.map(function (f, i) {
+      var href = f[0] === "compare" ? "#compare" : (first ? link(first, f[0]) : "#home");
+      return '<a href="' + href + '" data-feat' + (i === 0 ? ' class="on"' : "") + '><span class="t">' + esc(f[1]) + '</span><p class="d">' + esc(f[2]) + "</p></a>";
+    }).join("");
+    var vs = BRANDS.map(function (b) { return '<b style="color:' + color(b) + '">' + esc(b.name) + "</b>"; }).join(" vs. ");
+    var preview = '<div class="preview" aria-hidden="false"><div class="chrome"><i></i><i></i><i></i></div><div class="bar">SNSブランド研究室　｜　ブランド比較　＞　基本指標</div>' +
+      '<div style="background:var(--card)"><div class="vs">' + vs + '　<span class="muted">（' + esc(DATA.site.target_summary) + "）</span></div>" +
+      '<div style="padding:4px 10px 10px">' + compareTable(["対象", "設立", "年商（報道）", "主な販路", "価格帯", "成長のカギ"]) + "</div></div></div>";
     var cards = BRANDS.map(function (b) {
-      return '<a class="brandcard" href="#' + esc(b.id) + '"><span class="kn">' + esc(b.status) + '</span><span class="nm">' + esc(b.name) + '</span><span class="tl">' + esc(b.tagline || b.concept_word) + '</span><div class="chips">' +
-        list(b.tags).map(function (t) { return '<span class="chip">' + esc(t) + "</span>"; }).join("") + '</div><span class="go">くわしく見る →</span></a>';
-    }).join("") + '<a class="brandcard add" href="#howto">＋ ブランドを追加する</a>';
-    return '<p class="intro">SNSから人気になったブランドの成り立ち・成功事例・課題・数字・マーケティングを、出典付きでまとめた研究ノートです。自分の子供服ショップに活かすことを目的にしています。</p>' +
-      '<h2>ブランド一覧</h2><div class="brandcards">' + cards + "</div>" +
-      '<div class="homefoot"><a class="card" href="#compare" style="text-decoration:none;color:inherit"><h3>ブランド比較 →</h3><p class="muted">設立・販路・価格帯・成長のカギなどを横に並べて比べます。</p></a>' +
-      '<div class="card"><h3>想定ターゲット</h3><p class="muted">' + esc(DATA.site.target_summary) + "</p></div></div>";
+      return '<a class="panel pb bcard" href="#' + esc(b.id) + '"' + cs(b) + '><div class="muted" style="font-size:.72rem">' + esc(b.status) + '</div><div class="nm">' + esc(b.name) + '</div><div class="tl">' + esc(b.tagline || b.concept_word) + '</div><div class="chips">' +
+        list(b.tags).map(function (t) { return '<span class="chip">' + esc(t) + "</span>"; }).join("") + "</div></a>";
+    }).join("") + '<a class="panel pb bcard" href="#howto" style="--c:var(--accent)"><div class="nm">＋ ブランドを追加</div><div class="tl muted">調べたいブランドを、同じ型で増やせます。</div></a>';
+    return '<div class="inner"><div class="hero"><h1>「SNSブランドの成功の型」が直感的に見える</h1><p>ブランドの成り立ち・成功事例・課題・数字・マーケティングを、出典付きで整理。ブランド同士を横に並べて、自分のお店に活かせるポイントを見つけられます。</p></div>' +
+      '<div class="lp"><nav class="feat" aria-label="できること">' + feats + "</nav>" + preview + "</div>" +
+      '<h2 class="secttl">分析しているブランド</h2><div class="brandlist">' + cards + "</div></div>";
   }
 
   /* ---------- ブランドの小ページ ---------- */
   var BP = {
     overview: function (b) {
-      return '<div class="stack"><div class="card"><p class="concept">' + esc(b.concept_word) + '</p><p style="margin:0;font-size:.9rem">' + esc(b.concept) + "</p></div>" +
-        '<div class="card"><dl class="profile">' + list(b.profile).map(function (p) { return "<dt>" + esc(p.k) + "</dt><dd>" + esc(p.v) + srcs(p.src, b) + "</dd>"; }).join("") + "</dl></div></div>" +
+      return '<div class="grid2">' + panel("コンセプト", '<p class="concept">' + esc(b.concept_word) + '</p><p style="margin:0;font-size:.86rem">' + esc(b.concept) + "</p>", {c: color(b)}) +
+        panel("基本情報", '<dl class="profile">' + list(b.profile).map(function (p) { return "<dt>" + esc(p.k) + "</dt><dd>" + esc(p.v) + srcs(p.src, b) + "</dd>"; }).join("") + "</dl>", {c: color(b)}) + "</div>" +
         '<div class="kpis">' + list(b.kpis).map(function (k) {
-          return '<div class="card kpi"><div class="label">' + esc(k.label) + '</div><div class="value">' + esc(k.value) + srcs(k.src, b) + '</div><div class="sub">' + esc(k.sub) + "</div></div>";
+          return '<div class="panel pb kpi"><div class="label">' + esc(k.label) + '</div><div class="value">' + esc(k.value) + srcs(k.src, b) + '</div><div class="sub">' + esc(k.sub) + "</div></div>";
         }).join("") + "</div>";
     },
     history: function (b) {
-      return '<ol class="timeline">' + list(b.timeline).map(function (t) {
+      return panel("年表", '<ol class="timeline">' + list(b.timeline).map(function (t) {
         return '<li class="' + (t.major ? "major" : "") + '"><div class="tl-date">' + esc(t.date) + '</div><div class="tl-title">' + esc(t.title) + srcs(t.src, b) + '</div><div class="tl-body">' + esc(t.body) + "</div></li>";
-      }).join("") + '</ol><p class="note">塗りつぶしの丸は、ブランドの転機になった出来事です。</p>';
+      }).join("") + '</ol><p class="note">塗りつぶしの丸は、ブランドの転機になった出来事です。</p>', {c: color(b)});
     },
     success: function (b) {
       return '<div class="cases">' + list(b.successes).map(function (s) {
-        return '<div class="card case"><h3>' + esc(s.title) + srcs(s.src, b) + "</h3><p>" + esc(s.body) + '</p><div class="why">' + rich(s.why) + "</div></div>";
+        return '<div class="panel pb case"><h3>' + esc(s.title) + srcs(s.src, b) + "</h3><p>" + esc(s.body) + '</p><div class="why">' + rich(s.why) + "</div></div>";
       }).join("") + "</div>";
     },
     risks: function (b) {
-      return (b.risks_note ? '<p class="callout">' + esc(b.risks_note) + "</p>" : "") + list(b.risks).map(function (r) {
-        return '<div class="risk-row"><div><div class="lbl problem">起きたこと・リスク</div><p>' + kindTag(r.kind) + esc(r.problem) + srcs(r.src, b) + '</p></div><div><div class="lbl fix">対処・考え方</div><p>' + esc(r.fix) + "</p></div></div>";
-      }).join("") + '<p class="note"><span class="tag fact">事実</span>報道・公式・利用者の投稿で確認できた内容　<span class="tag analysis">分析</span>このサイトによる推察</p>';
+      return (b.risks_note ? '<p class="callout">' + esc(b.risks_note) + "</p>" : "") +
+        panel("起きたこと・リスクと対処", '<div class="scroll-x"><table class="risk-tbl"><thead><tr><th class="p">起きたこと・リスク</th><th class="f">対処・考え方</th></tr></thead><tbody>' + list(b.risks).map(function (r) {
+          return "<tr><td>" + kindTag(r.kind) + esc(r.problem) + srcs(r.src, b) + "</td><td>" + esc(r.fix) + "</td></tr>";
+        }).join("") + '</tbody></table></div><p class="note"><span class="tag fact">事実</span>報道・公式・利用者の投稿で確認できた内容　<span class="tag analysis">分析</span>このサイトによる推察</p>', {c: color(b)});
     },
     numbers: function (b) {
-      var charts = list(b.charts).map(function (c) { return hbars(c, b); }).join("");
       var acc = list(b.sns_accounts);
-      var sns = '<div class="card"><h3>Instagramフォロワー数</h3>' + (acc.length
-        ? '<div class="scroll-x"><table><thead><tr><th>アカウント</th><th>時点</th><th>フォロワー</th></tr></thead><tbody>' + acc.map(function (a) { return "<tr><td>" + esc(a.account) + "</td><td>" + esc(a.when) + '</td><td class="num">' + esc(a.followers) + srcs(a.src, b) + "</td></tr>"; }).join("") + '</tbody></table></div><p class="note">記事ごとに時点が違う参考値です。最新の数はInstagramで直接確認してください。</p>'
-        : '<p class="note">' + esc(b.sns_note || "フォロワー数は確認できていません。") + "</p>") + "</div>";
-      return '<div class="stack">' + charts + sns + "</div>";
+      var sns = panel("Instagramフォロワー数", acc.length
+        ? '<div class="scroll-x"><table><thead><tr><th>アカウント</th><th>時点</th><th style="text-align:right">フォロワー</th></tr></thead><tbody>' + acc.map(function (a) { return "<tr><td>" + esc(a.account) + "</td><td>" + esc(a.when) + '</td><td class="num">' + esc(a.followers) + srcs(a.src, b) + "</td></tr>"; }).join("") + '</tbody></table></div><p class="note">記事ごとに時点が違う参考値です。最新の数はInstagramで直接確認してください。</p>'
+        : '<p class="note" style="margin:0">' + esc(b.sns_note || "フォロワー数は確認できていません。") + "</p>", {c: color(b)});
+      return list(b.charts).map(function (c) { return hbars(c, b); }).join("") + sns;
     },
     marketing: function (b) {
       var m = b.marketing || {};
-      var tabs = [["persona", "ターゲット"], ["funnel", "集客〜ファン化"], ["fourp", "4P"], ["swot", "SWOT"]];
+      var tabs = [["persona", "ターゲット"], ["funnel", "集客〜ファン化"], ["fourp", "商品・価格・販路・販促（4P）"], ["swot", "SWOT"]];
       var body = "";
       if (mTab === "persona") {
-        body = '<p class="mlead">誰に、どんな気持ちで買われているか。</p><div class="persona">' + ["core", "target"].map(function (k) {
+        body = '<p class="mlead">誰に、どんな気持ちで買われているか。</p><div class="grid2">' + ["core", "target"].map(function (k) {
           var p = (m.persona || {})[k]; if (!p) return "";
-          return '<div class="card"><h3>' + kindTag(p.kind || "fact") + esc(p.title) + srcs(p.src, b) + "</h3>" + ul(p.items) + "</div>";
+          return '<div class="panel pb"><h3 style="font-size:.9rem;margin:0">' + kindTag(p.kind || "fact") + esc(p.title) + srcs(p.src, b) + "</h3>" + ul(p.items) + "</div>";
         }).join("") + "</div>";
       } else if (mTab === "funnel") {
         body = '<p class="mlead">知ってから、買って、人に広めるまでの流れ。</p><div class="funnel">' + list(m.funnel).map(function (f) {
@@ -1691,7 +1796,7 @@ pre.code { background: var(--card); border: 1px solid var(--line); border-radius
       } else if (mTab === "fourp") {
         body = '<p class="mlead">商品・価格・販路・販促の4つの視点で整理。</p><div class="fourp">' + ["product", "price", "place", "promotion"].map(function (k) {
           var p = (m.fourp || {})[k]; if (!p) return "";
-          return '<div class="card"><h3>' + esc(p.title) + srcs(p.src, b) + "</h3>" + ul(p.items) + "</div>";
+          return '<div class="panel pb"><h3 style="font-size:.9rem;margin:0">' + esc(p.title) + srcs(p.src, b) + "</h3>" + ul(p.items) + "</div>";
         }).join("") + "</div>";
       } else {
         var s = m.swot || {};
@@ -1700,70 +1805,57 @@ pre.code { background: var(--card); border: 1px solid var(--line); border-radius
           return "<div><h3>" + esc(p.title) + "<span>" + esc(p.en) + "</span></h3>" + ul(p.items) + "</div>";
         }).join("") + "</div>" + (s.note ? '<p class="note">' + esc(s.note) + "</p>" : "");
       }
-      return '<div class="mtabs" role="group" aria-label="分析の種類">' + tabs.map(function (t) {
+      return panel("マーケティング分析", '<div class="mtabs" role="group" aria-label="分析の種類">' + tabs.map(function (t) {
         return '<button type="button" data-mtab="' + t[0] + '" aria-pressed="' + (t[0] === mTab) + '">' + t[1] + "</button>";
-      }).join("") + "</div>" + body;
+      }).join("") + "</div>" + body, {c: color(b)});
     },
     lessons: function (b) {
-      return '<p class="intro">' + esc(b.name) + "の事例から、自分の子供服ショップで試せることをまとめました。</p>" +
-        '<ol class="lessons">' + list(b.lessons).map(function (l) {
-          return "<li><div><h3>" + esc(l.title) + "</h3><p>" + esc(l.body) + '</p><div class="try"><b>試すなら：</b>' + esc(l.try) + "</div></div></li>";
-        }).join("") + "</ol>";
+      return panel(b.name + " から学ぶ、自分のお店で試せること", '<ol class="lessons">' + list(b.lessons).map(function (l) {
+        return "<li><div><h3>" + esc(l.title) + "</h3><p>" + esc(l.body) + '</p><div class="try"><b>試すなら：</b>' + esc(l.try) + "</div></div></li>";
+      }).join("") + "</ol>", {c: color(b)});
     },
     sources: function (b) {
-      return '<div class="card"><ol class="sources">' + list(b.sources).map(function (s) {
+      return panel("出典一覧", '<ol class="sources">' + list(b.sources).map(function (s) {
         return '<li id="' + esc(b.id + "-" + s.id) + '"><a href="' + esc(s.url) + '" target="_blank" rel="noopener">' + esc(s.title) + '</a> <span class="muted">— ' + esc(s.site) + "</span></li>";
-      }).join("") + '</ol><p class="note">確認日：' + esc(b.checked) + "。売上などの数値は各メディアの報道で、ブランドの公式発表ではないものを含みます。</p></div>";
+      }).join("") + '</ol><p class="note">確認日：' + esc(b.checked) + "。売上などの数値は各メディアの報道で、ブランドの公式発表ではないものを含みます。</p>", {c: color(b)});
     }
   };
 
   function renderBrand(b, page) {
     var idx = PAGES.map(function (p) { return p[0]; }).indexOf(page);
-    var title = PAGES[idx][1];
     var prev = PAGES[idx - 1], next = PAGES[idx + 1];
-    var link = function (p) { return "#" + b.id + (p[0] === "overview" ? "" : "-" + p[0]); };
-    return '<div class="brandhead"><div class="status">' + esc(b.status) + '</div><div class="brandname">' + esc(b.name) + "<small>" + esc(b.kana) + "</small></div></div>" +
-      '<nav class="subnav" aria-label="' + esc(b.name) + 'のページ">' + PAGES.map(function (p) {
-        return '<a href="' + link(p) + '"' + (p[0] === page ? ' aria-current="page"' : "") + ">" + p[1] + "</a>";
-      }).join("") + "</nav>" +
-      "<h2>" + esc(title) + "</h2>" + BP[page](b) +
+    crumbs([["トップ", "#home"], [b.name, "#" + b.id], [PAGES[idx][1]]]);
+    return '<div class="pagebar"' + cs(b) + '><span class="bn"><span class="dot"></span>' + esc(b.name) + '</span><span class="meta">' + esc(b.kana) + "　｜　" + esc(b.status) + '</span><span class="pt" style="margin-left:auto">' + esc(PAGES[idx][1]) + "</span></div>" +
+      '<div class="inner">' + BP[page](b) +
       '<nav class="pager" aria-label="前後のページ">' +
-      (prev ? '<a href="' + link(prev) + '"><span>← 前へ</span>' + prev[1] + "</a>" : "") +
-      (next ? '<a class="next" href="' + link(next) + '"><span>次へ →</span>' + next[1] + "</a>" : "") + "</nav>";
+      (prev ? '<a href="' + link(b, prev[0]) + '"><span>← 前へ</span>' + prev[1] + "</a>" : "") +
+      (next ? '<a class="next" href="' + link(b, next[0]) + '"><span>次へ →</span>' + next[1] + "</a>" : "") + "</nav></div>";
   }
 
-  /* ---------- 比較 ---------- */
   function renderCompare() {
-    var keys = [];
-    BRANDS.forEach(function (b) { Object.keys(b.compare || {}).forEach(function (k) { if (keys.indexOf(k) < 0) keys.push(k); }); });
-    var head = "<tr><th>項目</th>" + BRANDS.map(function (b) { return '<th><a href="#' + esc(b.id) + '">' + esc(b.name) + "</a></th>"; }).join("") + "</tr>";
-    var body = keys.map(function (k) {
-      return "<tr><th>" + esc(k) + "</th>" + BRANDS.map(function (b) { return "<td>" + esc((b.compare || {})[k] || "—") + "</td>"; }).join("") + "</tr>";
-    }).join("");
-    var lessons = '<div class="cases" style="margin-top:14px">' + BRANDS.map(function (b) {
-      return '<div class="card case"><h3>' + esc(b.name) + 'から学ぶこと</h3>' + ul(list(b.lessons).slice(0, 3).map(function (l) { return l.title; })) + '<p><a href="#' + esc(b.id) + '-lessons">すべて見る →</a></p></div>';
+    crumbs([["トップ", "#home"], ["ブランド比較"]]);
+    var vs = BRANDS.map(function (b) { return '<span class="bn"' + cs(b) + '><span class="dot"></span>' + esc(b.name) + "</span>"; }).join('<span class="meta">vs.</span>');
+    var lessons = '<div class="grid2" style="margin-top:16px">' + BRANDS.map(function (b) {
+      return panel(b.name + " から学ぶこと（上位3つ）", ul(list(b.lessons).slice(0, 3).map(function (l) { return l.title; })) + '<p style="margin:8px 0 0;font-size:.82rem"><a href="' + link(b, "lessons") + '">すべて見る →</a></p>', {c: color(b)});
     }).join("") + "</div>";
-    return "<h2>ブランド比較</h2>" +
-      '<div class="card scroll-x"><table><thead>' + head + "</thead><tbody>" + body + "</tbody></table></div>" +
-      '<h2 style="margin-top:32px">お店へのヒント（各ブランドの上位3つ）</h2>' + lessons +
-      '<p class="note">項目はブランドごとの "compare" から自動で作られます。ブランドを追加すると列が増えます。</p>';
+    return '<div class="pagebar">' + vs + '<span class="meta">（' + esc(DATA.site.target_summary) + '）</span><span class="pt" style="margin-left:auto">ブランド比較</span></div>' +
+      '<div class="inner">' + panel("基本指標", compareTable() + '<p class="note">項目はブランドごとの "compare" から自動で作られます。ブランドを追加すると列が増えます。</p>') + lessons + "</div>";
   }
 
-  /* ---------- 追加方法 ---------- */
   function renderHowto() {
-    var sample = '{\n  "id": "brand3",          ← 英数字で（ページのアドレスになります）\n  "name": "ブランド名",  "kana": "よみがな",\n  "status": "比較対象",  "tagline": "ひとことで",\n  "tags": ["子供服", "Instagram"],\n  "concept_word": "...",  "concept": "...",\n  "profile": [...], "kpis": [...], "timeline": [...],\n  "successes": [...], "risks": [...], "charts": [...],\n  "marketing": {...}, "lessons": [...],\n  "sources": [ {"id": "X1", "title": "...", "site": "...", "url": "https://..."} ],\n  "compare": { "設立": "...", "主な販路": "..." }\n}';
-    return "<h2>ブランドを追加するには</h2>" +
-      '<div class="cases"><div class="card"><h3>Claudeに頼む</h3><p style="font-size:.88rem;margin:6px 0 0">「◯◯を追加して」と伝えるだけで、Web調査をして同じ型でページを足します。</p></div>' +
-      '<div class="card"><h3>自分で書き足す</h3><p style="font-size:.88rem;margin:6px 0 0">このHTMLファイルの <code>brand-data</code> 部分（JSON）の <code>"brands"</code> に、既存ブランドのブロックをコピーして書き換えます。ホーム・切り替え・比較表が自動で増えます。</p></div></div>' +
-      '<details open><summary>ブロックの形（抜粋）</summary><pre class="code">' + esc(sample) + "</pre></details>" +
-      '<p class="note">"charts" や "sns_accounts" は空でも動きます。迷ったら House on the Hill のブロックを丸ごとコピーするのがおすすめです。</p>';
+    crumbs([["トップ", "#home"], ["ブランドを追加"]]);
+    var sample = '{\n  "id": "brand3",          ← 英数字のみ（ページのアドレスになります）\n  "name": "ブランド名",  "kana": "よみがな",\n  "status": "比較対象",  "tagline": "ひとことで",\n  "tags": ["子供服", "Instagram"],\n  "concept_word": "...",  "concept": "...",\n  "profile": [...], "kpis": [...], "timeline": [...],\n  "successes": [...], "risks": [...], "charts": [...],\n  "marketing": {...}, "lessons": [...],\n  "sources": [ {"id": "X1", "title": "...", "site": "...", "url": "https://..."} ],\n  "compare": { "設立": "...", "主な販路": "..." }\n}';
+    return '<div class="pagebar"><span class="pt">ブランドを追加するには</span></div><div class="inner"><div class="grid2">' +
+      panel("Claudeに頼む", '<p style="margin:0;font-size:.86rem">「◯◯を追加して」と伝えるだけで、Web調査をして同じ型でページを足します。</p>') +
+      panel("自分で書き足す", '<p style="margin:0;font-size:.86rem">このHTMLファイルの <code>brand-data</code> 部分（JSON）の <code>"brands"</code> に、既存ブランドのブロックをコピーして書き換えます。メニュー・トップ・比較表が自動で増えます。</p>') +
+      "</div>" + panel("ブロックの形（抜粋）", '<pre class="code">' + esc(sample) + '</pre><p class="note">"charts" や "sns_accounts" は空でも動きます。迷ったら House on the Hill のブロックを丸ごとコピーするのがおすすめです。</p>') + "</div>";
   }
 
   /* ---------- ルーティング ---------- */
   function route() {
     var h = (location.hash || "").replace(/^#/, "") || "home";
-    var html, nav = h;
-    if (h === "home") html = renderHome();
+    var html, cur = h;
+    if (h === "home") { html = renderHome(); crumbs([["トップ"]]); }
     else if (h === "compare") html = renderCompare();
     else if (h === "howto") html = renderHowto();
     else {
@@ -1772,26 +1864,45 @@ pre.code { background: var(--card); border: 1px solid var(--line); border-radius
         if (h === x.id) b = x;
         else if (h.indexOf(x.id + "-") === 0 && BP[h.slice(x.id.length + 1)]) { b = x; page = h.slice(x.id.length + 1); }
       });
-      if (b) { html = renderBrand(b, page); nav = b.id; } else { html = renderHome(); nav = "home"; }
+      if (b) { html = renderBrand(b, page); cur = b.id + "-" + page; open[b.id] = true; }
+      else { html = renderHome(); cur = "home"; crumbs([["トップ"]]); }
     }
     view.innerHTML = html;
-    renderNav(nav);
+    curKey = cur;
+    renderSide(cur);
+    setMenu(false);
   }
 
+  var menuBtn = document.getElementById("menuBtn");
+  function setMenu(on) { side.classList.toggle("open", on); menuBtn.setAttribute("aria-expanded", on); }
+  menuBtn.addEventListener("click", function () { setMenu(!side.classList.contains("open")); });
+  document.getElementById("scrim").addEventListener("click", function () { setMenu(false); });
+
   document.addEventListener("click", function (e) {
+    var tg = e.target.closest("[data-toggle]");
+    if (tg) { var id = tg.getAttribute("data-toggle"); open[id] = !open[id]; renderSide(curKey); return; }
     var mt = e.target.closest("[data-mtab]");
     if (mt) { mTab = mt.getAttribute("data-mtab"); route(); return; }
     var s = e.target.closest("[data-src]");
     if (s) {
       e.preventDefault();
-      var id = s.getAttribute("data-src"), bid = id.split("-")[0];
+      var sid = s.getAttribute("data-src"), bid = sid.split("-")[0];
       if (location.hash !== "#" + bid + "-sources") location.hash = bid + "-sources";
       setTimeout(function () {
-        var li = document.getElementById(id);
+        var li = document.getElementById(sid);
         if (li) { li.scrollIntoView({block: "center"}); li.classList.add("flash"); setTimeout(function () { li.classList.remove("flash"); }, 1600); }
       }, 80);
     }
   });
+  // トップの「できること」：触れた項目をオレンジで強調
+  function feat(e) {
+    var a = e.target.closest && e.target.closest("[data-feat]");
+    if (!a) return;
+    a.parentNode.querySelectorAll("[data-feat]").forEach(function (x) { x.classList.toggle("on", x === a); });
+  }
+  document.addEventListener("mouseover", feat);
+  document.addEventListener("focusin", feat);
+
   function showTip(el, x, y) { tip.textContent = el.getAttribute("data-tip"); tip.hidden = false; tip.style.left = Math.min(x + 12, window.innerWidth - 270) + "px"; tip.style.top = (y + 14) + "px"; }
   document.addEventListener("mousemove", function (e) {
     var t = e.target.closest && e.target.closest("[data-tip]");
